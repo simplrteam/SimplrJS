@@ -1,5 +1,3 @@
-<%@ include file="/includes/include_jstl.jsp" %>
-
 <%-- Set the Response Header --%>
 <% response.setHeader("Content-Type","text/javascript"); %>
 
