@@ -18,11 +18,12 @@
 		}
 	};
 
-	<?php include("CORE/CORE.console.js"); ?>
-	<?php include("CORE/CORE.util.js"); ?>
-	<?php include("CORE/CORE.ui.js"); ?>
-	<?php include("CORE/CORE.validation.js"); ?>
-
+	<?php 
+		include("CORE/CORE.console.js"); 
+		include("CORE/CORE.util.js");
+		include("CORE/CORE.ui.js");
+		include("CORE/CORE.validation.js");
+	?>
 	var simplr = window.simplr = {
 		config : {
 			mToggleConsole : function(on) {
@@ -46,47 +47,50 @@
 		}
 	};
 	
-	<?php #browser ?>
-	<?php include("browser/browser.js"); ?>
-	
-	<?php #cache ?>
-	<?php include("cache/cache.js"); ?>
-	
-	<?php #cookie ?>
-	<?php include("cookie/cookie.js"); ?>
-	
-	<?php #controller ?>
-	<?php include("controller/jquery.ba-hashchange.js"); ?>
-	<?php include("controller/controller.js"); ?>
-	
-	<?php #conversion ?>
-	<?php include("conversion/json2.js"); ?>
-	<?php include("conversion/conversion.js"); ?>
-	
-	<?php #form ?>
-	<?php include("form/form.js"); ?>
-	<?php include("form/defaultCodesAndValidators.js"); ?>
-	
-	<?php #layout ?>
-	<?php include("layout/innerxhtml.js"); ?>
-	<?php include("layout/layout.js"); ?>
-	
-	<?php #tracker ?>
-	<?php include("trigger/trigger.js"); ?>
-	
-	<?php #ui ?>
-	<?php include("ui/ui.layer.js"); ?>
-	<?php include("ui/ui.newBrowserWindow.js"); ?>
-	<?php include("ui/ui.widget.oTrackableScrollingElement.js"); ?>
-	
-	<?php #util ?>
-	<?php include("util/util.js"); ?>
+	<?php 
+		
+		// browser 
+		include("browser/browser.js");
 
-	<?php #validation ?>
-	<?php include("validation/validation.js"); ?>
-	<?php include("validation/defaultCodesAndValidators.js"); ?>
-	
-	<?php #view ?>
-	<?php include("view/view.js"); ?>
+		// cache
+		include("cache/cache.js");
+		
+		// cookie
+		include("cookie/cookie.js");
+		
+		// controller
+		include("controller/jquery.ba-hashchange.js");
+		include("controller/controller.js");
+		
+		// conversion
+		include("conversion/json2.js");
+		include("conversion/conversion.js");
+		
+		// form
+		include("form/form.js");
+		include("form/defaultCodesAndValidators.js");
+		
+		// layout
+		include("layout/innerxhtml.js");
+		include("layout/layout.js");
+		
+		// tracker
+		include("trigger/trigger.js");
+		
+		// ui
+		include("ui/ui.layer.js");
+		include("ui/ui.newBrowserWindow.js");
+		include("ui/ui.widget.oTrackableScrollingElement.js");
+		
+		// util
+		include("util/util.js");
+		
+		// validation
+		include("validation/validation.js");
+		include("validation/defaultCodesAndValidators.js");
+		
+		// view
+		include("view/view.js");
+	?>
 
 })(jQuery);
