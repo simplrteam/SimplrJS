@@ -1,9 +1,13 @@
-<?php include("../../config.php"); ?>
+<?php 
+	include("../../config.php"); 
+	$useDistVersion = false;
+	$simplr_file = $useDistVersion ? "/dist/simplr.min.js" : "/src/simplr-dev.php";
+?>
 
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>testing</title>
+		<title><?php echo $page_template["title"] ?></title>
 	   	
 	   	<?php //Template Includes ?>
 	   	<link rel="stylesheet" type="text/css" href="<?php echo $ctx ?>/test/includes/qunit.css" />
@@ -12,15 +16,15 @@
 		</style>		
 		
 		<script type="text/javascript" src="<?php echo $ctx ?>/dist/jquery.min.js"></script>
-		<script type="text/javascript" src="<?php echo $ctx ?>/src/simplr-dev.php"></script>
+		<script type="text/javascript" src="<?php echo "$ctx$simplr_file" ?>"></script>
 		<script type="text/javascript" src="<?php echo $ctx ?>/test/includes/qunit.js"></script>
 
-		<?php //DocumentHead_TEXT ?>
+		<?php include($page_template["head_file"]); ?>
 	</head>
 
 	<body>
     	<div id="pageContent">
-    		<h1 id="qunit-header">HEADER</h1>  
+    		<h1 id="qunit-header"><?php echo $page_template["title"] ?></h1>  
 			<h2 id="qunit-banner"><!--  --></h2>  
 			<h2 id="qunit-userAgent"><!--  --></h2>  
 			<ol id="qunit-tests"><!--  --></ol>  
