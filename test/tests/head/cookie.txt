@@ -40,8 +40,7 @@
 		test("simplr.cookie.mExpire()", function() {
 			simplr.cookie.mSet({
 				name : "cA",
-				value : "A",
-				path : "/cw"
+				value : "A"
 			});
 			simplr.cookie.mSet({
 				name : "cB",
@@ -58,7 +57,7 @@
 			same([simplr.cookie.mGet({ name : "cA" }), simplr.cookie.mGet({ name : "cB"}), simplr.cookie.mGet({ name : "cC"})], ["A", "B", null], "Other Cookies still exist")
 			
 			simplr.cookie.mExpire({ name : "cB" });
-			simplr.cookie.mExpire({ name : "cA", path : "/cw" });
+			simplr.cookie.mExpire({ name : "cA" });
 			same([simplr.cookie.mGet({ name : "cA" }), simplr.cookie.mGet({ name : "cB"}), simplr.cookie.mGet({ name : "cC"})], [null, null, null], "All cookies expired")
 		});
 		
