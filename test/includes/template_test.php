@@ -12,7 +12,9 @@
 	   	<?php //Template Includes ?>
 	   	<link rel="stylesheet" type="text/css" href="<?php echo $ctx ?>/test/includes/qunit.css" />
 		<style type="text/css">
+			body { padding: 10px 0 0 0; margin: 0; }
 			#pageContent { width: 800px; margin: 0 auto; }
+			.none { display: none; }
 		</style>		
 		
 		<script type="text/javascript" src="<?php echo $ctx ?>/dist/jquery.min.js"></script>

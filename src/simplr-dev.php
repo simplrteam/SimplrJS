@@ -33,7 +33,7 @@
 					try {
 						if( typeof window.console != "undefined" && typeof window.console.group != "undefined") {
 							$(function() {
-								var consoleBarEl = $('<p></p>').attr('id','_simplr_core_console').css({textAlign: 'center', position: 'fixed', top: '0', width: '100%', borderBottom: '1px solid #000', color: '#000', backgroundColor: '#f00', padding: '5px', fontSize: '11px', opacity:'0.75'}).text('[console]: Console Messaging Active');
+								var consoleBarEl = $('<p></p>').attr('id','_simplr_core_console').css({margin: 0, textAlign: 'center', position: 'fixed', top: '0', width: '100%', borderBottom: '1px solid #000', color: '#000', backgroundColor: '#f00', padding: '5px', fontSize: '11px', opacity:'0.75'}).text('[console]: Console Messaging Active');
 								$("body").append(consoleBarEl);
 								consoleBarEl.mouseover(function(){ $(this).slideUp(); })
 								consoleBarEl.mouseout(function(){ $(this).delay(3000).slideDown(); });
