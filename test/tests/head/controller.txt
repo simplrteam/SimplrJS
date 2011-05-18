@@ -1,0 +1,112 @@
+
+<script type="text/javascript">
+
+	$(function() {
+		
+		function getCommandCount() {
+			var size = 0;
+			$.each(simplr.controller.mGetCommands(), function() {
+				size++;
+			});
+			return size;
+		};
+		
+		function getCommandNames() {
+			var results = [];
+			$.each(simplr.controller.mGetCommands(), function(name, object) {
+				results.push(name);
+			});
+			return results;
+		};
+
+		function getCurrentData() {
+			return window.jsTestData;
+		};
+
+		function setCurrentData(data) {
+			window.jsTestData = $.extend(true, {}, data);
+		};
+		
+		simplr.controller.mAddCommands({
+			cmd1 : {
+				route : [ "cmd1", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			},
+			cmd2 : {
+				route : [ "cmd1", "cmd2", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			}
+		});
+		
+		module("simplr.controller");
+		test("Layouts Initialized Correctly", function() {
+			equals( getCommandCount(), 2, "Command Count");
+			same( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view" ], "Command Names");
+		});
+
+		test("simplr.controller.mRouteAndExecute(), Routes", function() {
+
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('/cmd1/view');
+			same(getCurrentData().route, ["cmd1", "view"], "simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('#/cmd1/view');
+			same(getCurrentData().route, ["cmd1", "view"], "# simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('!/cmd1/view');
+			same(getCurrentData().route, ["cmd1", "view"], "! simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('#!/cmd1/view');
+			same(getCurrentData().route, ["cmd1", "view"], "#! simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('/cmd1/A/cmd2/');
+			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('#/cmd1/A/cmd2/');
+			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "# simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('!/cmd1/A/cmd2/');
+			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "! simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('#!/cmd1/A/cmd2/');
+			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "#! simplr route array");
+		});
+		
+		test("simplr.controller.mRouteAndExecute(), Parameters - cross site scripting", function() {
+			simplr.controller.mRouteAndExecute('/cmd1/view?x=%3Cscript%3Ealert(%22junk%22);%3C/script%3E');
+			equals(getCurrentData().parameters.x, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag url encoded");
+			simplr.controller.mRouteAndExecute('/cmd1/view?y=<script>alert("junk");<\/script>');
+			equals(getCurrentData().parameters.y, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag not url encoded");
+			simplr.controller.mRouteAndExecute('/cmd1/view?y=<b>BOLD</b>');
+			equals(getCurrentData().parameters.y, '&lt;b&gt;BOLD&lt;/b&gt;', "html tag not url encoded");
+		});
+
+		test("simplr.controller.mRouteAndExecute(), Parameters - Parsing", function() {
+			simplr.controller.mRouteAndExecute('/cmd1/?x=1&y=1/2');
+			equals(getCurrentData().parameters.x, "1", "X=1");
+			equals(getCurrentData().parameters.y, "1/2", "Y=1/2");
+			simplr.controller.mRouteAndExecute('/cmd1/view?x=2&y=2/2');
+			equals(getCurrentData().parameters.x, "2", "X=2");
+			equals(getCurrentData().parameters.y, "2/2", "Y=2/2");
+			simplr.controller.mRouteAndExecute('/cmd1/A/?x=3&y=3/2');
+			equals(getCurrentData().parameters.x, "3", "X=3");
+			equals(getCurrentData().parameters.y, "3/2", "Y=3/2");
+			simplr.controller.mRouteAndExecute('/cmd1/A/cmd2/?x=4&y=4/2');
+			equals(getCurrentData().parameters.x, "4", "X=4");
+			equals(getCurrentData().parameters.y, "4/2", "Y=4/2");
+		});
+		
+	});
+</script>

@@ -13,6 +13,7 @@
 	   	<link rel="stylesheet" type="text/css" href="<?php echo $ctx ?>/test/includes/qunit.css" />
 		<style type="text/css">
 			#pageContent { width: 800px; margin: 0 auto; }
+			.none { display: none; }
 		</style>		
 		
 		<script type="text/javascript" src="<?php echo $ctx ?>/dist/jquery.min.js"></script>

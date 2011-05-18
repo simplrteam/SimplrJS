@@ -1,0 +1,44 @@
+<script type="text/javascript">
+
+	simplr.config.mToggleConsole(true);
+
+	$(function() {
+		
+		module("simplr.trigger");
+		test("simplr.trigger.mAddServices() / .mGetServices", function() {
+			
+			same(simplr.trigger.mGetServices(), {}, "No services");
+			simplr.trigger.mAddServices({ "ga" : {
+					data : {
+						environmentIDs : { dev : "something" }
+					},
+					onPage : function( data ) {
+					},
+					onEvent : function( data ) {
+					},
+					onTransaction : function( data ) {
+					}
+				}
+			});
+			equal($.isFunction(simplr.trigger.mGetServices().ga.onPage), true, "One service added");
+			simplr.trigger.mAddServices({ "wt" : {
+					onPage : function( data ) {
+					},
+					onEvent : function( data ) {
+					},
+					onTransaction : function( data ) {
+					}
+				}
+			});
+			equal($.isFunction(simplr.trigger.mGetServices().ga.onPage) && $.isFunction(simplr.trigger.mGetServices().wt.onPage), true, "Two services added");
+			simplr.trigger.mOnPage({data: { path: "ere"} });
+		});
+		
+		test("simplr.trigger.mOnPage()", function() {
+			
+			equal(true, true, "TO TEST");
+			
+		});
+		
+	});
+</script>

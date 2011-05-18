@@ -1,0 +1,122 @@
+<style type="text/css">form { margin-left:-1000px; }</style>
+<script type="text/javascript">
+	
+	$(function() {
+		
+		function countLength(data) {
+			var x = 0;
+			$.each(data, function(key, value) { x++; });
+			return x;
+		};
+		
+		var htmlContent = 
+		'<div id="formTest">' +
+			'<form id="form1">' +
+				'<input type="password" name="isPassword" id="pInput" value="password test" />' +
+				'<input type="hidden" name="isHidden" id="hInput" value="hidden test" />' +
+				'<input type="text" name="isText" id="tInput" value="text test" />' +
+				'<input type="radio" name="isRadio" id="rInput1" value="radio1" />' +
+				'<input type="radio" name="isRadio" id="rInput2" checked="true" value="radio2" />' +
+				'<input type="radio" name="isRadio" id="rInput3" value="radio3" />' +
+				'<input type="checkbox" name="isCheckbox1" id="cInput1" checked="true" />' +
+				'<input type="checkbox" name="isCheckbox2" id="cInput2" value="checkbox2" checked="true" />' +
+				'<input type="checkbox" name="isCheckbox3" id="cInput3" />' +
+				'<input type="checkbox" name="isCheckbox4" id="cInput4" value="checkbox4" />' +
+				'<textarea name="isTextarea" id="tArea">textarea text</textarea>' +
+				'<select name="isSelect" id="select">' +
+					'<option value="one">1</option>' +
+					'<option selected="true" value="two">2</option>' +
+					'<option value="three">3</option>' +
+				'</select>' +
+				'<input type="submit" value="submitForm" />' +
+			'</form>' +
+			'<div id="form2"><form>' +
+				'<div><input type="text" name="isText2" id="tInput2" value="test text2" /></div>' +
+			'</form></div>' +
+			'<div id="form3"><form>' +
+				'<div><input type="text" name="isText3" id="tInput3" value="" /></div>' +
+			'</form></div>' +
+				'<div id="form4"><form>' +
+				'<p class="errorText">Test Error Stuff that shouldnt get cleared.</p>' +
+				'<div class="formEntry"><input type="text" name="Text_4-0" id="tInput4-0" value="notempty4-0" /></div>' +
+				'<div class="formEntry"><input type="text" name="Text_4-1" id="tInput4-1" value="" /></div>' +
+				'<input type="text" name="Text_4-2" id="tInput4-2" value="" />' +
+			'</form></div>' +
+			'<div id="form5"><form>' +
+				'<div class="formEntry"><input type="text" name="Zip_Code" id="ZipCode" value="abc" /></div>' +
+			'</form></div>'
+		'</div>';
+		$("#js-testHTML").append(htmlContent);
+		
+		module("simplr.form");
+		test("simplr.form.mAddValidators()", function() {
+			simplr.form.mAddValidators({ "test0" : function() {} });
+			var test0Exists = false;
+			if( simplr.form.mGetValidators()["test0"] ) { test0Exists = true; }
+			equal(test0Exists, true, "Add a Single Validator");
+
+			simplr.form.mAddValidators({ 
+				"test1" : function(value) {},
+				"test2" : function(value) {}
+			});
+			var test1And2Exists = false;
+			if( simplr.form.mGetValidators()["test1"] && simplr.form.mGetValidators()["test2"] ) { test1And2Exists = true; }
+			equal(test1And2Exists, true, "Add a list of Validators");
+		});
+		
+		test("simplr.form.mAddCodes()", function() {
+			simplr.form.mAddCodes({ "test0" : function(label) { return "test0"; } });
+			var code0Exists = false;
+			if( simplr.form.mGetCodes()["test0"] ) { code0Exists = true; }
+			equal(code0Exists, true, "Add a single code");
+			
+			simplr.form.mAddCodes({ 
+	   	   		"test1" : "test1", 
+	   			"test2" : "test2"
+   			});
+			var code1And2Exists = false;
+			if( simplr.form.mGetCodes()["test1"] && simplr.form.mGetCodes()["test2"] ) { code1And2Exists = true; }
+			equal(code1And2Exists, true, "Add a list of codes");
+		});
+
+		test("simplr.form.mGetValues()", function() {
+			equals( countLength( simplr.form.mGetValues("#formTest form") ), 16, "Selector: 'form'");
+			equals( countLength( simplr.form.mGetValues("#formTest #form1") ), 10, "Selector: '#form1'");
+			equals( countLength( simplr.form.mGetValues("#formTest #form2") ), 1, "Selector: '#form2'");
+			same(simplr.form.mGetValues("#formTest #form1"), { 
+				isPassword : "password test",
+				isHidden : "hidden test",
+				isText : "text test",
+				isRadio : "radio2",
+				isCheckbox1 : true,
+				isCheckbox2 : "checkbox2",
+				isCheckbox3 : false,
+				isCheckbox4 : false,
+				isSelect : "two", 
+				isTextarea : "textarea text"
+			}, "All Expected Fields");
+		});
+
+		test("simplr.form.mAddValidationAssociation() - simplr.form.mValidateValuesAndRender()", function() {
+			simplr.form.mAddValidationAssociation({ "Zip_Code" : function(rules) { rules.push("postalcode") } });
+			var data = simplr.form.mGetValues("#formTest #form5");
+			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a postal code rule that was associated correctly" );
+		});
+		
+		test("simplr.form.mValidateValuesAndRender()", function() {
+			equals( simplr.form.mValidateValuesAndRender("#formTest #form2", simplr.form.mGetValues("#form2")), true, "rule notempty, field is not empty");
+			equals( simplr.form.mValidateValuesAndRender("#formTest #form3", simplr.form.mGetValues("#form3")), false, "rule notempty, field is empty");
+			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", simplr.form.mGetValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
+		});
+		
+		test("simplr.form.mAddLabelAssociation()", function() {
+			simplr.form.mAddLabelAssociation({ "Text_4-1" : "Text 4-1" });
+			var data = simplr.form.mGetValues("#formTest #form4");
+			simplr.form.mValidateValuesAndRender("#formTest #form4", data);
+			equals( $("#form4 .errorText").size(), 2, "2 total messages, 1 default, 1 from the tool." );
+			equals( $("#form4 .formEntry:eq(1) .errorText").size(), 1, "error in the correct spot" );
+			equals( $("#form4 .formEntry:eq(1) .errorText").text(), "Text 4-1 is empty.", "error text is correct" );
+		});
+		
+	});
+</script>
