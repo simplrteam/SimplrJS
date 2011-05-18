@@ -32,8 +32,11 @@
 		});
 		
 		test("simplr.util.mGetUrlParameter()", function() {
-			var p1 = simplr.util.mGetUrlParameter("test");
-			var p2 = simplr.util.mGetUrlParameter("component");
+			
+
+
+			var p1 = simplr.util.mGetUrlParameter("param1");
+			var p2 = simplr.util.mGetUrlParameter("param2");
 			var p3 = simplr.util.mGetUrlParameter("abc");
 			var p4 = simplr.util.mGetUrlParameter();
 			var p4Length = 0;
@@ -42,7 +45,7 @@
 			});
 
 			equals((p1 == "simplr"), true, "Test - exist");
-			equals(((p2 == "util") || (p2 == "all")), true, "Component - exist");
+			equals((p2 == "123"), true, "Component - exist");
 			equals((p3 == null), true, "abc - doesn't exist");
 			equals(p4Length , 2, "all parameters ( 2 params)");
 		});
