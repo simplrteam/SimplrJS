@@ -26,12 +26,12 @@
 			},
 			
 			mAddCommands : function(commands) {
-				$.each(commands, function(name, command) {
-					var tmp = $.extend({ route : [], callback : function() {} }, command);
+				for(var name in commands) {
+					var tmp = $.extend({ route : [], callback : function() {} }, commands[name]);
 					var key = tmp.route.join("_");
 					if( key != "" )
 					{ mD.commands[key] = tmp.callback; }
-				});
+				}
 			},
 			
 			mExecute : function(data) {
@@ -62,10 +62,11 @@
 				
 				/* 1. Find the base and remove if its there */
 				var tmpURL = urlArray[0];
-				$.each(mD.bases, function(base) {
-					if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL )
-					{ ret.base = base; ret.route.push(base); return false; }
-				});
+				for(var base in mD.bases) {
+					if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL ) { 
+						ret.base = base; ret.route.push(base); break;
+					}
+				}
 				
 				/* 2. Get CRUD Operation */
 				urlArray[0] = urlArray[0].split("/");

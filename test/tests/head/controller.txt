@@ -39,18 +39,24 @@
 				callback : function(data) { 
 					setCurrentData(data);
 				}
-			}
+			},
+			cmd3 : {
+				route : [ "test1", "cmd3", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			},
 		});
+
+		simplr.controller.mAddBases([ "test1", "test2" ]);
 		
 		module("simplr.controller");
 		test("Layouts Initialized Correctly", function() {
-			equals( getCommandCount(), 2, "Command Count");
-			same( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view" ], "Command Names");
+			equals( getCommandCount(), 3, "Command Count");
+			same( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view", "test1_cmd3_view" ], "Command Names");
 		});
 
 		test("simplr.controller.mRouteAndExecute(), Routes", function() {
-
-
 			window.jsTestData = {};
 			simplr.controller.mRouteAndExecute('/cmd1/view');
 			same(getCurrentData().route, ["cmd1", "view"], "simplr route array");
@@ -82,6 +88,11 @@
 			window.jsTestData = {};
 			simplr.controller.mRouteAndExecute('#!/cmd1/A/cmd2/');
 			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "#! simplr route array");
+
+			window.jsTestData = {};
+			simplr.controller.mRouteAndExecute('!/test1/cmd3/view');
+			same(getCurrentData().route, ["test1", "cmd3", "view"], "! simplr route array with base");
+
 		});
 		
 		test("simplr.controller.mRouteAndExecute(), Parameters - cross site scripting", function() {
