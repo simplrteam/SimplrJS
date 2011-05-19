@@ -7,9 +7,10 @@ $.extend(true, simplr, {
 				var url = opts.url;
 				var name = opts.name;
 				delete opts.url; delete opts.width; delete opts.height; delete opts.name;
-				$.each(opts, function(key, value) {
-					features += "," + key + "=" + value;
-				});
+				
+				for(var key in opts) {
+					features += "," + key + "=" + opts[key];
+				}
 				
 				var newWindow = window.open(url, name, features);
 				if( newWindow != null) { 
