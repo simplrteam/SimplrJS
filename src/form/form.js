@@ -22,7 +22,8 @@
 		$(theSelectors[1] + "," + theSelectors[0], selector).filter("." + specClass).remove();
 		
 		/* Create the Messages */
-		$.each(obj.codes, function(key, msgObject) {
+		for(var key in obj.codes) {
+			var msgObject = obj.codes[key];
 			var html = "";
 			$.each([ msgObject.error, msgObject.success ], function(i, type) {
 				for(var j = 0, jL = type.length; j < jL; j++) {
@@ -34,22 +35,22 @@
 			
 			/* Now find the Form Entry to put the message html */
 			$("[name='" + key + "']:first", selector).addClass(theClasses[3] + " " + specClass).closest(theSelectors[4]).addClass(theClasses[2] + " " + specClass).append(html);
-		});
+		}
 	};
 	
 	function transformValues(values) {
 		var validationAndRenderValues = {};
-		$.each(values, function(key, value) {
+		for(var key in values) {
 			var label = data.labels[key] ? data.labels[key] : data.defaultLabel;
-			var validationObject = { value : value, label : label, rules : [] };
-			/* Add Validators as needed */
+			var validationObject = { value : values[key], label : label, rules : [] };
+			// Add Validators as needed
 			for(var i = 0, iL = data.defaultRules.length; i < iL; i++) {
 				validationObject.rules.push(data.defaultRules[i]);
 			}
 			try { data.rules[key](validationObject.rules); } catch(e) {}
-			/* Return the Transformed Data */
+			// Return the Transformed Data
 			validationAndRenderValues[key] = validationObject;
-		});
+		}
 		return validationAndRenderValues;
 	};
 	

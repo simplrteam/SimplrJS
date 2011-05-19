@@ -101,6 +101,11 @@
 			simplr.form.mAddValidationAssociation({ "Zip_Code" : function(rules) { rules.push("postalcode") } });
 			var data = simplr.form.mGetValues("#formTest #form5");
 			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a postal code rule that was associated correctly" );
+		
+			simplr.form.mAddValidationAssociation({ "isText2" : function(rules) { rules.push("equal") } });
+			var data = simplr.form.mGetValues("#formTest #form2");
+			data.isText2 = [ data.isText2, "test text2222" ];
+			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a equals rule false");
 		});
 		
 		test("simplr.form.mValidateValuesAndRender()", function() {
