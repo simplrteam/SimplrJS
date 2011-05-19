@@ -6,7 +6,9 @@
 	
 	function getServiceIDs() {
 		var serviceIDs = [];
-		$.each(mD.services, function(id) { serviceIDs.push(id); });
+		for(var id in mD.services) {
+			serviceIDs.push(id);
+		}
 		return serviceIDs;
 	};
 	
@@ -40,7 +42,7 @@
 	$.extend(simplr, {
 		trigger : {
 			mAddServices : function( services ) {
-				$.each(services, function(serviceName, service) {
+				for(var serviceName in services) {
 					mD.services[serviceName] = $.extend({
 						data : {
 							environmentIDs : {}
@@ -49,9 +51,9 @@
 						onPage : function() {},
 						onEvent : function() {},
 						onTransaction : function() {}
-					}, service);
+					}, services[serviceName]);
 					trigger({ type : "onLoad", options : { services : [ serviceName ] } });
-				});
+				}
 			},
 			
 			mGetServices : function() {
