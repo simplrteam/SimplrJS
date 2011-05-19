@@ -42,9 +42,9 @@
 						var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
 						for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
 							var tmpTokens = {};
-							$.each(tokenCollections[i], function(tKey, tValue) {
-								tmpTokens[tKey] = convertTokenToString(tValue);
-							});
+							for(var tKey in tokenCollections[i]) {
+								tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
+							}
 							finalResults += Cu.mReplaceTokens(tmpTokens, Cu.mGetComponent(config.component));
 						}
 					}
@@ -73,9 +73,9 @@
 			mReplaceTokens : function(keys, string) {
 				if(string != null) {
 					$.extend(keys, data.globalTokens);
-					$.each(keys, function(token, value) {
-						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(value));
-					});
+					for(var token in keys) {
+						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+					}
 				}
 				return unescape(string);
 			}
