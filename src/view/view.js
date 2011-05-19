@@ -5,13 +5,13 @@
 	$.extend(true, simplr, {
 		view : {
 			mAddViews : function(obj) {
-				$.each(obj, function(key, viewData) {
+				for(var key in obj) {
 					var newView = $.extend(true, {}, { 
 						html : function(data) { return ""; }, 
 						callback : function(selector, data) {} 
-					}, viewData);
+					}, obj[key]);
 					data[key] = newView;
-				});
+				}
 			},
 			mGetViews : function() {
 				return data;
