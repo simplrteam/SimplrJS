@@ -33,10 +33,9 @@
 					try {
 						if( typeof window.console != "undefined" && typeof window.console.group != "undefined") {
 							$(function() {
-								var consoleBarEl = $('<p></p>').attr('id','_simplr_core_console').css({margin: 0, textAlign: 'center', position: 'fixed', top: '0', width: '100%', borderBottom: '1px solid #000', color: '#000', backgroundColor: '#f00', padding: '5px', fontSize: '11px', opacity:'0.75'}).text('[console]: Console Messaging Active');
-								$("body").append(consoleBarEl);
-								consoleBarEl.mouseover(function(){ $(this).slideUp(); })
-								consoleBarEl.mouseout(function(){ $(this).delay(3000).slideDown(); });
+								var consoleHTML = '<p id="_simplr_core_console" style="margin: 0; text-align: center; position: fixed; top: 0; width: 100%; left: 0; border-bottom: 1px solid #000; color: #fff; font-weight: bold; background-color: #f00; padding: 5px; font-size: 11px; opacity: .75;">[console]: Console Messaging Active</p>';
+								$("body").append(consoleHTML);
+								$("#_simplr_core_console").mouseover(function() { $(this).slideUp(); }).mouseout(function() { $(this).delay(3000).slideDown(); });
 							});
 							CORE.config.console = true;
 						}
