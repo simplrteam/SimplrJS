@@ -48,7 +48,7 @@
 		
 	});
 	
-})(jQuery);	(function($) {
+})(jQuery);(function($) {
 	
 	var hasLocalStorage = typeof localStorage == "undefined" ? false : true;
 	
@@ -71,20 +71,20 @@
 					return false;
 				} else {
 					var ret = true;
-					$.each(thing1, function(key, value) { 
-						if( !equal(value, thing2[key]) ) { 
+					for(var key in thing1) {
+						if( !equal(thing1[key], thing2[key]) ) { 
 							ret = false; return false; 
 						}
-					});
-					if( ret ) {
+					}
+					if(ret) {
 						var l1 = 0;
 						var l2 = 0;
-						$.each(thing1, function() { 
-							l1++; 
-						});
-						$.each(thing2, function() { 
-							l2++; 
-						});
+						for(var key in thing1) {
+							l1++;
+						}
+						for(var key in thing2) {
+							l2++;
+						}
 						return l1 == l2;
 					}
 					return false;
@@ -151,7 +151,7 @@
 		}
 	});
 	
-})(jQuery);	(function($) {
+})(jQuery);(function($) {
 	
 	var widgetIDs = {};
 	
@@ -202,7 +202,7 @@
 		}
 	});
 	
-})(jQuery);	(function($) {
+})(jQuery);(function($) {
 	
 	function mergeValidationResults(key, rule, newData, existingData) {
 		existingData.codes[key].success = existingData.codes[key].success.concat( newData.successCodes );
@@ -212,9 +212,9 @@
 	
 	function replaceTokens(keys, message) {
 		var results = message;
-		$.each(keys, function(token, value) {
-			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(value));
-		});
+		for(var token in keys) {
+			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+		}
 		return unescape(results);
 	};
 	
@@ -283,8 +283,9 @@
 			
 			mValidate : function(dataObject) {
 				var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
-				$.each( results.data, function(key, entry) {
-					/* Check the Rules for this data */
+				for(var key in results.data) {
+					// Check the Rules for this data
+					var entry = results.data[key];
 					results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
 					for(var i = 0, iL = entry.rules.length; i < iL; i++) {
 						var rule = entry.rules[i];
@@ -296,16 +297,17 @@
 						}
 						mergeValidationResults(key, rule, tmpValidationData, results);
 					}
-					/* Cleanup Data */
-					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { delete results.codes[key]; }
-				});
+					// Cleanup Data
+					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
+						delete results.codes[key]; 
+					}
+				}
 				return results;
 			}
 		}
 	});
 	
-})(jQuery);
-	var simplr = window.simplr = {
+})(jQuery);	var simplr = window.simplr = {
 		config : {
 			mToggleConsole : function(on) {
 				$("#_simplr_core_console").remove();
@@ -314,10 +316,9 @@
 					try {
 						if( typeof window.console != "undefined" && typeof window.console.group != "undefined") {
 							$(function() {
-								var consoleBarEl = $('<p></p>').attr('id','_simplr_core_console').css({textAlign: 'center', position: 'fixed', top: '0', width: '100%', borderBottom: '1px solid #000', color: '#000', backgroundColor: '#f00', padding: '5px', fontSize: '11px', opacity:'0.75'}).text('[console]: Console Messaging Active');
-								$("body").append(consoleBarEl);
-								consoleBarEl.mouseover(function(){ $(this).slideUp(); })
-								consoleBarEl.mouseout(function(){ $(this).delay(3000).slideDown(); });
+								var consoleHTML = '<p id="_simplr_core_console" style="margin: 0; text-align: center; position: fixed; top: 0; width: 100%; left: 0; border-bottom: 1px solid #000; color: #fff; font-weight: bold; background-color: #f00; padding: 5px; font-size: 11px; opacity: .75;">[console]: Console Messaging Active</p>';
+								$("body").append(consoleHTML);
+								$("#_simplr_core_console").mouseover(function() { $(this).slideUp(); }).mouseout(function() { $(this).delay(3000).slideDown(); });
 							});
 							CORE.config.console = true;
 						}
@@ -328,7 +329,7 @@
 		}
 	};
 	
-		(function($) {
+	(function($) {
 	
 	var mD = {
 		userAgent : ""	
@@ -375,8 +376,7 @@
 	Cu.mSetUserAgent(navigator.userAgent);
 	
 })(jQuery);
-	
-		(function($) {
+(function($) {
 	
 	function createTimeKey(key) {
 		return key;
@@ -437,8 +437,7 @@
 	
 	var Cu = simplr.cache;
 	
-})(jQuery);	
-		(function($) {
+})(jQuery);(function($) {
 
 	$.extend(simplr, {
 		cookie : {
@@ -477,8 +476,7 @@
 	
 	var Cu = simplr.cookie;
 	
-})(jQuery);	
-		/*!
+})(jQuery);/*!
  * jQuery hashchange event - v1.3 - 7/21/2010
  * http://benalman.com/projects/jquery-hashchange-plugin/
  * 
@@ -868,7 +866,7 @@
   })();
   
 })(jQuery,this);
-	(function($) {
+(function($) {
 
 	function htmlEntities(string) {
 		return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -896,12 +894,12 @@
 			},
 			
 			mAddCommands : function(commands) {
-				$.each(commands, function(name, command) {
-					var tmp = $.extend({ route : [], callback : function() {} }, command);
+				for(var name in commands) {
+					var tmp = $.extend({ route : [], callback : function() {} }, commands[name]);
 					var key = tmp.route.join("_");
 					if( key != "" )
 					{ mD.commands[key] = tmp.callback; }
-				});
+				}
 			},
 			
 			mExecute : function(data) {
@@ -932,10 +930,11 @@
 				
 				/* 1. Find the base and remove if its there */
 				var tmpURL = urlArray[0];
-				$.each(mD.bases, function(base) {
-					if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL )
-					{ ret.base = base; ret.route.push(base); return false; }
-				});
+				for(var base in mD.bases) {
+					if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL ) { 
+						ret.base = base; ret.route.push(base); break;
+					}
+				}
 				
 				/* 2. Get CRUD Operation */
 				urlArray[0] = urlArray[0].split("/");
@@ -992,8 +991,7 @@
 		});
 	});
 	
-})(jQuery);	
-		/*
+})(jQuery);/*
     http://www.JSON.org/json2.js
     2011-02-23
 
@@ -1473,7 +1471,7 @@ if (!JSON) {
         };
     }
 }());
-	(function($) {
+(function($) {
 
 	$.extend(simplr, {
 		conversion : {
@@ -1487,8 +1485,7 @@ if (!JSON) {
 		}
 	});	
 	
-})(jQuery);	
-		(function($) {
+})(jQuery);(function($) {
 	
 	function render(selector, obj) {
 		var specClass = "_simplr";
@@ -1512,7 +1509,8 @@ if (!JSON) {
 		$(theSelectors[1] + "," + theSelectors[0], selector).filter("." + specClass).remove();
 		
 		/* Create the Messages */
-		$.each(obj.codes, function(key, msgObject) {
+		for(var key in obj.codes) {
+			var msgObject = obj.codes[key];
 			var html = "";
 			$.each([ msgObject.error, msgObject.success ], function(i, type) {
 				for(var j = 0, jL = type.length; j < jL; j++) {
@@ -1524,22 +1522,22 @@ if (!JSON) {
 			
 			/* Now find the Form Entry to put the message html */
 			$("[name='" + key + "']:first", selector).addClass(theClasses[3] + " " + specClass).closest(theSelectors[4]).addClass(theClasses[2] + " " + specClass).append(html);
-		});
+		}
 	};
 	
 	function transformValues(values) {
 		var validationAndRenderValues = {};
-		$.each(values, function(key, value) {
+		for(var key in values) {
 			var label = data.labels[key] ? data.labels[key] : data.defaultLabel;
-			var validationObject = { value : value, label : label, rules : [] };
-			/* Add Validators as needed */
+			var validationObject = { value : values[key], label : label, rules : [] };
+			// Add Validators as needed
 			for(var i = 0, iL = data.defaultRules.length; i < iL; i++) {
 				validationObject.rules.push(data.defaultRules[i]);
 			}
 			try { data.rules[key](validationObject.rules); } catch(e) {}
-			/* Return the Transformed Data */
+			// Return the Transformed Data
 			validationAndRenderValues[key] = validationObject;
-		});
+		}
 		return validationAndRenderValues;
 	};
 	
@@ -1600,142 +1598,104 @@ if (!JSON) {
 		}
 	});
 
-})(jQuery);	(function($) {
+})(jQuery);/* Add Codes */
+CORE.validation.mAddCodes({ 
+	eMissingValidator : "Missing Validator",
+	eAlphaNumeric : "$[label] is not alphanumeric.",
+	eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
+	eDinersClub : "$[label] is not a valid DINERS CLUB number.",
+	eDiscover : "$[label] is not a valid DISCOVER number.",
+	eEmail : "$[label] is not an email address.",
+	eEqual : "$[label] does not match.",
+	eMastercard : "$[label] is not a valid MASTERCARD number.",
+	eEmpty : "$[label] is empty.",
+	eNumber : "$[label] is not a number.",
+	ePhoneNumber : "$[label] is not a valid Phone Number.",
+	ePostalCode : "$[label] is not a Postal Code.",
+	eVisa : "$[label] is not a valid VISA number."
+});
 
-	function checkEquality(thing1, thing2) {
-		var ret = false;
-		if( typeof thing1 == typeof thing2 ) {
-			if( $.isArray(thing1) ) {
-				if( thing1.length == thing2.length ) {
-					ret = true;
-					for(var i = 0, iL = thing1.length; i < iL; i++) {
-						if( !checkEquality(thing1[i], thing2[i]) ) { 
-							ret = false;
-							i = iL;
-						}
-					}
-				}
-			}
-			else if( $.isPlainObject(thing1) ) {
-				ret = true;
-				$.each(thing1, function(key, value) { 
-					if( !checkEquality(value, thing2[key]) ) { ret = false; return false; }
-				});
-				if( ret ) {
-					var l1 = 0;
-					var l2 = 0;
-					$.each(thing1, function() { l1++; });
-					$.each(thing2, function() { l2++; });
-					ret = l1 == l2;
-				}
-			}
-			else
-			{ ret = thing1 == thing2; }
-		}
-		return ret;
-	};
+/* Add Validators */
+CORE.validation.mAddValidators({
+	/* Missing Validator */
+	missingvalidator : function(value) { 
+		return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
+	},
 	
-	/* Add Codes */
-	CORE.validation.mAddCodes({ 
-		eMissingValidator : "Missing Validator",
-		eAlphaNumeric : "$[label] is not alphanumeric.",
-		eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
-		eDinersClub : "$[label] is not a valid DINERS CLUB number.",
-		eDiscover : "$[label] is not a valid DISCOVER number.",
-		eEmail : "$[label] is not an email address.",
-		eEqual : "$[label] does not match.",
-		eMastercard : "$[label] is not a valid MASTERCARD number.",
-		eEmpty : "$[label] is empty.",
-		eNumber : "$[label] is not a number.",
-		ePhoneNumber : "$[label] is not a valid Phone Number.",
-		ePostalCode : "$[label] is not a Postal Code.",
-		eVisa : "$[label] is not a valid VISA number."
-	});
-	
-	/* Add Validators */
-	CORE.validation.mAddValidators({
-		/* Missing Validator */
-		missingvalidator : function(value) { 
-			return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
-		},
-		
-		alphanumeric : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
-			return results;
-		},
-		americanexpress : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
-			return results;
-		},
-		dinersclub : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
-			return results;
-		},
-		discover : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eDiscover"); }
-			return results;
-		},
-		email : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eEmail"); }
-			return results;
-		},
-		equal : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-			if( $.isArray(value) ) { 
-				for(var i = 0, iL = value.length; i < iL; i++) {
-					if( !checkEquality(value[0], value[i]) ) { 
-						results.valid = false; 
-						i = iL;
-					}
+	alphanumeric : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
+		return results;
+	},
+	americanexpress : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
+		return results;
+	},
+	dinersclub : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
+		return results;
+	},
+	discover : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDiscover"); }
+		return results;
+	},
+	email : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eEmail"); }
+		return results;
+	},
+	equal : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
+		if( $.isArray(value) ) { 
+			for(var i = 0, iL = value.length; i < iL; i++) {
+				if(!CORE.util.mEqual([value[0], value[i]])) {
+					results.valid = false; 
+					i = iL;
 				}
 			}
-			if( !results.valid ) { results.errorCodes.push("eEqual"); }
-			return results;
-		},
-		mastercard : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eMastercard"); }
-			return results;
-		},
-		notempty : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-			if( typeof value != "undefined" && value != null ) {
-				if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
-				else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
-				else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
-			}
-			if(!results.valid) { results.errorCodes.push("eEmpty"); }
-			return results;
-		},
-		number : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
-			if( !results.valid ) { results.errorCodes.push("eNumber"); }
-			return results;
-		},
-		phonenumber : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
-			return results;
-		},
-		postalcode : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("ePostalCode") }
-			return results;	
-		},
-		visa : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eVisa"); }
-			return results;
 		}
-	});
-
-})(jQuery);	
-		/*
+		if( !results.valid ) { results.errorCodes.push("eEqual"); }
+		return results;
+	},
+	mastercard : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eMastercard"); }
+		return results;
+	},
+	notempty : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
+		if( typeof value != "undefined" && value != null ) {
+			if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
+			else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
+			else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
+		}
+		if(!results.valid) { results.errorCodes.push("eEmpty"); }
+		return results;
+	},
+	number : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
+		if( !results.valid ) { results.errorCodes.push("eNumber"); }
+		return results;
+	},
+	phonenumber : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
+		return results;
+	},
+	postalcode : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("ePostalCode") }
+		return results;	
+	},
+	visa : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eVisa"); }
+		return results;
+	}
+});/*
 Written by Steve Tucker, 2006, http://www.stevetucker.co.uk
 Full documentation can be found at http://www.stevetucker.co.uk/page-innerxhtml.php
 Released under the Creative Commons Attribution-Share Alike 3.0  License, http://creativecommons.org/licenses/by-sa/3.0/
@@ -1784,7 +1744,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 	}
 	return $xhtml;
-};	(function($) {
+};(function($) {
 	
 	function convertTokenToString(value) {
 		if(typeof value == "object") {
@@ -1828,9 +1788,9 @@ var innerXHTML = function($source,$string,$appendage) {
 						var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
 						for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
 							var tmpTokens = {};
-							$.each(tokenCollections[i], function(tKey, tValue) {
-								tmpTokens[tKey] = convertTokenToString(tValue);
-							});
+							for(var tKey in tokenCollections[i]) {
+								tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
+							}
 							finalResults += Cu.mReplaceTokens(tmpTokens, Cu.mGetComponent(config.component));
 						}
 					}
@@ -1859,9 +1819,9 @@ var innerXHTML = function($source,$string,$appendage) {
 			mReplaceTokens : function(keys, string) {
 				if(string != null) {
 					$.extend(keys, data.globalTokens);
-					$.each(keys, function(token, value) {
-						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(value));
-					});
+					for(var token in keys) {
+						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+					}
 				}
 				return unescape(string);
 			}
@@ -1870,8 +1830,7 @@ var innerXHTML = function($source,$string,$appendage) {
 	
 	var Cu = simplr.layout;
 	
-})(jQuery);	
-		(function($) {
+})(jQuery);(function($) {
 	var mD = {
 		env : "_simplr",
 		services : {}
@@ -1879,7 +1838,9 @@ var innerXHTML = function($source,$string,$appendage) {
 	
 	function getServiceIDs() {
 		var serviceIDs = [];
-		$.each(mD.services, function(id) { serviceIDs.push(id); });
+		for(var id in mD.services) {
+			serviceIDs.push(id);
+		}
 		return serviceIDs;
 	};
 	
@@ -1913,7 +1874,7 @@ var innerXHTML = function($source,$string,$appendage) {
 	$.extend(simplr, {
 		trigger : {
 			mAddServices : function( services ) {
-				$.each(services, function(serviceName, service) {
+				for(var serviceName in services) {
 					mD.services[serviceName] = $.extend({
 						data : {
 							environmentIDs : {}
@@ -1922,9 +1883,9 @@ var innerXHTML = function($source,$string,$appendage) {
 						onPage : function() {},
 						onEvent : function() {},
 						onTransaction : function() {}
-					}, service);
+					}, services[serviceName]);
 					trigger({ type : "onLoad", options : { services : [ serviceName ] } });
-				});
+				}
 			},
 			
 			mGetServices : function() {
@@ -1949,8 +1910,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 	});
 	
-})(jQuery);	
-		(function($) {
+})(jQuery);(function($) {
 	
 	var cClass = "_simplr_centerLayer";
 	var kcClass = "_simplr_keepCenterLayer";
@@ -2090,7 +2050,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		});
 	});
 
-})(jQuery);	$.extend(true, simplr, {
+})(jQuery);$.extend(true, simplr, {
 	ui : {
 		newBrowserWindow : function(options) {
 			var opts = $.extend({ url : "", width : 500, height: 500, name : "_simplr_newBrowserWindow"}, options);
@@ -2099,9 +2059,10 @@ var innerXHTML = function($source,$string,$appendage) {
 				var url = opts.url;
 				var name = opts.name;
 				delete opts.url; delete opts.width; delete opts.height; delete opts.name;
-				$.each(opts, function(key, value) {
-					features += "," + key + "=" + value;
-				});
+				
+				for(var key in opts) {
+					features += "," + key + "=" + opts[key];
+				}
 				
 				var newWindow = window.open(url, name, features);
 				if( newWindow != null) { 
@@ -2111,7 +2072,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 	}
 });
-	(function($) {
+(function($) {
 	
 	$.extend(true, simplr, {
 		ui : {
@@ -2197,8 +2158,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		$(window).unbind(this.data._PRIVATE.evtString);
 	};
 
-})(jQuery);	
-		$.extend(true, simplr, {
+})(jQuery);$.extend(true, simplr, {
 	util : {
 		mEmpty : function(thing) {
 			return CORE.util.mEmpty(thing);
@@ -2228,8 +2188,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 	}
 });
-	
-		(function($) {
+	(function($) {
 
 	$.extend(true, simplr, {
 		validation : {
@@ -2261,155 +2220,117 @@ var innerXHTML = function($source,$string,$appendage) {
 	});
 
 })(jQuery);
-	(function($) {
-	
-	function checkEquality(thing1, thing2) {
-		var ret = false;
-		if( typeof thing1 == typeof thing2 ) {
-			if( $.isArray(thing1) ) {
-				if( thing1.length == thing2.length ) {
-					ret = true;
-					for(var i = 0, iL = thing1.length; i < iL; i++) {
-						if( !checkEquality(thing1[i], thing2[i]) ) { 
-							ret = false; 
-							i = iL;
-						}
-					}
-				}
-			}
-			else if( $.isPlainObject(thing1) ) {
-				ret = true;
-				$.each(thing1, function(key, value) { 
-					if( !checkEquality(value, thing2[key]) ) { ret = false; return false; }
-				});
-				if( ret ) {
-					var l1 = 0;
-					var l2 = 0;
-					$.each(thing1, function() { l1++; });
-					$.each(thing2, function() { l2++; });
-					ret = l1 == l2;
-				}
-			}
-			else
-			{ ret = thing1 == thing2; }
-		}
-		return ret;
-	};
-	
-	/* Add Codes */
-	CORE.validation.mAddCodes({ 
-		eMissingValidator : "Missing Validator",
-		eAlphaNumeric : "$[label] is not alphanumeric.",
-		eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
-		eDinersClub : "$[label] is not a valid DINERS CLUB number.",
-		eDiscover : "$[label] is not a valid DISCOVER number.",
-		eEmail : "$[label] is not an email address.",
-		eEqual : "$[label] does not match.",
-		eMastercard : "$[label] is not a valid MASTERCARD number.",
-		eEmpty : "$[label] is empty.",
-		eNumber : "$[label] is not a number.",
-		ePhoneNumber : "$[label] is not a valid Phone Number.",
-		ePostalCode : "$[label] is not a Postal Code.",
-		eVisa : "$[label] is not a valid VISA number."
-	});
-	
-	/* Add Validators */
-	CORE.validation.mAddValidators({
-		/* Missing Validator */
-		missingvalidator : function(value) { 
-			return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
-		},
-		
-		alphanumeric : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
-			return results;
-		},
-		americanexpress : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
-			return results;
-		},
-		dinersclub : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
-			return results;
-		},
-		discover : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eDiscover"); }
-			return results;
-		},
-		email : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eEmail"); }
-			return results;
-		},
-		equal : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-			if( $.isArray(value) ) { 
-				for(var i = 0, iL = value.length; i < iL; i++) {
-					if(!checkEquality(value[0], value[i])) { 
-						results.valid = false; 
-						i = iL;
-					}
-				}
-			}
-			if( !results.valid ) { results.errorCodes.push("eEqual"); }
-			return results;
-		},
-		mastercard : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eMastercard"); }
-			return results;
-		},
-		notempty : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-			if( typeof value != "undefined" && value != null ) {
-				if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
-				else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
-				else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
-			}
-			if(!results.valid) { results.errorCodes.push("eEmpty"); }
-			return results;
-		},
-		number : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
-			if( !results.valid ) { results.errorCodes.push("eNumber"); }
-			return results;
-		},
-		phonenumber : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
-			return results;
-		},
-		postalcode : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("ePostalCode") }
-			return results;	
-		},
-		visa : function(value) {
-			var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-			if( !results.valid ) { results.errorCodes.push("eVisa"); }
-			return results;
-		}
-	});
+/* Add Codes */
+CORE.validation.mAddCodes({ 
+	eMissingValidator : "Missing Validator",
+	eAlphaNumeric : "$[label] is not alphanumeric.",
+	eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
+	eDinersClub : "$[label] is not a valid DINERS CLUB number.",
+	eDiscover : "$[label] is not a valid DISCOVER number.",
+	eEmail : "$[label] is not an email address.",
+	eEqual : "$[label] does not match.",
+	eMastercard : "$[label] is not a valid MASTERCARD number.",
+	eEmpty : "$[label] is empty.",
+	eNumber : "$[label] is not a number.",
+	ePhoneNumber : "$[label] is not a valid Phone Number.",
+	ePostalCode : "$[label] is not a Postal Code.",
+	eVisa : "$[label] is not a valid VISA number."
+});
 
-})(jQuery);	
-		(function($) {
+/* Add Validators */
+CORE.validation.mAddValidators({
+	/* Missing Validator */
+	missingvalidator : function(value) { 
+		return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
+	},
+	
+	alphanumeric : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
+		return results;
+	},
+	americanexpress : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
+		return results;
+	},
+	dinersclub : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
+		return results;
+	},
+	discover : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDiscover"); }
+		return results;
+	},
+	email : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eEmail"); }
+		return results;
+	},
+	equal : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
+		if( $.isArray(value) ) { 
+			for(var i = 0, iL = value.length; i < iL; i++) {
+				if(!CORE.util.mEqual([value[0], value[i]])) {
+					results.valid = false; 
+					i = iL;
+				}
+			}
+		}
+		if( !results.valid ) { results.errorCodes.push("eEqual"); }
+		return results;
+	},
+	mastercard : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eMastercard"); }
+		return results;
+	},
+	notempty : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
+		if( typeof value != "undefined" && value != null ) {
+			if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
+			else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
+			else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
+		}
+		if(!results.valid) { results.errorCodes.push("eEmpty"); }
+		return results;
+	},
+	number : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
+		if( !results.valid ) { results.errorCodes.push("eNumber"); }
+		return results;
+	},
+	phonenumber : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
+		return results;
+	},
+	postalcode : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("ePostalCode") }
+		return results;	
+	},
+	visa : function(value) {
+		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eVisa"); }
+		return results;
+	}
+});(function($) {
 	
 	var data = {};
 	
 	$.extend(true, simplr, {
 		view : {
 			mAddViews : function(obj) {
-				$.each(obj, function(key, viewData) {
+				for(var key in obj) {
 					var newView = $.extend(true, {}, { 
 						html : function(data) { return ""; }, 
 						callback : function(selector, data) {} 
-					}, viewData);
+					}, obj[key]);
 					data[key] = newView;
-				});
+				}
 			},
 			mGetViews : function() {
 				return data;
