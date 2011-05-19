@@ -8,9 +8,9 @@
 	
 	function replaceTokens(keys, message) {
 		var results = message;
-		$.each(keys, function(token, value) {
-			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(value));
-		});
+		for(var token in keys) {
+			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+		}
 		return unescape(results);
 	};
 	
@@ -79,8 +79,9 @@
 			
 			mValidate : function(dataObject) {
 				var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
-				$.each( results.data, function(key, entry) {
-					/* Check the Rules for this data */
+				for(var key in results.data) {
+					// Check the Rules for this data
+					var entry = results.data[key];
 					results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
 					for(var i = 0, iL = entry.rules.length; i < iL; i++) {
 						var rule = entry.rules[i];
@@ -92,9 +93,11 @@
 						}
 						mergeValidationResults(key, rule, tmpValidationData, results);
 					}
-					/* Cleanup Data */
-					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { delete results.codes[key]; }
-				});
+					// Cleanup Data
+					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
+						delete results.codes[key]; 
+					}
+				}
 				return results;
 			}
 		}

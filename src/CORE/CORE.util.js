@@ -21,20 +21,20 @@
 					return false;
 				} else {
 					var ret = true;
-					$.each(thing1, function(key, value) { 
-						if( !equal(value, thing2[key]) ) { 
+					for(var key in thing1) {
+						if( !equal(thing1[key], thing2[key]) ) { 
 							ret = false; return false; 
 						}
-					});
-					if( ret ) {
+					}
+					if(ret) {
 						var l1 = 0;
 						var l2 = 0;
-						$.each(thing1, function() { 
-							l1++; 
-						});
-						$.each(thing2, function() { 
-							l2++; 
-						});
+						for(var key in thing1) {
+							l1++;
+						}
+						for(var key in thing2) {
+							l2++;
+						}
 						return l1 == l2;
 					}
 					return false;
