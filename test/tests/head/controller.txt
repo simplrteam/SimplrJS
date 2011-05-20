@@ -1,6 +1,5 @@
-
 <script type="text/javascript">
-
+	QUnit.config.reorder = false
 	$(function() {
 		
 		function getCommandCount() {

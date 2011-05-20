@@ -1,4 +1,5 @@
 <script type="text/javascript">
+	QUnit.config.reorder = false
 	$(function() {
 		
 		module("simplr.conversion");

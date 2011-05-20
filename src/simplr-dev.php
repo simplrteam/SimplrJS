@@ -23,6 +23,7 @@
 		include("CORE/CORE.util.js");
 		include("CORE/CORE.ui.js");
 		include("CORE/CORE.validation.js");
+		include("CORE/defaultCodesAndValidators.js");
 	?>
 	var simplr = window.simplr = {
 		config : {
@@ -67,7 +68,6 @@
 		
 		// form
 		include("form/form.js");
-		include("form/defaultCodesAndValidators.js");
 		
 		// layout
 		include("layout/innerxhtml.js");
@@ -86,7 +86,6 @@
 		
 		// validation
 		include("validation/validation.js");
-		include("validation/defaultCodesAndValidators.js");
 		
 		// view
 		include("view/view.js");

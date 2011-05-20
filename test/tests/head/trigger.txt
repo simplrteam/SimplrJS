@@ -1,7 +1,6 @@
 <script type="text/javascript">
-
 	simplr.config.mToggleConsole(true);
-
+	QUnit.config.reorder = false
 	$(function() {
 		
 		module("simplr.trigger");

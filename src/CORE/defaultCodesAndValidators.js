@@ -87,7 +87,9 @@ CORE.validation.mAddValidators({
 	},
 	postalcode : function(value) {
 		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("ePostalCode") }
+		if( !results.valid ) { 
+			results.errorCodes.push("ePostalCode") 
+		}
 		return results;	
 	},
 	visa : function(value) {

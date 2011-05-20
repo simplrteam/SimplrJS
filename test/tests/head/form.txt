@@ -1,6 +1,6 @@
 <style type="text/css">form { margin-left:-1000px; }</style>
 <script type="text/javascript">
-	
+	QUnit.config.reorder = false
 	$(function() {
 		
 		function countLength(data) {
@@ -113,7 +113,7 @@
 			equals( simplr.form.mValidateValuesAndRender("#formTest #form3", simplr.form.mGetValues("#form3")), false, "rule notempty, field is empty");
 			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", simplr.form.mGetValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
 		});
-		
+	
 		test("simplr.form.mAddLabelAssociation()", function() {
 			simplr.form.mAddLabelAssociation({ "Text_4-1" : "Text 4-1" });
 			var data = simplr.form.mGetValues("#formTest #form4");
