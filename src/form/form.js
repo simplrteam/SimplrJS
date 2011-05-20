@@ -2,39 +2,29 @@
 	
 	function render(selector, obj) {
 		var specClass = "_simplr";
-		var theClasses = [
-		  data.classes.textError, 
-	      data.classes.textInformation, 
-	      data.classes.formError, 
-	      data.classes.fieldError, 
-	      data.classes.formEntry
-	    ];
-		var theSelectors = [
-			"." + theClasses[0],
-			"." + theClasses[1],
-			"." + theClasses[2],	 
-			"." + theClasses[3],
-			"." + theClasses[4]
-	    ];
+		var classes = data.classes;
 		
-		/* Reset the Form */
-		$(theSelectors[2] + "," + theSelectors[3], selector).filter("." + specClass).removeClass(theClasses[2]).removeClass(theClasses[3]);
-		$(theSelectors[1] + "," + theSelectors[0], selector).filter("." + specClass).remove();
+		// Reset the Form
+		$("."+classes.formError + "," + "."+classes.fieldError, selector).filter("." + specClass).removeClass(classes.formError).removeClass(classes.fieldError);
+		$("."+classes.textInformation + "," + "."+classes.textError, selector).filter("." + specClass).remove();
 		
-		/* Create the Messages */
+		// Create the Messages
 		for(var key in obj.codes) {
 			var msgObject = obj.codes[key];
 			var html = "";
-			$.each([ msgObject.error, msgObject.success ], function(i, type) {
-				for(var j = 0, jL = type.length; j < jL; j++) {
-					html += '<p class="' + theClasses[i] + ' ' + specClass + '">' + CORE.validation.mGetCodeMessage(type[j], obj.data[key].label) + '</p>';
-					j = jL; // Only Display 1 Message
-				}
-				return false; // Only display 1 of each type
-			});
 			
-			/* Now find the Form Entry to put the message html */
-			$("[name='" + key + "']:first", selector).addClass(theClasses[3] + " " + specClass).closest(theSelectors[4]).addClass(theClasses[2] + " " + specClass).append(html);
+			var msgArray = [ msgObject.error, msgObject.success ];
+			for(var i = 0; i < 2; i++) {
+				var type = msgArray[i];
+				for(var j = 0, jL = type.length; j < jL; j++) {
+					html += '<p class="' + (( i == 0) ? classes.textError : classes.textInformation) + ' ' + specClass + '">' + CORE.validation.mGetCodeMessage(type[j], obj.data[key].label) + '</p>';
+					break; // Only Display 1 Message
+				}
+				break; // Only display 1 of each type
+			}
+			
+			// Now find the Form Entry to put the message html
+			$("[name='" + key + "']:first", selector).addClass(classes.fieldError + " " + specClass).closest("."+classes.formEntry).addClass(classes.formError + " " + specClass).append(html);
 		}
 	};
 	
