@@ -11,9 +11,10 @@
 		while( $(".layout-component", component).size() > 0 ) {
 			loadLayoutComponent($(".layout-component:eq(0)", component));
 		}
-		var key = $(component).attr("id").split("-")[1];
-		data.components[key] = $.trim(innerXHTML($(component).get(0)).replace(/\n/g,"").replace(/\s{1,}/g," "));
-		$(component).remove();
+		var componentToLoad = {};
+		componentToLoad[component.attr("id").split("-")[1]] = innerXHTML(component.get(0));
+		Cu.mAddComponents(componentToLoad);
+		component.remove();
 	};
 	
 	function getComponent(key) {
@@ -35,6 +36,13 @@
 	
 	$.extend(simplr, {
 		layout : {
+			
+			mAddComponents : function(obj) {
+				for(var key in obj) {
+					data.components[key] = $.trim(obj[key].replace(/\n/g,"").replace(/\s{1,}/g," "));
+				}
+			},
+			
 			mAssembleLayout : function(config) {
 				var finalResults = "";
 				if( config ) {
@@ -58,12 +66,6 @@
 			
 			mGetComponents : function() {
 				return data.components;
-			},
-			
-			mLoadComponents : function() {
-				while( $(".layout-component").size() > 0 ) {
-					loadLayoutComponent($(".layout-component:eq(0)"));
-				}
 			},
 			
 			mAddGlobalTokens : function(globalTokens) {

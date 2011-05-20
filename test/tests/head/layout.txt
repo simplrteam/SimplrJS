@@ -13,9 +13,6 @@
 
 		var testLayouts =
 		'<div id="layoutTest">' +	
-			'<div id="layout-test1" class="layout-component">' +
-				'<div id="test1">test1</div>'+
-			'</div>'+
 			'<div id="layout-test2" class="layout-component">'+
 				'<div id="test2">test2</div>'+
 			'</div>'+
@@ -36,9 +33,17 @@
 		module("simplr.layout");
 
 		test("Components exist in DOM before using simplr.layout.*", function() {
-			equals( $("#layoutTest .layout-component").size(), 5, "Components Expected");
+			equals( $("#layoutTest .layout-component").size(), 4, "Components Expected");
 		});
 		
+		test("simplr.layout.mAddComponents()", function() {
+			equals(simplr.layout.mGetComponent("test1"), null, "Component Doesn't exist, isn't in DOM");			
+			simplr.layout.mAddComponents({
+				test1 : '<div id="test1">test1</div>'
+			});
+			equals(simplr.layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
+		});
+
 		test("simplr.layout.mGetComponent()", function() {
 			equals(simplr.layout.mGetComponent("doesnntexist"), null, "NULL component");
 			equals(simplr.layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
@@ -46,14 +51,7 @@
 			equals(simplr.layout.mGetComponent("nested"), '<div id="nested"><span>nested</span></div>', "Nested Component");
 			equals(simplr.layout.mGetComponent("nested2"), '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>', "Nested -> Nested Component");
 		});
-		
-		test("simplr.layout.mLoadComponents()", function() {
-			equals( $("#layoutTest .layout-component").size(), 1, "4/5 components were loaded on demand, 1 left to be loaded." );
-			simplr.layout.mLoadComponents();
-			equals( $("#layoutTest .layout-component").size(), 0, "Components Removed from DOM" );
-			equals( countComponents(), 6, "Components expected in config.components ( 5 real components, 1 that didn't exist but is now added )" );
-		});
-		
+
 		test("simplr.layout.mReplaceTokens()", function() {
 			var string1 = "test test $[rp1] test test";
 			equals( simplr.layout.mReplaceTokens({ rp1 : "RP1" }, string1), "test test RP1 test test", "Single Replacement");
