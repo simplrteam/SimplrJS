@@ -1,7 +1,7 @@
 (function($) {
 
 	function htmlEntities(string) {
-		return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+		return string.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 	};
 	
 	var mD = {
@@ -50,11 +50,11 @@
 			mRoute : function(url) {
 				var ret = { route : [], url : url, base : "", resources : {}, action : "", parameters : {} };
 				// remove hash
-				if(ret.url[0] == "#") {
+				if(ret.url.charAt(0) == "#") {
 					ret.url = ret.url.substring(1);
 				}
 				// remove bang
-				if(ret.url[0] == "!") {
+				if(ret.url.charAt(0) == "!") {
 					ret.url = ret.url.substring(1);
 				}
 				
@@ -98,7 +98,7 @@
 					var kvArr = urlArray[1].split("&");
 					for(var i = 0, iL = kvArr.length; i < iL; i++) {
 						var keyValue = kvArr[i].split("=");
-						ret.parameters[keyValue[0]] = $.trim(htmlEntities(keyValue[1]));
+						ret.parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
 					}
 				}
 				
@@ -118,7 +118,8 @@
 	$(function() {
 		$(window).hashchange(function() {
 			if( window.location.hash != "" ) {
-				Cu.mRouteAndExecute(window.location.hash);
+var encodedHash = "#" + (window.location.href.split("#")[1] || "");
+Cu.mRouteAndExecute(encodedHash);
 			}
 		});
 	});
