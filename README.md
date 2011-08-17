@@ -1,4 +1,4 @@
-SimplrJS
+SimplrJS 
 =============
 
 SimplrJS (dev) is a robust javascript platform for developing highly flexible web applications.  Simplr is the complement to jQuery, taking your development to "the next level".  Development just got Simplr.
