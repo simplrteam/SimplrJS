@@ -22,34 +22,34 @@
 			out3 : "test3"
 		};
 		
-		module("simplr.cache");
-		test("simplr.cache.mSet()", function() {
-			equals(simplr.cache.mSet(input.put1), output.out1, "put string");
-			equals(simplr.cache.mSet(input.put2), output.out2, "put string");
-			equals(simplr.cache.mSet(input.put3), output.out3, "put string");
+		module("Simplr.Cache");
+		test("Simplr.Cache.mSet()", function() {
+			equals(Simplr.Cache.mSet(input.put1), output.out1, "put string");
+			equals(Simplr.Cache.mSet(input.put2), output.out2, "put string");
+			equals(Simplr.Cache.mSet(input.put3), output.out3, "put string");
 		});
 		
-		test("simplr.cache.mGet()", function() {
-			equals(simplr.cache.mGet(input.get1), output.isNull, "get no data, not expired");
-			equals(simplr.cache.mGet(input.get2), output.out2, "get with data not expired");
-			equals(simplr.cache.mGet(input.get3), output.out3, "get with data not expired");
-			equals(simplr.cache.mGet(input.get4), output.isNull, "get with a different then what the data is identifer");
+		test("Simplr.Cache.mGet()", function() {
+			equals(Simplr.Cache.mGet(input.get1), output.isNull, "get no data, not expired");
+			equals(Simplr.Cache.mGet(input.get2), output.out2, "get with data not expired");
+			equals(Simplr.Cache.mGet(input.get3), output.out3, "get with data not expired");
+			equals(Simplr.Cache.mGet(input.get4), output.isNull, "get with a different then what the data is identifer");
 		});
 		
-		test("simplr.cache.mExpire()", function() {
-			simplr.cache.mSet(input.put2);
-			simplr.cache.mExpire(input.expire1);
-			equals(simplr.cache.mGet(input.get2), output.isNull, "data is now expired");
-			simplr.cache.mSet(input.put3);
-			simplr.cache.mExpire(input.expire2);
-			equals(simplr.cache.mGet(input.get3), output.isNull, "data is now expired");
+		test("Simplr.Cache.mExpire()", function() {
+			Simplr.Cache.mSet(input.put2);
+			Simplr.Cache.mExpire(input.expire1);
+			equals(Simplr.Cache.mGet(input.get2), output.isNull, "data is now expired");
+			Simplr.Cache.mSet(input.put3);
+			Simplr.Cache.mExpire(input.expire2);
+			equals(Simplr.Cache.mGet(input.get3), output.isNull, "data is now expired");
 		});
 		
 		asyncTest("put/get, with expire", function() {
-			simplr.cache.mSet(input.put4);
-			equals(simplr.cache.mGet(input.get5), output.out1, "get data prior to expire");
+			Simplr.Cache.mSet(input.put4);
+			equals(Simplr.Cache.mGet(input.get5), output.out1, "get data prior to expire");
 			setTimeout(function() {
-				equals(simplr.cache.mGet(input.get5), output.isNull, "null after expire");
+				equals(Simplr.Cache.mGet(input.get5), output.isNull, "null after expire");
 				start();
 			}, 750);
 		});

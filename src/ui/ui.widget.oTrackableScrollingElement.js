@@ -1,14 +1,8 @@
-(function($) {
+(function() {
 	
-	$.extend(true, simplr, {
-		ui : {
-			widget : {
-				oTrackableScrollingElement : function(options) {
-					return new trackableScrollingElement(options);
-				}
-			}
-		}
-	});
+	Simplr.Ui.Widget.oTrackableScrollingElement = function(options) {
+		return new trackableScrollingElement(options);
+	};
 	
 	function trackableScrollingElement(options) {
 		// user
@@ -23,7 +17,7 @@
 		
 		// private
 		this.data._PRIVATE = {
-			evtString : "scroll.simplr.widget.trackableScrollingElement." + CORE.ui.widget.mGenerateWidgetID(),
+			evtString : "scroll.simplr.widget.trackableScrollingElement." + Simplr.Core.Ui.Widget.mGenerateWidgetID(),
 			timeout : null,
 			previousOffset : 0
 		};
@@ -40,9 +34,9 @@
 				var childEl = parentEl.children(thisWidget.data.elementSelector).eq(0);
 				if( parentEl.is(":visible") && childEl.is(":visible") ) {
 					/* Object Infos */
-					var containerInfo = CORE.ui.mElementInfo({ selector : parentEl });
-					var mElementInfo = CORE.ui.mElementInfo({ selector : childEl });
-					var windowInfo = CORE.ui.mWindowInfo();
+					var containerInfo = Simplr.Core.Ui.mElementInfo({ selector : parentEl });
+					var mElementInfo = Simplr.Core.Ui.mElementInfo({ selector : childEl });
+					var windowInfo = Simplr.Core.Ui.mWindowInfo();
 					/* Figure Out How this thing is moving */
 					var movingUP = ((windowInfo.offsets[1] - thisWidget.data._PRIVATE.previousOffset) < 0);
 					thisWidget.data._PRIVATE.previousOffset = windowInfo.offsets[1];	
@@ -84,4 +78,4 @@
 		$(window).unbind(this.data._PRIVATE.evtString);
 	};
 
-})(jQuery);
+})();

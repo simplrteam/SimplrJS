@@ -1,10 +1,10 @@
-(function($) {
+(function() {
 	
 	function renderMessages(data) {
 		if( $.isArray(data.message) ) {
 			console.group(data.group);
 			for(var i = 0, iL = data.message.length; i < iL; i++) {
-				var newMessageData = $.extend(CORE.console.mGetMessageTemplate(), data.message[i]);
+				var newMessageData = $.extend(Simplr.Core.Console.mGetMessageTemplate(), data.message[i]);
 				renderMessages(newMessageData);
 			}
 			console.groupEnd();
@@ -15,22 +15,19 @@
 		}
 	};
 	
-	$.extend(true, CORE, {
-		console : {
+	Simplr.Core.Console = {
 			
-			mGetMessageTemplate : function() {
-				return { group : "", message : "", data : "" };
-			},
-	
-			mMessage : function(options) {
-				if(CORE.config.console) {
-					var messageData = $.extend(CORE.console.mGetMessageTemplate(), options);
-					renderMessages(messageData);
-				}
+		mGetMessageTemplate : function() {
+			return { group : "", message : "", data : "" };
+		},
+
+		mMessage : function(options) {
+			if(Simplr.Config.Data.ConsoleActive) {
+				var messageData = $.extend(Simplr.Core.Console.mGetMessageTemplate(), options);
+				renderMessages(messageData);
 			}
-			
 		}
 		
-	});
+	};
 	
-})(jQuery);
+})();

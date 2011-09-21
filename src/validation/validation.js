@@ -1,32 +1,23 @@
-(function($) {
-
-	$.extend(true, simplr, {
-		validation : {
-			mAddCodes : function(obj) {
-				CORE.validation.mAddCodes(obj);
-			},
-			mGetCodes : function() {
-				return CORE.validation.mGetCodes();
-			},
-			
-			mAddValidators : function(obj) {
-				CORE.validation.mAddValidators(obj);
-			},
-			mGetValidators : function() {
-				return CORE.validation.mGetValidators();
-			},
-		
-			mGetRuleResultsTemplate : function() {
-				return CORE.validation.mGetRuleResultsTemplate();
-			},
-			
-			mGetCodeMessage : function(code, label) {
-				return CORE.validation.mGetCodeMessage(code, label);
-			},
-			mValidate : function(obj) {
-				return CORE.validation.mValidate(obj);
-			}
-		}
-	});
-
-})(jQuery);
+Simplr.Validation = {
+	mAddCodes : function(obj) {
+		Simplr.Core.Validation.mAddCodes(obj);
+	},
+	mGetCodes : function() {
+		return Simplr.Core.Validation.mData().codes;
+	},
+	mAddValidators : function(obj) {
+		Simplr.Core.Validation.mAddValidators(obj);
+	},
+	mGetValidators : function() {
+		return Simplr.Core.Validation.mData().validators;
+	},
+	mGetRuleResultsTemplate : function() {
+		return Simplr.Core.Validation.mGetRuleResultsTemplate();
+	},
+	mGetCodeMessage : function(code, label) {
+		return Simplr.Core.Validation.mGetCodeMessage(code, label);
+	},
+	mValidate : function(obj) {
+		return Simplr.Core.Validation.mValidate(obj);
+	}
+};

@@ -1,42 +1,53 @@
 <script type="text/javascript">
-	simplr.config.mToggleConsole(true);
+	Simplr.Config.mToggleConsole(true);
 	QUnit.config.reorder = false
 	$(function() {
-		
-		module("simplr.trigger");
-		test("simplr.trigger.mAddServices() / .mGetServices", function() {
+		Simplr.Trigger.mSetEnvironment("dev");		
+		var xResult = 0;
+
+		module("Simplr.Trigger");
+		test("Simplr.Trigger.mAddServices()", function() {
 			
-			same(simplr.trigger.mGetServices(), {}, "No services");
-			simplr.trigger.mAddServices({ "ga" : {
+			same(Simplr.Trigger.mData().Services, {}, "No services");
+			Simplr.Trigger.mAddServices({ "ga" : {
 					data : {
 						environmentIDs : { dev : "something" }
 					},
 					onPage : function( data ) {
+						xResult += data.x;
+						return data;
 					},
 					onEvent : function( data ) {
+						return data;
 					},
 					onTransaction : function( data ) {
+						return data;
 					}
 				}
 			});
-			equal($.isFunction(simplr.trigger.mGetServices().ga.onPage), true, "One service added");
-			simplr.trigger.mAddServices({ "wt" : {
+			equal($.isFunction(Simplr.Trigger.mData().Services.ga.onPage), true, "One service added");
+			Simplr.Trigger.mAddServices({ "wt" : {
+					data : {
+						environmentIDs : { dev : "something" }
+					},
 					onPage : function( data ) {
+						xResult += data.x;
+						return data;
 					},
 					onEvent : function( data ) {
+						return data;
 					},
 					onTransaction : function( data ) {
+						return data;
 					}
 				}
 			});
-			equal($.isFunction(simplr.trigger.mGetServices().ga.onPage) && $.isFunction(simplr.trigger.mGetServices().wt.onPage), true, "Two services added");
-			simplr.trigger.mOnPage({data: { path: "ere"} });
+			equal($.isFunction(Simplr.Trigger.mData().Services.ga.onPage) && $.isFunction(Simplr.Trigger.mData().Services.wt.onPage), true, "Two services added");
 		});
 		
-		test("simplr.trigger.mOnPage()", function() {
-			
-			equal(true, true, "TO TEST");
-			
+		test("Simplr.Trigger.mOnPage()", function() {
+			Simplr.Trigger.mOnPage({  data : {x : 1} });
+			equal(xResult, 2, "Both Triggers Fired");
 		});
 		
 	});

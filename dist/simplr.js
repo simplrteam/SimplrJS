@@ -1,3 +1,4 @@
+// simplr v2.0.0
 (function($) {
 
 	// Array Remove - By John Resig (MIT Licensed)
@@ -7,410 +8,14 @@
 	  return this.push.apply(this, rest);
 	};
 
-	var CORE = {
-		config : {
-			console : false
-		}
-	};
-
-	(function($) {
-	
-	function renderMessages(data) {
-		if( $.isArray(data.message) ) {
-			console.group(data.group);
-			for(var i = 0, iL = data.message.length; i < iL; i++) {
-				var newMessageData = $.extend(CORE.console.mGetMessageTemplate(), data.message[i]);
-				renderMessages(newMessageData);
-			}
-			console.groupEnd();
-		} else {
-			console.group(data.message);
-			console.log(data.data);
-			console.groupEnd();
-		}
-	};
-	
-	$.extend(true, CORE, {
-		console : {
-			
-			mGetMessageTemplate : function() {
-				return { group : "", message : "", data : "" };
+	window.Simplr = {
+		Config : {
+			Data : {
+				ConsoleActive : false
 			},
-	
-			mMessage : function(options) {
-				if(CORE.config.console) {
-					var messageData = $.extend(CORE.console.mGetMessageTemplate(), options);
-					renderMessages(messageData);
-				}
-			}
-			
-		}
-		
-	});
-	
-})(jQuery);(function($) {
-	
-	var hasLocalStorage = typeof localStorage == "undefined" ? false : true;
-	
-	function htmlEntities(string) {
-		return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-	};
-	
-	function equal(thing1, thing2) {
-		if( typeof thing1 == typeof thing2 ) {
-			if(typeof thing1 == "object") {
-				if( $.isArray(thing1) ) {
-					if( thing1.length == thing2.length ) {
-						for(var i = 0, iL = thing1.length; i < iL; i++) {
-							if( !equal(thing1[i], thing2[i]) ) { 
-								return false; 
-							}
-						}
-						return true;
-					}
-					return false;
-				} else {
-					var ret = true;
-					for(var key in thing1) {
-						if( !equal(thing1[key], thing2[key]) ) { 
-							ret = false; return false; 
-						}
-					}
-					if(ret) {
-						var l1 = 0;
-						var l2 = 0;
-						for(var key in thing1) {
-							l1++;
-						}
-						for(var key in thing2) {
-							l2++;
-						}
-						return l1 == l2;
-					}
-					return false;
-				}
-			} 
-			return thing1 == thing2; 
-		}
-		return false;
-	};
-	
-	$.extend(true, CORE, {
-		util : {
-			mEmpty : function(thing) {
-				var typeOfThing = typeof thing;
-				if( typeOfThing != "undefined" && thing != null ) {
-					if(typeOfThing == "object") {
-						if($.isArray(thing)) {
-							return thing.length == 0;
-						}
-						return $.isEmptyObject(thing);
-					}
-					return $.trim(thing) == "";				
-				}
-				return true;
-			},
-			mEqual : function(things) {
-				if( !CORE.util.mEmpty(things) ) {
-					if( $.isArray(things) ) {
-						var valid = true;
-						for(var i = 0, iL = things.length; i < iL; i++) {
-							if( !equal(things[0], things[i]) ) {
-								valid = false;
-								i = iL;
-							}
-						}
-						return valid;
-					} 
-					return true;
-				}
-				return true;
-			},
-			mGetUrlParameter : function(name) {
-				var string = window.location.search;
-				if(!CORE.util.mEmpty(string)) {
-					var parameters = {};
-					string = string.substring(1).split("&");
-					for(var i = 0, iL = string.length; i < iL; i++) {
-						var keyValue = string[i].split("=");
-						parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
-					}
-					if(CORE.util.mEmpty(name)) {
-						return parameters;
-					} else {
-						var value = parameters[name];
-						return typeof value == "undefined" ? null : value;
-					}
-				} else { 
-					return null;
-				}
-			},
-			mHasLocalStorage : function() {
-				return hasLocalStorage;
-			}
-		}
-	});
-	
-})(jQuery);(function($) {
-	
-	var widgetIDs = {};
-	
-	$.extend(true, CORE, {
-		ui : {
-		
-			mElementInfo : function(options) {
-				var opts = $.extend({ selector : "body" }, options);
-				var jqThisElement = $(opts.selector).eq(0);
-				var dimensions = [ jqThisElement.width(), jqThisElement.height() ];
-				var offsets = jqThisElement.offset();
-				offsets = [ offsets.left, offsets.top ];
-				return { offsets : offsets, dimensions : dimensions };
-			},
-			mWindowInfo : function() {
-   				var screenInfo = {};
-   				/* Find Offsets */
-   				if( typeof( window.pageYOffset ) == 'number' ) {
-					/*Netscape compliant*/
-   					screenInfo.offsets = [ window.pageXOffset, window.pageYOffset ];
-				} else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
-				    /*DOM compliant*/
-					screenInfo.offsets = [ document.body.scrollLeft, document.body.scrollTop ];
-				} else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
-				    /*IE6 standards compliant mode*/
-					screenInfo.offsets = [ document.documentElement.scrollLeft, document.documentElement.scrollTop ];
-				} else {
-					screenInfo.offsets = [ 0, 0 ];
-				}
-   				/* ---------------- */
-   				/* Get height / widths */
-   				screenInfo.dimensions = [ $(window).width(), $(window).height() ];
-   				return screenInfo;
-   			},
-   			
-   			widget : {
-   				mGenerateWidgetID : function() {
-   					var num = Math.floor(Math.random()*10000000);
-   					if(CORE.util.mEmpty(widgetIDs[num])) {
-   						widgetIDs[num] = true;
-   						return num;
-   					} else {
-   						return CORE.ui.widget.mGenerateWidgetID();
-   					}
-   				}
-   			}
-			
-		}
-	});
-	
-})(jQuery);(function($) {
-	
-	function mergeValidationResults(key, rule, newData, existingData) {
-		existingData.codes[key].success = existingData.codes[key].success.concat( newData.successCodes );
-		existingData.codes[key].error = existingData.codes[key].error.concat( newData.errorCodes );
-		if( !newData.valid ) { existingData.valid = false; }
-	};
-	
-	function replaceTokens(keys, message) {
-		var results = message;
-		for(var token in keys) {
-			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
-		}
-		return unescape(results);
-	};
-	
-	var data = {
-		codes : {
-			eEmpty : "$[label] is empty.",
-			eMissingValidator : "Missing Validator"
-		},
-		codeResultsTemplate : { 
-			success : [], 
-			error : []
-		},
-		defaultCodeMessage : "$[label] is UNDEFINED",
-		ruleResultsTemplate : { 
-			valid : true, 
-			successCodes : [], 
-			errorCodes : []
-		},
-		validators : {
-			missingvalidator : function(value) { 
-				return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
-			},
-			notempty : function(value) {
-				var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-				if( typeof value != "undefined" && value != null ) {
-					if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
-					else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
-					else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
-				}
-				if(!results.valid) { results.errorCodes.push("eEmpty"); }
-				return results;
-			}
-		},
-		validationResultsTemplate : { 
-			data : "", 
-			valid : true, 
-			codes : {} 
-		}
-	};
-	
-	$.extend(true, CORE, {
-		validation : {
-			
-			mAddCodes : function(obj) {
-				$.extend(data.codes, obj);
-			},
-			mAddValidators : function(obj) {
-				$.extend(data.validators, obj);
-			},
-			
-			mGetCodes : function() {
-				return data.codes;
-			},
-			mGetCodeMessage : function(code, label) {
-				if( data.codes[code] != undefined ) {
-					return replaceTokens({ label : label }, data.codes[code]);
-				}
-				return replaceTokens({ label : code }, data.defaultCodeMessage);
-			},
-			mGetRuleResultsTemplate : function() {
-				return $.extend(true, {}, data.ruleResultsTemplate);
-			},
-			mGetValidators : function() {
-				return data.validators;
-			},
-			
-			mValidate : function(dataObject) {
-				var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
-				for(var key in results.data) {
-					// Check the Rules for this data
-					var entry = results.data[key];
-					results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
-					for(var i = 0, iL = entry.rules.length; i < iL; i++) {
-						var rule = entry.rules[i];
-						var tmpValidationData = $.extend(true, {}, data.ruleResultsTemplate);
-						if( data.validators[rule] ) { 
-							tmpValidationData = data.validators[rule](entry.value); 
-						} else { 
-							tmpValidationData = data.validators["missingvalidator"](entry.value); 
-						}
-						mergeValidationResults(key, rule, tmpValidationData, results);
-					}
-					// Cleanup Data
-					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
-						delete results.codes[key]; 
-					}
-				}
-				return results;
-			}
-		}
-	});
-	
-})(jQuery);/* Add Codes */
-CORE.validation.mAddCodes({ 
-	eMissingValidator : "Missing Validator",
-	eAlphaNumeric : "$[label] is not alphanumeric.",
-	eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
-	eDinersClub : "$[label] is not a valid DINERS CLUB number.",
-	eDiscover : "$[label] is not a valid DISCOVER number.",
-	eEmail : "$[label] is not an email address.",
-	eEqual : "$[label] does not match.",
-	eMastercard : "$[label] is not a valid MASTERCARD number.",
-	eEmpty : "$[label] is empty.",
-	eNumber : "$[label] is not a number.",
-	ePhoneNumber : "$[label] is not a valid Phone Number.",
-	ePostalCode : "$[label] is not a Postal Code.",
-	eVisa : "$[label] is not a valid VISA number."
-});
-
-/* Add Validators */
-CORE.validation.mAddValidators({
-	/* Missing Validator */
-	missingvalidator : function(value) { 
-		return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
-	},
-	
-	alphanumeric : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
-		return results;
-	},
-	americanexpress : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
-		return results;
-	},
-	dinersclub : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
-		return results;
-	},
-	discover : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eDiscover"); }
-		return results;
-	},
-	email : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eEmail"); }
-		return results;
-	},
-	equal : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-		if( $.isArray(value) ) { 
-			for(var i = 0, iL = value.length; i < iL; i++) {
-				if(!CORE.util.mEqual([value[0], value[i]])) {
-					results.valid = false; 
-					i = iL;
-				}
-			}
-		}
-		if( !results.valid ) { results.errorCodes.push("eEqual"); }
-		return results;
-	},
-	mastercard : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eMastercard"); }
-		return results;
-	},
-	notempty : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
-		if( typeof value != "undefined" && value != null ) {
-			if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
-			else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
-			else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
-		}
-		if(!results.valid) { results.errorCodes.push("eEmpty"); }
-		return results;
-	},
-	number : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
-		if( !results.valid ) { results.errorCodes.push("eNumber"); }
-		return results;
-	},
-	phonenumber : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
-		return results;
-	},
-	postalcode : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
-		if( !results.valid ) { 
-			results.errorCodes.push("ePostalCode") 
-		}
-		return results;	
-	},
-	visa : function(value) {
-		var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
-		if( !results.valid ) { results.errorCodes.push("eVisa"); }
-		return results;
-	}
-});	var simplr = window.simplr = {
-		config : {
 			mToggleConsole : function(on) {
 				$("#_simplr_core_console").remove();
-				CORE.config.console = false;
+				Simplr.Config.Data.ConsoleActive = false;
 				if(on) {
 					try {
 						if( typeof window.console != "undefined" && typeof window.console.group != "undefined") {
@@ -419,63 +24,65 @@ CORE.validation.mAddValidators({
 								$("body").append(consoleHTML);
 								$("#_simplr_core_console").mouseover(function() { $(this).slideUp(); }).mouseout(function() { $(this).delay(3000).slideDown(); });
 							});
-							CORE.config.console = true;
+							Simplr.Config.Data.ConsoleActive = true;
 						}
 					} catch(e) {}
 				}
-				return CORE.config.console;
+				return Simplr.Config.Data.ConsoleActive;
 			}
 		}
 	};
+
+	// Browser
+	Simplr.Browser = {};
+	(function() {
 	
-	(function($) {
-	
-	var mD = {
-		userAgent : ""	
+	var browserData = {
+		UserAgent : ""
 	};
 	
-	$.extend(simplr, {
-		browser : {
-			
-			mAddressBarHeight : function() {
-				var deviceID = Cu.mDevice();
-				return (deviceID == "iPhone" || deviceID == "iPod" || deviceID == "iPad") ? 60 : 0;
-			},
-			
-			mDevice : function() {
-				if(mD.userAgent.match(/iPhone/i)) {
-					return "iPhone";
-				} else if(mD.userAgent.match(/iPod/i) ) {
-					return "iPod";
-				} else if(mD.userAgent.match(/iPad/i)) {
-					return "iPad";
-				} else if(mD.userAgent.match(/Android/i)) {
-					return "Android";
-				}
-				return "other";
-			},
+	Simplr.Browser = {
 	
-			mLocalStorageCapable : function() {
-				return CORE.util.mHasLocalStorage();
-			},
-			
-			mSetUserAgent : function(uaString) {
-				mD.userAgent = uaString;
-			},
-			
-			mTouchCapable : function() {
-				var deviceID = Cu.mDevice();
-				return (deviceID == "iPhone") || (deviceID == "iPod") || (deviceID == "iPad") || (deviceID == "Android");
+		mAddressBarHeight : function() {
+			var deviceID = Simplr.Browser.mDevice();
+			return (deviceID == "iPhone" || deviceID == "iPod" || deviceID == "iPad") ? 60 : 0;
+		},
+		
+		mDevice : function() {
+			if(browserData.UserAgent.match(/iPhone/i)) {
+				return "iPhone";
+			} else if(browserData.UserAgent.match(/iPod/i) ) {
+				return "iPod";
+			} else if(browserData.UserAgent.match(/iPad/i)) {
+				return "iPad";
+			} else if(browserData.UserAgent.match(/Android/i)) {
+				return "Android";
 			}
-			
+			return "other";
+		},
+
+		mLocalStorageCapable : function() {
+			return Simplr.Core.Util.mHasLocalStorage();
+		},
+		
+		mSetUserAgent : function(uaString) {
+			browserData.UserAgent = uaString;
+		},
+		
+		mTouchCapable : function() {
+			var deviceID = Simplr.Browser.mDevice();
+			return (deviceID == "iPhone") || (deviceID == "iPod") || (deviceID == "iPad") || (deviceID == "Android");
 		}
-	});
+			
+	};
 	
-	var Cu = simplr.browser;
-	Cu.mSetUserAgent(navigator.userAgent);
+	Simplr.Browser.mSetUserAgent(navigator.userAgent);
 	
-})(jQuery);
-(function($) {
+})();
+	
+	// Cache
+	Simplr.Cache = {};
+	(function() {
 	
 	function createTimeKey(key) {
 		return key;
@@ -489,93 +96,53 @@ CORE.validation.mAddValidators({
 		return key + "|" + (new Date().getTime()+freshness);
 	};
 	
-	$.extend(simplr, {
-		cache : {
-			
-			mExpire : function(key) {
-				if(CORE.util.mHasLocalStorage()) {
-					localStorage.removeItem(createTimeKey(key));
-					localStorage.removeItem(createDataKey(key));
-				}
-				return null;
-			},
-			
-			mGet : function(options) {
-				var options = $.extend({ key : "", identifier : ""}, options);
-				if(CORE.util.mHasLocalStorage() && (options.key != "")) {
-					var timeData = localStorage.getItem(createTimeKey(options.key));
-					if(timeData != null) {
-						var timeParts = timeData.split("|");
-						if( timeParts.length == 2 ) {
-							if(timeParts[0] == options.identifier) {
-								if(new Date().getTime() <= (parseInt(timeParts[1], 10))) {
-									return localStorage.getItem(createDataKey(options.key));
-								} else {
-									Cu.mExpire(options.key);
-								}
+	Simplr.Cache = {
+		
+		mExpire : function(key) {
+			if(Simplr.Core.Util.mHasLocalStorage()) {
+				localStorage.removeItem(createTimeKey(key));
+				localStorage.removeItem(createDataKey(key));
+			}
+			return null;
+		},
+		
+		mGet : function(options) {
+			var options = $.extend({ key : "", identifier : ""}, options);
+			if(Simplr.Core.Util.mHasLocalStorage() && (options.key != "")) {
+				var timeData = localStorage.getItem(createTimeKey(options.key));
+				if(timeData != null) {
+					var timeParts = timeData.split("|");
+					if( timeParts.length == 2 ) {
+						if(timeParts[0] == options.identifier) {
+							if(new Date().getTime() <= (parseInt(timeParts[1], 10))) {
+								return localStorage.getItem(createDataKey(options.key));
+							} else {
+								Simplr.Cache.mExpire(options.key);
 							}
 						}
 					}
 				}
-				return null;
-			},
-			
-			mSet : function(options) {
-				var options = $.extend({ key : "", identifier : "", data : "", freshness : 600000 }, options);
-				if(CORE.util.mHasLocalStorage()) {
-					if(options.key != "") {
-						localStorage.setItem(createTimeKey(options.key), createTimeValue(options.identifier, options.freshness));
-						localStorage.setItem(createDataKey(options.key), options.data);
-					}
-				}
-				return options.data;
 			}
-			
-		}
-	});
-	
-	var Cu = simplr.cache;
-	
-})(jQuery);(function($) {
-
-	$.extend(simplr, {
-		cookie : {
-			mGet : function(options) {
-				var opts = $.extend({ name : "" }, options);
-				if( document.cookie.length > 0 && !CORE.util.mEmpty(opts.name)) {
-					var r = document.cookie.match( '(^|;) ?' + opts.name + '=([^;]*)(;|$)');
-					if(r) {
-						return decodeURIComponent(r[2]);
-					}
+			return null;
+		},
+		
+		mSet : function(options) {
+			var options = $.extend({ key : "", identifier : "", data : "", freshness : 600000 }, options);
+			if(Simplr.Core.Util.mHasLocalStorage()) {
+				if(options.key != "") {
+					localStorage.setItem(createTimeKey(options.key), createTimeValue(options.identifier, options.freshness));
+					localStorage.setItem(createDataKey(options.key), options.data);
 				}
-				return null;
-			},
-			mSet : function(options) {
-				var opts = $.extend({ name : "", value : "", expireDays : null, path : "/", domain : null, secure : false }, options);
-				if( !CORE.util.mEmpty(opts.name) ) {
-					var cookieString = opts.name + "=" + encodeURIComponent(opts.value);
-					if(!CORE.util.mEmpty(opts.expireDays)) {
-						var expirationDate = new Date();
-						expirationDate.setTime(expirationDate.getTime() + (opts.expireDays * 86400000));
-						cookieString += "; expires=" + expirationDate.toUTCString();
-					}
-					cookieString += !CORE.util.mEmpty(opts.path) ? "; path=" + opts.path : "";
-					cookieString += !CORE.util.mEmpty(opts.domain) ? "; domain=" + opts.domain : "";
-					cookieString += opts.secure ? "; secure" : "";
-					document.cookie = cookieString;
-					return true;
-				}
-				return false;
-			},
-			mExpire : function(options) {
-				return Cu.mSet($.extend({ name : "", expireDays : -1}, options));
 			}
+			return options.data;
 		}
-	});	
+			
+	};
 	
-	var Cu = simplr.cookie;
-	
-})(jQuery);/*!
+})();
+	// Controller
+	Simplr.Controller = {};
+	/*!
  * jQuery hashchange event - v1.3 - 7/21/2010
  * http://benalman.com/projects/jquery-hashchange-plugin/
  * 
@@ -965,136 +532,129 @@ CORE.validation.mAddValidators({
   })();
   
 })(jQuery,this);
-
-(function($) {
+(function() {
 
 	function htmlEntities(string) {
 		return string.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 	};
 	
-	var mD = {
-		crud : { 
+	var ControllerData = {
+		CRUD : { 
 			"view" : true, 
 			"new" : true, 
 			"update" : true, 
 			"delete" : true 
 		},
-		commands : {},
-		bases : {}
+		Commands : {},
+		Bases : {}
 	};
 	
-	$.extend(simplr, {
-		controller : {
-			
-			mAddBases : function(bases) {
-				var collection = $.isArray(bases) ? bases : [ bases ];
-				for(var i = 0, iL = collection.length; i < iL; i++) {
-					mD.bases[collection[i]] = 1;
-				}
-			},
-			
-			mAddCommands : function(commands) {
-				for(var name in commands) {
-					var tmp = $.extend({ route : [], callback : function() {} }, commands[name]);
-					var key = tmp.route.join("_");
-					if( key != "" )
-					{ mD.commands[key] = tmp.callback; }
-				}
-			},
-			
-			mExecute : function(data) {
-				var key = data.route.join("_");
-				try { mD.commands[key](data); } catch(e) { };
-			},
-			
-			mGetCommands : function() {
-				return mD.commands;
-			},
-			
-			mGetBases : function() {
-				return mD.bases;
-			},
-			
-			mRoute : function(url) {
-				var ret = { route : [], url : url, base : "", resources : {}, action : "", parameters : {} };
-				// remove hash
-				if(ret.url.charAt(0) == "#") {
-					ret.url = ret.url.substring(1);
-				}
-				// remove bang
-				if(ret.url.charAt(0) == "!") {
-					ret.url = ret.url.substring(1);
-				}
-				
-				var urlArray = ret.url.split("?");
-				
-				/* 1. Find the base and remove if its there */
-				var tmpURL = urlArray[0];
-				for(var base in mD.bases) {
-					if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL ) { 
-						ret.base = base; ret.route.push(base); break;
-					}
-				}
-				
-				/* 2. Get CRUD Operation */
-				urlArray[0] = urlArray[0].split("/");
-				ret.action = urlArray[0][urlArray[0].length-1];
-				ret.action = mD.crud[ret.action] ? ret.action : "view";
-				
-				/* 3. Get the Resources */
-				var isResource = true;
-				var res = "";
-				for(var x = 0, xL = urlArray[0].length-1; x < xL; x++)
-				{
-					if(urlArray[0][x] != "")
-					{
-						if( isResource )
-						{ 
-							res = urlArray[0][x];
-							ret.route.push(res);
-							ret.resources[res] = ""; 
-						}
-						else
-						{ ret.resources[res] = urlArray[0][x]; }
-						isResource = !isResource;
-					}
-				}
-				
-				/* 4. Get Parameters */
-				if( urlArray[1] )
-				{ 
-					var kvArr = urlArray[1].split("&");
-					for(var i = 0, iL = kvArr.length; i < iL; i++) {
-						var keyValue = kvArr[i].split("=");
-						ret.parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
-					}
-				}
-				
-				ret.route.push(ret.action);
-				return ret;
-			},
-			
-			mRouteAndExecute : function(hashURLPart) {
-				Cu.mExecute(Cu.mRoute(decodeURI(hashURLPart)));
+	Simplr.Controller = {
+		
+		mAddBases : function(bases) {
+			var collection = $.isArray(bases) ? bases : [ bases ];
+			for(var i = 0, iL = collection.length; i < iL; i++) {
+				ControllerData.Bases[collection[i]] = 1;
+			}
+		},
+		
+		mAddCommands : function(commands) {
+			for(var name in commands) {
+				var tmp = $.extend({ route : [], callback : function() {} }, commands[name]);
+				var key = tmp.route.join("_");
+				if( key != "" )
+				{ ControllerData.Commands[key] = tmp.callback; }
+			}
+		},
+		
+		mData : function() {
+			return ControllerData;
+		},
+		
+		mExecute : function(data) {
+			var key = data.route.join("_");
+			try { ControllerData.Commands[key](data); } catch(e) { };
+		},
+		
+		mRoute : function(url) {
+			var ret = { route : [], url : url, base : "", resources : {}, action : "", parameters : {} };
+			// remove hash
+			if(ret.url[0] == "#") {
+				ret.url = ret.url.substring(1);
+			}
+			// remove bang
+			if(ret.url[0] == "!") {
+				ret.url = ret.url.substring(1);
 			}
 			
+			var urlArray = ret.url.split("?");
+			
+			/* 1. Find the base and remove if its there */
+			var tmpURL = decodeURI(urlArray[0]);
+			for(var base in ControllerData.Bases) {
+				if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL ) { 
+					ret.base = base; ret.route.push(base); break;
+				}
+			}
+			
+			/* 2. Get CRUD Operation */
+			urlArray[0] = urlArray[0].split("/");
+			ret.action = urlArray[0][urlArray[0].length-1];
+			ret.action = ControllerData.CRUD[ret.action] ? ret.action : "view";
+			
+			/* 3. Get the Resources */
+			var isResource = true;
+			var res = "";
+			for(var x = 0, xL = urlArray[0].length-1; x < xL; x++)
+			{
+				if(urlArray[0][x] != "")
+				{
+					if( isResource )
+					{ 
+						res = urlArray[0][x];
+						ret.route.push(res);
+						ret.resources[res] = ""; 
+					}
+					else
+					{ ret.resources[res] = urlArray[0][x]; }
+					isResource = !isResource;
+				}
+			}
+			
+			/* 4. Get Parameters */
+			if( urlArray[1] )
+			{ 
+				var kvArr = urlArray[1].split("&");
+				for(var i = 0, iL = kvArr.length; i < iL; i++) {
+					var keyValue = kvArr[i].split("=");
+					ret.parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
+				}
+			}
+			
+			ret.route.push(ret.action);
+			return ret;
+		},
+		
+		mRouteAndExecute : function(hashURLPart) {
+			Simplr.Controller.mExecute(Simplr.Controller.mRoute(hashURLPart));
 		}
-	});	
-	
-	var Cu = simplr.controller;
+	};
 	
 	$(function() {
 		$(window).hashchange(function() {
-			if( window.location.hash != "" ) {
-var encodedHash = "#" + (window.location.href.split("#")[1] || "");
-Cu.mRouteAndExecute(encodedHash);
+			var hash = window.location.href.split("#");
+			if(hash.length < 2) {
+				if(!Simplr.Core.Util.mEmpty(hash[1])) {
+					Simplr.Controller.mRouteAndExecute(hash[1]);
+				}
 			}
 		});
 	});
 	
-})(jQuery);
-
-/*
+})();	
+	// Converison
+	Simplr.Conversion = {};
+	/*
     http://www.JSON.org/json2.js
     2011-02-23
 
@@ -1574,124 +1134,539 @@ if (!JSON) {
         };
     }
 }());
-(function($) {
-
-	$.extend(simplr, {
-		conversion : {
-			// We use json2.js to do the actual conversion.
-			mObjectToJSONString : function(value, replacer, space) {
-				return JSON.stringify(value, replacer, space);
-			},
-			mJSONStringToObject : function(text, reviver) {
-				return JSON.parse(text, reviver);
+Simplr.Conversion = {
+	// We use json2.js to do the actual conversion.
+	mObjectToJSONString : function(value, replacer, space) {
+		return JSON.stringify(value, replacer, space);
+	},
+	mJSONStringToObject : function(text, reviver) {
+		return JSON.parse(text, reviver);
+	}
+};
+		
+		
+	// Cookie
+	Simplr.Cookie = {};
+	Simplr.Cookie = {
+	mGet : function(options) {
+		var opts = $.extend({ name : "" }, options);
+		if( document.cookie.length > 0 && !Simplr.Core.Util.mEmpty(opts.name)) {
+			var r = document.cookie.match( '(^|;) ?' + opts.name + '=([^;]*)(;|$)');
+			if(r) {
+				return decodeURIComponent(r[2]);
 			}
 		}
-	});	
+		return null;
+	},
+	mSet : function(options) {
+		var opts = $.extend({ name : "", value : "", expireDays : null, path : "/", domain : null, secure : false }, options);
+		if( !Simplr.Core.Util.mEmpty(opts.name) ) {
+			var cookieString = opts.name + "=" + encodeURIComponent(opts.value);
+			if(!Simplr.Core.Util.mEmpty(opts.expireDays)) {
+				var expirationDate = new Date();
+				expirationDate.setTime(expirationDate.getTime() + (opts.expireDays * 86400000));
+				cookieString += "; expires=" + expirationDate.toUTCString();
+			}
+			cookieString += !Simplr.Core.Util.mEmpty(opts.path) ? "; path=" + opts.path : "";
+			cookieString += !Simplr.Core.Util.mEmpty(opts.domain) ? "; domain=" + opts.domain : "";
+			cookieString += opts.secure ? "; secure" : "";
+			document.cookie = cookieString;
+			return true;
+		}
+		return false;
+	},
+	mExpire : function(options) {
+		return Simplr.Cookie.mSet($.extend({ name : "", expireDays : -1}, options));
+	}
+};
+	// Core
+	Simplr.Core = {};
+	(function() {
 	
-})(jQuery);(function($) {
+	function renderMessages(data) {
+		if( $.isArray(data.message) ) {
+			console.group(data.group);
+			for(var i = 0, iL = data.message.length; i < iL; i++) {
+				var newMessageData = $.extend(Simplr.Core.Console.mGetMessageTemplate(), data.message[i]);
+				renderMessages(newMessageData);
+			}
+			console.groupEnd();
+		} else {
+			console.group(data.message);
+			console.log(data.data);
+			console.groupEnd();
+		}
+	};
+	
+	Simplr.Core.Console = {
+			
+		mGetMessageTemplate : function() {
+			return { group : "", message : "", data : "" };
+		},
+
+		mMessage : function(options) {
+			if(Simplr.Config.Data.ConsoleActive) {
+				var messageData = $.extend(Simplr.Core.Console.mGetMessageTemplate(), options);
+				renderMessages(messageData);
+			}
+		}
+		
+	};
+	
+})();(function() {
+	
+	var hasLocalStorage = typeof localStorage == "undefined" ? false : true;
+	
+	function htmlEntities(string) {
+		return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+	};
+	
+	function equal(thing1, thing2) {
+		if( typeof thing1 == typeof thing2 ) {
+			if(typeof thing1 == "object") {
+				if( $.isArray(thing1) ) {
+					if( thing1.length == thing2.length ) {
+						for(var i = 0, iL = thing1.length; i < iL; i++) {
+							if( !equal(thing1[i], thing2[i]) ) { 
+								return false; 
+							}
+						}
+						return true;
+					}
+					return false;
+				} else {
+					var ret = true;
+					for(var key in thing1) {
+						if( !equal(thing1[key], thing2[key]) ) { 
+							ret = false; return false; 
+						}
+					}
+					if(ret) {
+						var l1 = 0;
+						var l2 = 0;
+						for(var key in thing1) {
+							l1++;
+						}
+						for(var key in thing2) {
+							l2++;
+						}
+						return l1 == l2;
+					}
+					return false;
+				}
+			} 
+			return thing1 == thing2; 
+		}
+		return false;
+	};
+	
+	Simplr.Core.Util = {
+		mEmpty : function(thing) {
+			var typeOfThing = typeof thing;
+			if( typeOfThing != "undefined" && thing != null ) {
+				if(typeOfThing == "object") {
+					if($.isArray(thing)) {
+						return thing.length == 0;
+					}
+					return $.isEmptyObject(thing);
+				}
+				return $.trim(thing) == "";				
+			}
+			return true;
+		},
+		mEqual : function(things) {
+			if( !Simplr.Core.Util.mEmpty(things) ) {
+				if( $.isArray(things) ) {
+					var valid = true;
+					for(var i = 0, iL = things.length; i < iL; i++) {
+						if( !equal(things[0], things[i]) ) {
+							valid = false;
+							i = iL;
+						}
+					}
+					return valid;
+				} 
+				return true;
+			}
+			return true;
+		},
+		mGetUrlParameter : function(name) {
+			var string = window.location.search;
+			if(!Simplr.Core.Util.mEmpty(string)) {
+				var parameters = {};
+				string = string.substring(1).split("&");
+				for(var i = 0, iL = string.length; i < iL; i++) {
+					var keyValue = string[i].split("=");
+					parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
+				}
+				if(Simplr.Core.Util.mEmpty(name)) {
+					return parameters;
+				} else {
+					var value = parameters[name];
+					return typeof value == "undefined" ? null : value;
+				}
+			} else { 
+				return null;
+			}
+		},
+		mHasLocalStorage : function() {
+			return hasLocalStorage;
+		}
+	};
+	
+})();(function() {
+	
+	var widgetIDs = {};
+	
+	Simplr.Core.Ui = {
+		mElementInfo : function(options) {
+			var opts = $.extend({ selector : "body" }, options);
+			var jqThisElement = $(opts.selector).eq(0);
+			var dimensions = [ jqThisElement.width(), jqThisElement.height() ];
+			var offsets = jqThisElement.offset();
+			offsets = [ offsets.left, offsets.top ];
+			return { offsets : offsets, dimensions : dimensions };
+		},
+		mWindowInfo : function() {
+			var screenInfo = {
+				offsets : [0, 0],
+				dimensions : [0, 0]
+			};
+			
+			// Offsets
+			if (typeof window.pageYOffset == 'number') { 
+				// Netscape compliant
+				screenInfo.offsets = [window.pageXOffset, window.pageYOffset];
+			} else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) { 
+				// DOM compliant
+				screenInfo.offsets = [document.body.scrollLeft, document.body.scrollTop];
+			} else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+				// IE6 standards compliant mode
+				screenInfo.offsets = [document.documentElement.scrollLeft, document.documentElement.scrollTop];
+			}
+
+			// Width and Height
+			if( typeof window.innerWidth == 'number' ) {
+				// NON IE
+				screenInfo.dimensions = [window.innerWidth, window.innerHeight];
+			} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+				// IE 6 plus in standards compliant mode
+				screenInfo.dimensions = [document.documentElement.clientWidth, document.documentElement.clientHeight];
+			}
+			return screenInfo;
+		},
+		Widget : {
+			mGenerateWidgetID : function() {
+				var num = Math.floor(Math.random()*10000000);
+				if(Simplr.Core.Util.mEmpty(widgetIDs[num])) {
+					widgetIDs[num] = true;
+					return num;
+				} else {
+					return Simplr.Core.Ui.Widget.mGenerateWidgetID();
+				}
+			}
+		}
+	}	
+	
+	
+})();(function($) {
+	
+	function mergeValidationResults(key, rule, newData, existingData) {
+		existingData.codes[key].success = existingData.codes[key].success.concat( newData.successCodes );
+		existingData.codes[key].error = existingData.codes[key].error.concat( newData.errorCodes );
+		if( !newData.valid ) { existingData.valid = false; }
+	};
+	
+	function replaceTokens(keys, message) {
+		var results = message;
+		for(var token in keys) {
+			results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+		}
+		return unescape(results);
+	};
+	
+	var data = {
+		codes : {
+			eEmpty : "$[label] is empty.",
+			eMissingValidator : "Missing Validator"
+		},
+		codeResultsTemplate : { 
+			success : [], 
+			error : []
+		},
+		defaultCodeMessage : "$[label] is UNDEFINED",
+		ruleResultsTemplate : { 
+			valid : true, 
+			successCodes : [], 
+			errorCodes : []
+		},
+		validators : {
+			missingvalidator : function(value) { 
+				return $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
+			},
+			notempty : function(value) {
+				var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate());
+				if( typeof value != "undefined" && value != null ) {
+					if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
+					else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
+					else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
+				}
+				if(!results.valid) { results.errorCodes.push("eEmpty"); }
+				return results;
+			}
+		},
+		validationResultsTemplate : { 
+			data : "", 
+			valid : true, 
+			codes : {}
+		}
+	};
+	
+	
+	Simplr.Core.Validation = {
+		mAddCodes : function(obj) {
+			$.extend(data.codes, obj);
+		},
+		mAddValidators : function(obj) {
+			$.extend(data.validators, obj);
+		},
+		mData : function() {
+			return data;
+		},
+		mGetCodeMessage : function(code, label) {
+			if( data.codes[code] != undefined ) {
+				return replaceTokens({ label : label }, data.codes[code]);
+			}
+			return replaceTokens({ label : code }, data.defaultCodeMessage);
+		},
+		mGetRuleResultsTemplate : function() {
+			return $.extend(true, {}, data.ruleResultsTemplate);
+		},
+		mValidate : function(dataObject) {
+			var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
+			for(var key in results.data) {
+				// Check the Rules for this data
+				var entry = results.data[key];
+				results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
+				for(var i = 0, iL = entry.rules.length; i < iL; i++) {
+					var rule = entry.rules[i];
+					var tmpValidationData = $.extend(true, {}, data.ruleResultsTemplate);
+					if( data.validators[rule] ) { 
+						tmpValidationData = data.validators[rule](entry.value); 
+					} else { 
+						tmpValidationData = data.validators["missingvalidator"](entry.value); 
+					}
+					mergeValidationResults(key, rule, tmpValidationData, results);
+				}
+				// Cleanup Data
+				if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
+					delete results.codes[key]; 
+				}
+			}
+			return results;
+		}
+	};
+	
+})(jQuery);/* Add Codes */
+Simplr.Core.Validation.mAddCodes({ 
+	eMissingValidator : "Missing Validator",
+	eAlphaNumeric : "$[label] is not alphanumeric.",
+	eAmericanExpress : "$[label] is not a valid AMERICAN EXPRESS number.",
+	eDinersClub : "$[label] is not a valid DINERS CLUB number.",
+	eDiscover : "$[label] is not a valid DISCOVER number.",
+	eEmail : "$[label] is not an email address.",
+	eEqual : "$[label] does not match.",
+	eMastercard : "$[label] is not a valid MASTERCARD number.",
+	eEmpty : "$[label] is empty.",
+	eNumber : "$[label] is not a number.",
+	ePhoneNumber : "$[label] is not a valid Phone Number.",
+	ePostalCode : "$[label] is not a Postal Code.",
+	eVisa : "$[label] is not a valid VISA number."
+});
+
+/* Add Validators */
+Simplr.Core.Validation.mAddValidators({
+	/* Missing Validator */
+	missingvalidator : function(value) { 
+		return $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
+	},
+	
+	alphanumeric : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^\w*$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAlphaNumeric"); }
+		return results;
+	},
+	americanexpress : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^3(4|7)\d{2}-?\d{6}-?\d{5}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eAmericanExpress"); }
+		return results;
+	},
+	dinersclub : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^3[0,6,8]\d{12}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDinersClub"); }
+		return results;
+	},
+	discover : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^6011-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eDiscover"); }
+		return results;
+	},
+	email : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eEmail"); }
+		return results;
+	},
+	equal : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate());
+		if( $.isArray(value) ) { 
+			for(var i = 0, iL = value.length; i < iL; i++) {
+				if(!Simplr.Core.Util.mEqual([value[0], value[i]])) {
+					results.valid = false; 
+					i = iL;
+				}
+			}
+		}
+		if( !results.valid ) { results.errorCodes.push("eEqual"); }
+		return results;
+	},
+	mastercard : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eMastercard"); }
+		return results;
+	},
+	notempty : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate());
+		if( typeof value != "undefined" && value != null ) {
+			if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
+			else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
+			else if( typeof value == "object" ) { results.valid = !$.isEmptyObject(value); }
+		}
+		if(!results.valid) { results.errorCodes.push("eEmpty"); }
+		return results;
+	},
+	number : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : ( !isNaN(parseFloat(value)) && isFinite(value) ) });
+		if( !results.valid ) { results.errorCodes.push("eNumber"); }
+		return results;
+	},
+	phonenumber : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^\d{10}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("ePhoneNumber"); }
+		return results;
+	},
+	postalcode : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^\d{5}([\-]?\d{4})?$/.test(value) });
+		if( !results.valid ) { 
+			results.errorCodes.push("ePostalCode") 
+		}
+		return results;	
+	},
+	visa : function(value) {
+		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/.test(value) });
+		if( !results.valid ) { results.errorCodes.push("eVisa"); }
+		return results;
+	}
+});	
+	// Form
+	Simplr.Form = {};
+	(function() {
 	
 	function render(selector, obj) {
 		var specClass = "_simplr";
-		var classes = data.classes;
+		var classes = FormData.Classes;
 		
 		// Reset the Form
-		$("."+classes.formError + "," + "."+classes.fieldError, selector).filter("." + specClass).removeClass(classes.formError).removeClass(classes.fieldError);
-		$("."+classes.textInformation + "," + "."+classes.textError, selector).filter("." + specClass).remove();
+		$("."+classes.FormError + "," + "."+classes.FieldError, selector).filter("." + specClass).removeClass(classes.FormError).removeClass(classes.FieldError);
+		$("."+classes.TextInformation + "," + "."+classes.TextError, selector).filter("." + specClass).remove();
 		
 		// Create the Messages
 		for(var key in obj.codes) {
 			var msgObject = obj.codes[key];
-			var html = "";
-			
 			var msgArray = [ msgObject.error, msgObject.success ];
+			var html = "";
 			for(var i = 0; i < 2; i++) {
-				var type = msgArray[i];
-				for(var j = 0, jL = type.length; j < jL; j++) {
-					html += '<p class="' + (( i == 0) ? classes.textError : classes.textInformation) + ' ' + specClass + '">' + CORE.validation.mGetCodeMessage(type[j], obj.data[key].label) + '</p>';
-					break; // Only Display 1 Message
+				// Only showing 1 message at a time.
+				if(msgArray[i].length > 0) {
+					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + Simplr.Core.Validation.mGetCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
 				}
-				break; // Only display 1 of each type
 			}
 			
 			// Now find the Form Entry to put the message html
-			$("[name='" + key + "']:first", selector).addClass(classes.fieldError + " " + specClass).closest("."+classes.formEntry).addClass(classes.formError + " " + specClass).append(html);
+			$("[name='" + key + "']:first", selector).addClass(classes.FieldError + " " + specClass).closest("."+classes.FormEntry).addClass(classes.FormError + " " + specClass).append(html);
 		}
 	};
 	
 	function transformValues(values) {
 		var validationAndRenderValues = {};
 		for(var key in values) {
-			var label = data.labels[key] ? data.labels[key] : data.defaultLabel;
+			var label = FormData.Labels[key] ? FormData.Labels[key] : FormData.DefaultLabel;
 			var validationObject = { value : values[key], label : label, rules : [] };
 			// Add Validators as needed
-			for(var i = 0, iL = data.defaultRules.length; i < iL; i++) {
-				validationObject.rules.push(data.defaultRules[i]);
+			for(var i = 0, iL = FormData.DefaultRules.length; i < iL; i++) {
+				validationObject.rules.push(FormData.DefaultRules[i]);
 			}
-			try { data.rules[key](validationObject.rules); } catch(e) {}
+			try { FormData.Rules[key](validationObject.rules); } catch(e) {}
 			// Return the Transformed Data
 			validationAndRenderValues[key] = validationObject;
 		}
 		return validationAndRenderValues;
 	};
 	
-	var data = {
-		classes : {
-			formEntry : "formEntry",
-			formError : "formError",
-			fieldError : "errorField",
-			textError : "errorText",
-			textInformation : "informationText"
+	var FormData = {
+		Classes : {
+			FormEntry : "formEntry",
+			FormError : "formError",
+			FieldError : "errorField",
+			TextError : "errorText",
+			TextInformation : "informationText"
 		},
-		defaultRules : [ "notempty" ],
-		defaultLabel : "_LABEL_",
-		rules : { },
-		labels : { }
+		DefaultRules : [ "notempty" ],
+		DefaultLabel : "_LABEL_",
+		Rules : { },
+		Labels : { }
 	};
 	
-	$.extend(true, simplr, {
-		form : {
-			
-			mAddValidators : function(obj) {
-				CORE.validation.mAddValidators(obj);
-			},
-			mGetValidators : function() {
-				return CORE.validation.mGetValidators();
-			},
-			
-			mAddCodes : function(obj) {
-				CORE.validation.mAddCodes(obj);
-			},
-			mGetCodes : function() {
-				return CORE.validation.mGetCodes();
-			},
-			
-			mAddLabelAssociation : function(obj) {
-				$.extend(data.labels, obj);
-			},
-			mAddValidationAssociation : function(obj) {
-				$.extend(data.rules, obj);
-			},
-			mGetValues : function(selector) {
-				var values = {};
-				$("input[type='checkbox']", selector).each(function() { 
-					values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
-				});
-				$("input[type='text'], input[type='password'], input[type='hidden'], input[type='radio']:checked, select, textarea", selector).each(function() { 
-					values[$(this).attr("name")] = $(this).val();
-				});
-				return values;
-			},
-			mValidateValuesAndRender : function(selector, values) {
-				var validationData = transformValues(values);
-				var validatedData = CORE.validation.mValidate(validationData);
-				render(selector, validatedData);
-				return validatedData.valid;
-			}
-			
+	Simplr.Form = {
+		mAddValidators : function(obj) {
+			Simplr.Core.Validation.mAddValidators(obj);
+		},
+		mGetValidators : function() {
+			return Simplr.Core.Validation.mData().validators;
+		},
+		mAddCodes : function(obj) {
+			Simplr.Core.Validation.mAddCodes(obj);
+		},
+		mGetCodes : function() {
+			return Simplr.Core.Validation.mData().codes;
+		},
+		mAddLabelAssociation : function(obj) {
+			$.extend(FormData.Labels, obj);
+		},
+		mAddValidationAssociation : function(obj) {
+			$.extend(FormData.Rules, obj);
+		},
+		mGetValues : function(selector) {
+			var values = {};
+			$("input[type='checkbox']", selector).each(function() { 
+				values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
+			});
+			$("input[type='text'], input[type='password'], input[type='hidden'], input[type='radio']:checked, select, textarea", selector).each(function() { 
+				values[$(this).attr("name")] = $(this).val();
+			});
+			return values;
+		},
+		mValidateValuesAndRender : function(selector, values) {
+			var validationData = transformValues(values);
+			var validatedData = Simplr.Core.Validation.mValidate(validationData);
+			render(selector, validatedData);
+			return validatedData.valid;
 		}
-	});
+	};
 
-})(jQuery);/*
+})();	
+	// Layout
+	Simplr.Layout = {};
+	/*
 Written by Steve Tucker, 2006, http://www.stevetucker.co.uk
 Full documentation can be found at http://www.stevetucker.co.uk/page-innerxhtml.php
 Released under the Creative Commons Attribution-Share Alike 3.0  License, http://creativecommons.org/licenses/by-sa/3.0/
@@ -1740,11 +1715,11 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 	}
 	return $xhtml;
-};(function($) {
+};(function() {
 	
 	function convertTokenToString(value) {
 		if(typeof value == "object") {
-			return Cu.mAssembleLayout(value);
+			return Simplr.Layout.mAssembleLayout(value);
 		}
 		return value;
 	};
@@ -1755,160 +1730,162 @@ var innerXHTML = function($source,$string,$appendage) {
 		}
 		var componentToLoad = {};
 		componentToLoad[component.attr("id").split("-")[1]] = innerXHTML(component.get(0));
-		Cu.mAddComponents(componentToLoad);
+		Simplr.Layout.mAddComponents(componentToLoad);
 		component.remove();
 	};
 	
 	function getComponent(key) {
-		if(typeof data.components[key] == "undefined") {
+		if(typeof LayoutData.Components[key] == "undefined") {
 			var layoutEl = $("#layout-"+key);
 			if( layoutEl.size() > 0 ) {
 				loadLayoutComponent($("#layout-"+key));
 			} else {
-				data.components[key] = null;
+				LayoutData.Components[key] = null;
 			}
 		}
-		return data.components[key];
+		return LayoutData.Components[key];
 	};
 	
-	var data = {
-		components : {}	,
-		globalTokens : {}
+	var LayoutData = {
+		Components : {}	,
+		GlobalTokens : {}
 	};
 	
-	$.extend(simplr, {
-		layout : {
-			
-			mAddComponents : function(obj) {
-				for(var key in obj) {
-					data.components[key] = $.trim(obj[key].replace(/\n/g,"").replace(/\s{1,}/g," "));
-				}
-			},
-			
-			mAssembleLayout : function(config) {
-				var finalResults = "";
-				if( config ) {
-					if( config.component && config.tokens) {
-						var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
-						for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
-							var tmpTokens = {};
-							for(var tKey in tokenCollections[i]) {
-								tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
-							}
-							finalResults += Cu.mReplaceTokens(tmpTokens, Cu.mGetComponent(config.component));
+	Simplr.Layout = {
+		mAddComponents : function(obj) {
+			for(var key in obj) {
+				LayoutData.Components[key] = $.trim(obj[key].replace(/\n/g,"").replace(/\s{1,}/g," "));
+			}
+		},
+		
+		mAddGlobalTokens : function(globalTokens) {
+			$.extend(LayoutData.GlobalTokens, globalTokens);
+		},
+		
+		mAssembleLayout : function(config) {
+			var finalResults = "";
+			if( config ) {
+				if( config.component && config.tokens) {
+					var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
+					for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
+						var tmpTokens = {};
+						for(var tKey in tokenCollections[i]) {
+							tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
 						}
+						finalResults += Simplr.Layout.mReplaceTokens(tmpTokens, Simplr.Layout.mGetComponent(config.component));
 					}
 				}
-				return finalResults;
-			},
-			
-			mGetComponent : function(key) {
-				return getComponent(key);
-			},
-			
-			mGetComponents : function() {
-				return data.components;
-			},
-			
-			mAddGlobalTokens : function(globalTokens) {
-				$.extend(data.globalTokens, globalTokens);
-			},
-			
-			mReplaceTokens : function(keys, string) {
-				if(string != null) {
-					$.extend(keys, data.globalTokens);
-					for(var token in keys) {
-						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
-					}
-				}
-				return unescape(string);
 			}
+			return finalResults;
+		},
+		
+		mData : function() {
+			return LayoutData;
+		},
+		
+		mGetComponent : function(key) {
+			return getComponent(key);
+		},
+		
+		mReplaceTokens : function(keys, string) {
+			if(string != null) {
+				$.extend(keys, LayoutData.GlobalTokens);
+				for(var token in keys) {
+					string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+				}
+			}
+			return unescape(string);
 		}
-	});
+	};
 	
-	var Cu = simplr.layout;
-	
-})(jQuery);(function($) {
-	var mD = {
-		env : "_simplr",
-		services : {}
+})();	
+	// Trigger
+	Simplr.Trigger = {};
+	(function() {
+	var TriggerData = {
+		Env : "_simplr",
+		Services : {}
 	};
 	
 	function getServiceIDs() {
 		var serviceIDs = [];
-		for(var id in mD.services) {
+		for(var id in TriggerData.Services) {
 			serviceIDs.push(id);
 		}
 		return serviceIDs;
 	};
 	
 	function trigger(triggerObj) {
-		var triggerOptions = { services : [], data : { envID : mD.env } };
+		var triggerOptions = { services : [], data : { envID : TriggerData.Env } };
 		$.extend(true, triggerOptions, triggerObj.options);
-		if(CORE.util.mEmpty(triggerOptions.services)) { 
+		if(Simplr.Core.Util.mEmpty(triggerOptions.services)) { 
 			triggerOptions.services = getServiceIDs(); 
 		}
 		
-		var messages = $.extend(CORE.console.mGetMessageTemplate(), {
-			group : "simplr.trigger: " + mD.env + " environment",
+		var messages = $.extend(Simplr.Core.Console.mGetMessageTemplate(), {
+			group : "simplr.trigger: " + TriggerData.Env + " environment",
 			message : []
 		});
 		
 		for(var i = 0, iL = triggerOptions.services.length; i < iL; i++) {
 			var id = triggerOptions.services[i];
-			if($.isFunction(mD.services[id][triggerObj.type]) && mD.services[id].data.environmentIDs[mD.env]) { 
+			if($.isFunction(TriggerData.Services[id][triggerObj.type]) && TriggerData.Services[id].data.environmentIDs[TriggerData.Env]) { 
 				messages.message.push({
 					message : "[" + id + "] " + triggerObj.type + " triggered.",
-				    data : mD.services[id][triggerObj.type](triggerOptions.data)
+				    data : TriggerData.Services[id][triggerObj.type](triggerOptions.data)
 				});
 			}
 		}
 		
 		if( messages.message.length > 0 ) {
-			CORE.console.mMessage(messages);
+			Simplr.Core.Console.mMessage(messages);
 		}
 	}
 	
-	$.extend(simplr, {
-		trigger : {
-			mAddServices : function( services ) {
-				for(var serviceName in services) {
-					mD.services[serviceName] = $.extend({
-						data : {
-							environmentIDs : {}
-						},
-						onLoad : function() {},
-						onPage : function() {},
-						onEvent : function() {},
-						onTransaction : function() {}
-					}, services[serviceName]);
-					trigger({ type : "onLoad", options : { services : [ serviceName ] } });
-				}
-			},
-			
-			mGetServices : function() {
-				return mD.services;
-			},
-
-			mSetEnvironment : function( env ) {
-				mD.env = env;
-			},
-			
-			mOnPage : function( options ) {
-				trigger({ type : "onPage", options : $.extend({},options) });
-			},
-			
-			mOnEvent : function( options ) {
-				trigger({ type : "onEvent", options : $.extend({},options) });
-			},
-			
-			mOnTransaction : function( options ) {
-				trigger({ type : "onTransaction", options : $.extend({},options) });
+	Simplr.Trigger = {
+		mAddServices : function( services ) {
+			for(var serviceName in services) {
+				TriggerData.Services[serviceName] = $.extend({
+					data : {
+						environmentIDs : {}
+					},
+					onLoad : function() {},
+					onPage : function() {},
+					onEvent : function() {},
+					onTransaction : function() {}
+				}, services[serviceName]);
+				trigger({ type : "onLoad", options : { services : [ serviceName ] } });
 			}
+		},
+		
+		mData : function() {
+			return TriggerData;
+		},
+
+		mSetEnvironment : function( env ) {
+			TriggerData.Env = env;
+		},
+		
+		mOnPage : function( options ) {
+			trigger({ type : "onPage", options : $.extend({}, options) });
+		},
+		
+		mOnEvent : function( options ) {
+			trigger({ type : "onEvent", options : $.extend({}, options) });
+		},
+		
+		mOnTransaction : function( options ) {
+			trigger({ type : "onTransaction", options : $.extend({}, options) });
 		}
-	});
+	};
 	
-})(jQuery);(function($) {
+	
+})();	
+	// Ui
+	Simplr.Ui = {
+		Widget : {}
+	};
+	(function() {
 	
 	var cClass = "_simplr_centerLayer";
 	var kcClass = "_simplr_keepCenterLayer";
@@ -1931,156 +1908,139 @@ var innerXHTML = function($source,$string,$appendage) {
 			if( opts.keepCentered ) { 
 				jqThisLayer.addClass(kcClass); 
 			}
-			Cu.mCenter(opts.id);
+			Simplr.Ui.Layer.mCenter(opts.id);
 		}
 		
 		jqThisLayer.html(opts.defaultContent);
 		if(centered) {
-			Cu.mCenter(opts.id);
+			Simplr.Ui.Layer.mCenter(opts.id);
 		}
 		
 		$(opts.closeSelector).bind("click.simplr.layer.destroy." + opts.id, function(evt) {
 			evt.preventDefault();
-			Cu.mDestroy({ id : opts.id, closeSelector : opts.closeSelector });
+			Simplr.Ui.Layer.mDestroy({ id : opts.id, closeSelector : opts.closeSelector });
 		});
 	};
 	
-	$.extend(true, simplr, {
-		ui : {
-			layer : {
+	Simplr.Ui.Layer = {
+		mCenter : function(id) {
+			if(!Simplr.Core.Util.mEmpty(id)) {
+				var jqThisLayer = $("#" + id);
+				var lWidth = jqThisLayer.width();
+				var lHeight = jqThisLayer.height();
+				var screenInfo = Simplr.Core.Ui.mWindowInfo();
 				
-				mCenter : function(id) {
-					if(!CORE.util.mEmpty(id)) {
-						var jqThisLayer = $("#" + id);
-						var lWidth = jqThisLayer.width();
-						var lHeight = jqThisLayer.height();
-						var screenInfo = CORE.ui.mWindowInfo();
-						
-						/* Get Left Offset */
-						var left = 0;
-						left = (( screenInfo.dimensions[0] - lWidth ) / 2);
-						left = ( left < 0 ) ? 20 : left;
-						left += screenInfo.offsets[0];
-						
-						/* Get Top Offset */
-						var top = 0;
-						top = (( screenInfo.dimensions[1] - lHeight ) / 2);
-						top = ( top < 0 ) ? 20 : top;
-						top += screenInfo.offsets[1];
-						
-						/* if layer Can't be centered on Screen */
-						if( ( lWidth > screenInfo.dimensions[0] ) || ( lHeight > screenInfo.dimensions[1] ) ) { 
-							/* Should this layer stay centered? */
-							if( jqThisLayer.hasClass(kcClass) )	{ 
-								jqThisLayer.removeClass(kcClass).addClass(cClass); 
-							}
-						}
-						
-						jqThisLayer.css("top",top+"px").css("left", left+"px");
-					}
-				},
-				mCreate : function(options) {
-					var opts = $.extend({
-						ajax : null,
-						callback : null,
-						closeSelector : "#_simplr_layerClose",
-						defaultContent : "",
-						id : "_simplr_layer",
-						isOverlay : false,
-						keepCentered : false,
-						xPos : null,
-						yPos : null
-					}, options);
-					
-					if( opts.isOverlay ) { 
-						opts.id = opts.id == "_simplr_layer" ? "_simplr_overlay" : opts.id;
-						opts.closeSelector = opts.closeSelector == "#_simplr_layerClose" ? "#_simplr_overlayClose" : opts.closeSelector;
-						opts.xPos = 0;
-						opts.yPos = 0;
-					}
-					
-					addLayer(opts);
-					
-					if(opts.ajax != null) { 
-						var previousCallback = opts.ajax.success;
-						opts.ajax.success = function(data, textStatus) {
-							opts.defaultContent = data;
-							addLayer(opts);
-							if( $.isFunction(previousCallback) ) { 
-								previousCallback(data, textStatus); 
-							}
-						};
-						$.ajax(opts.ajax); 
-					} else {
-						if( $.isFunction(opts.callback) ) { 
-							opts.callback(); 
-						}
-					}
-					
-					if(opts.isOverlay) { 
-						$("#" + opts.id).css({ "position" : "fixed", "width" : "100%", "height" : "100%" }); 
-					}
-				},
-				mDestroy : function(options) {
-					var opts = $.extend({ id : "_simplr_layer", closeSelector : "#_simplr_layerClose" }, options);
-					if(!CORE.util.mEmpty(opts.id)) {
-						$("#"+opts.id).remove();
-						$(opts.closeSelector).unbind("click.simplr.ui.layer.destroy." + opts.id);
+				/* Get Left Offset */
+				var left = 0;
+				left = (( screenInfo.dimensions[0] - lWidth ) / 2);
+				left = ( left < 0 ) ? 20 : left;
+				left += screenInfo.offsets[0];
+				
+				/* Get Top Offset */
+				var top = 0;
+				top = (( screenInfo.dimensions[1] - lHeight ) / 2);
+				top = ( top < 0 ) ? 20 : top;
+				top += screenInfo.offsets[1];
+				
+				/* if layer Can't be centered on Screen */
+				if( ( lWidth > screenInfo.dimensions[0] ) || ( lHeight > screenInfo.dimensions[1] ) ) { 
+					/* Should this layer stay centered? */
+					if( jqThisLayer.hasClass(kcClass) )	{ 
+						jqThisLayer.removeClass(kcClass).addClass(cClass); 
 					}
 				}
+				
+				jqThisLayer.css("top",top+"px").css("left", left+"px");
+			}
+		},
+		mCreate : function(options) {
+			var opts = $.extend({
+				ajax : null,
+				callback : null,
+				closeSelector : "#_simplr_layerClose",
+				defaultContent : "",
+				id : "_simplr_layer",
+				isOverlay : false,
+				keepCentered : false,
+				xPos : null,
+				yPos : null
+			}, options);
+			
+			if( opts.isOverlay ) { 
+				opts.id = opts.id == "_simplr_layer" ? "_simplr_overlay" : opts.id;
+				opts.closeSelector = opts.closeSelector == "#_simplr_layerClose" ? "#_simplr_overlayClose" : opts.closeSelector;
+				opts.xPos = 0;
+				opts.yPos = 0;
+			}
+			
+			addLayer(opts);
+			
+			if(opts.ajax != null) { 
+				var previousCallback = opts.ajax.success;
+				opts.ajax.success = function(data, textStatus) {
+					opts.defaultContent = data;
+					addLayer(opts);
+					if( $.isFunction(previousCallback) ) { 
+						previousCallback(data, textStatus); 
+					}
+				};
+				$.ajax(opts.ajax); 
+			} else {
+				if( $.isFunction(opts.callback) ) { 
+					opts.callback(); 
+				}
+			}
+			
+			if(opts.isOverlay) { 
+				$("#" + opts.id).css({ "position" : "fixed", "width" : "100%", "height" : "100%" }); 
+			}
+		},
+		mDestroy : function(options) {
+			var opts = $.extend({ id : "_simplr_layer", closeSelector : "#_simplr_layerClose" }, options);
+			if(!Simplr.Core.Util.mEmpty(opts.id)) {
+				$("#"+opts.id).remove();
+				$(opts.closeSelector).unbind("click.simplr.ui.layer.destroy." + opts.id);
 			}
 		}
-	});
-	
-	var Cu = simplr.ui.layer;
+	};
 	
 	/* this managers the layers during window scroll or resize. */
 	$(function() {
 		$(window).bind("resize.simplr.ui.layer", function() {
 			$("." + kcClass +","+ "." +cClass).each(function(i, layer) {
 				$(layer).addClass( kcClass ).removeClass( cClass );
-				Cu.mCenter($(layer).attr("id"));
+				Simplr.Ui.Layer.mCenter($(layer).attr("id"));
 			});
 		}).bind("scroll.simplr.ui.layer", function() {
 			$("." + kcClass).each(function(i, layer) { 
-				Cu.mCenter($(layer).attr("id")); 
+				Simplr.Ui.Layer.mCenter($(layer).attr("id")); 
 			});
 		});
 	});
 
-})(jQuery);$.extend(true, simplr, {
-	ui : {
-		newBrowserWindow : function(options) {
-			var opts = $.extend({ url : "", width : 500, height: 500, name : "_simplr_newBrowserWindow"}, options);
-			if(!CORE.util.mEmpty(opts.url)) {
-				var features = "width=" + opts.width + ",height=" + opts.height;
-				var url = opts.url;
-				var name = opts.name;
-				delete opts.url; delete opts.width; delete opts.height; delete opts.name;
-				
-				for(var key in opts) {
-					features += "," + key + "=" + opts[key];
-				}
-				
-				var newWindow = window.open(url, name, features);
-				if( newWindow != null) { 
-					newWindow.focus(); 
-				}
-			}
+})();Simplr.Ui.mNewBrowserWindow = function(options) {
+	var opts = $.extend({ url : "", width : 500, height: 500, name : "_simplr_newBrowserWindow"}, options);
+	if(!Simplr.Core.Util.mEmpty(opts.url)) {
+		var features = "width=" + opts.width + ",height=" + opts.height;
+		var url = opts.url;
+		var name = opts.name;
+		delete opts.url; delete opts.width; delete opts.height; delete opts.name;
+		
+		for(var key in opts) {
+			features += "," + key + "=" + opts[key];
+		}
+		
+		var newWindow = window.open(url, name, features);
+		if( newWindow != null) { 
+			newWindow.focus(); 
 		}
 	}
-});
-(function($) {
+};
+(function() {
 	
-	$.extend(true, simplr, {
-		ui : {
-			widget : {
-				oTrackableScrollingElement : function(options) {
-					return new trackableScrollingElement(options);
-				}
-			}
-		}
-	});
+	Simplr.Ui.Widget.oTrackableScrollingElement = function(options) {
+		return new trackableScrollingElement(options);
+	};
 	
 	function trackableScrollingElement(options) {
 		// user
@@ -2095,7 +2055,7 @@ var innerXHTML = function($source,$string,$appendage) {
 		
 		// private
 		this.data._PRIVATE = {
-			evtString : "scroll.simplr.widget.trackableScrollingElement." + CORE.ui.widget.mGenerateWidgetID(),
+			evtString : "scroll.simplr.widget.trackableScrollingElement." + Simplr.Core.Ui.Widget.mGenerateWidgetID(),
 			timeout : null,
 			previousOffset : 0
 		};
@@ -2112,9 +2072,9 @@ var innerXHTML = function($source,$string,$appendage) {
 				var childEl = parentEl.children(thisWidget.data.elementSelector).eq(0);
 				if( parentEl.is(":visible") && childEl.is(":visible") ) {
 					/* Object Infos */
-					var containerInfo = CORE.ui.mElementInfo({ selector : parentEl });
-					var mElementInfo = CORE.ui.mElementInfo({ selector : childEl });
-					var windowInfo = CORE.ui.mWindowInfo();
+					var containerInfo = Simplr.Core.Ui.mElementInfo({ selector : parentEl });
+					var mElementInfo = Simplr.Core.Ui.mElementInfo({ selector : childEl });
+					var windowInfo = Simplr.Core.Ui.mWindowInfo();
 					/* Figure Out How this thing is moving */
 					var movingUP = ((windowInfo.offsets[1] - thisWidget.data._PRIVATE.previousOffset) < 0);
 					thisWidget.data._PRIVATE.previousOffset = windowInfo.offsets[1];	
@@ -2156,93 +2116,92 @@ var innerXHTML = function($source,$string,$appendage) {
 		$(window).unbind(this.data._PRIVATE.evtString);
 	};
 
-})(jQuery);$.extend(true, simplr, {
-	util : {
-		mEmpty : function(thing) {
-			return CORE.util.mEmpty(thing);
-		},
-		mEqual : function(things) {
-			return CORE.util.mEqual(things);
-		},
-		mGetUrlParameter : function(name) {
-			return CORE.util.mGetUrlParameter(name);
-		},
-		mHasLocalStorage : function() {
-			return CORE.util.mHasLocalStorage();
-		},
-		mTruncateString : function(options) {
-			var opts = $.extend({ string : "", size : 5, postfix : "", smart : true }, options);
-			if(opts.string.length > opts.size) {
-				var truncateIndex = opts.size - opts.postfix.length - 1;
-				var defaultIndex = truncateIndex+1;
-				if(opts.smart) {
-					while((opts.string.charAt(truncateIndex) != " ") && (truncateIndex > 0)) {
-						truncateIndex--;
-					}
+})();
+	// Util
+	Simplr.Util = {};
+	Simplr.Util = {
+	mEmpty : function(thing) {
+		return Simplr.Core.Util.mEmpty(thing);
+	},
+	mEqual : function(things) {
+		return Simplr.Core.Util.mEqual(things);
+	},
+	mGetUrlParameter : function(name) {
+		return Simplr.Core.Util.mGetUrlParameter(name);
+	},
+	mHasLocalStorage : function() {
+		return Simplr.Core.Util.mHasLocalStorage();
+	},
+	mTruncateString : function(options) {
+		var opts = $.extend({ string : "", size : 5, postfix : "", smart : true }, options);
+		if(opts.string.length > opts.size) {
+			var truncateIndex = opts.size - opts.postfix.length - 1;
+			var defaultIndex = truncateIndex+1;
+			if(opts.smart) {
+				while((opts.string.charAt(truncateIndex) != " ") && (truncateIndex > 0)) {
+					truncateIndex--;
 				}
-				return opts.string.substring(0, (truncateIndex == 0 ? defaultIndex : (truncateIndex+1))) + opts.postfix;
 			}
-			return opts.string;
+			return opts.string.substring(0, (truncateIndex == 0 ? defaultIndex : (truncateIndex+1))) + opts.postfix;
 		}
-	}
-});
-	(function($) {
-
-	$.extend(true, simplr, {
-		validation : {
-			mAddCodes : function(obj) {
-				CORE.validation.mAddCodes(obj);
-			},
-			mGetCodes : function() {
-				return CORE.validation.mGetCodes();
-			},
-			
-			mAddValidators : function(obj) {
-				CORE.validation.mAddValidators(obj);
-			},
-			mGetValidators : function() {
-				return CORE.validation.mGetValidators();
-			},
+		return opts.string;
+	}	
+};
 		
-			mGetRuleResultsTemplate : function() {
-				return CORE.validation.mGetRuleResultsTemplate();
-			},
-			
-			mGetCodeMessage : function(code, label) {
-				return CORE.validation.mGetCodeMessage(code, label);
-			},
-			mValidate : function(obj) {
-				return CORE.validation.mValidate(obj);
+	// Validation
+	Simplr.Validation = {};
+	Simplr.Validation = {
+	mAddCodes : function(obj) {
+		Simplr.Core.Validation.mAddCodes(obj);
+	},
+	mGetCodes : function() {
+		return Simplr.Core.Validation.mData().codes;
+	},
+	mAddValidators : function(obj) {
+		Simplr.Core.Validation.mAddValidators(obj);
+	},
+	mGetValidators : function() {
+		return Simplr.Core.Validation.mData().validators;
+	},
+	mGetRuleResultsTemplate : function() {
+		return Simplr.Core.Validation.mGetRuleResultsTemplate();
+	},
+	mGetCodeMessage : function(code, label) {
+		return Simplr.Core.Validation.mGetCodeMessage(code, label);
+	},
+	mValidate : function(obj) {
+		return Simplr.Core.Validation.mValidate(obj);
+	}
+};
+	// View
+	Simplr.View = {};
+	(function() {
+	
+	var ViewData = {
+		Views : {}
+	};
+	
+	Simplr.View = {
+		mAddViews : function(obj) {
+			for(var key in obj) {
+				var newView = $.extend(true, {}, { 
+					html : function(data) { return ""; }, 
+					callback : function(selector, data) {} 
+				}, obj[key]);
+				ViewData.Views[key] = newView;
 			}
+		},
+		
+		mData : function() {
+			return ViewData;
+		},
+		
+		mRender : function(options) {
+			var tmp = $.extend({ name : "", data: "", selector : ""}, options);
+			$(tmp.selector).html(ViewData.Views[tmp.name].html(tmp.data));
+			ViewData.Views[tmp.name].callback(tmp.selector, tmp.data);
 		}
-	});
-
-})(jQuery);
-(function($) {
+	};
 	
-	var data = {};
-	
-	$.extend(true, simplr, {
-		view : {
-			mAddViews : function(obj) {
-				for(var key in obj) {
-					var newView = $.extend(true, {}, { 
-						html : function(data) { return ""; }, 
-						callback : function(selector, data) {} 
-					}, obj[key]);
-					data[key] = newView;
-				}
-			},
-			mGetViews : function() {
-				return data;
-			},
-			mRender : function(options) {
-				var tmp = $.extend({ name : "", data: "", selector : ""}, options);
-				$(tmp.selector).html(data[tmp.name].html(tmp.data));
-				data[tmp.name].callback(tmp.selector, tmp.data);
-			}
-		}
-	});
-	
-})(jQuery);
+})();
 })(jQuery);

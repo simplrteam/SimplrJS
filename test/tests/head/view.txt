@@ -3,7 +3,7 @@
 	$(function() {
 		
 		/* Create 3 Layouts */
-		simplr.view.mAddViews({
+		Simplr.View.mAddViews({
 			layout_1 : {
 				html : function(data) { return '<div id="layout_1">Layout1</div>' },
 				callback : function(selector, data) {}
@@ -20,40 +20,40 @@
 
 		function getLayoutCount() {
 			var tmp = 0;
-			$.each(simplr.view.mGetViews(), function(key, value) { tmp++; });
+			$.each(Simplr.View.mData().Views, function(key, value) { tmp++; });
 			return tmp;
 		};
 
 		function getLayoutNames() {
 			var tmp = [];
-			$.each(simplr.view.mGetViews(), function(key, value) { tmp.push(key); });
+			$.each(Simplr.View.mData().Views, function(key, value) { tmp.push(key); });
 			return tmp;
 		};
 
 		/* Need to Create a Dummy Container for our content */
 		$("body").append('<div id="js-page" class="none"><!-- --></div>');
 		
-		module("simplr.view");
+		module("Simplr.View");
 
-		test("simplr.view.mAddViews()", function() {
+		test("Simplr.View.mAddViews()", function() {
 			equals( getLayoutCount(), 3, "Layout Count");
 			same( getLayoutNames(), ["layout_1", "layout_2", "layout_3"], "Layout Names");
 		});
 
-		test("simplr.view.mRender() - HTML Executes correctly", function() {
+		test("Simplr.View.mRender() - HTML Executes correctly", function() {
 			equals( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist");
-			simplr.view.mRender({ name : "layout_1", data : {}, selector : "#js-page"});
+			Simplr.View.mRender({ name : "layout_1", data : {}, selector : "#js-page"});
 			equals( $("#layout_1").size(), 1, "Layout Now Exists");
 		});
 		
-		test("simplr.view.mRender() - CALLBACK Executes", function() {
-			simplr.view.mRender({ name : "layout_2", data : {}, selector : "#js-page" });
+		test("Simplr.View.mRender() - CALLBACK Executes", function() {
+			Simplr.View.mRender({ name : "layout_2", data : {}, selector : "#js-page" });
 			equals( $("#layout_2").size(), 1, "New Layout Exists");
 			equals( $("#layout_2").css("font-weight") == "bold" || $("#layout_2").css("font-weight") == "700", true, "Callback executed");
 		});
 
-		test("simplr.view.mRender() - DATA is Passed", function() {
-			simplr.view.mRender({ name : "layout_3", data : { text : "data string" }, selector : "#js-page" });
+		test("Simplr.View.mRender() - DATA is Passed", function() {
+			Simplr.View.mRender({ name : "layout_3", data : { text : "data string" }, selector : "#js-page" });
 			equals( $("#layout_3").size(), 1, "New Layout Exists");
 			equals( $("#layout_3").text(), "data string", "Data Passed"); 
 		});

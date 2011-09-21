@@ -31,10 +31,10 @@
 		},
 		validators : {
 			missingvalidator : function(value) { 
-				return $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
+				return $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate(), { valid : false, errorCodes : [ "eMissingValidator" ] }); 
 			},
 			notempty : function(value) {
-				var results = $.extend(true, {}, CORE.validation.mGetRuleResultsTemplate());
+				var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate());
 				if( typeof value != "undefined" && value != null ) {
 					if( typeof value == "string" ) { results.valid = !($.trim(value) == ""); }
 					else if( $.isArray(value) ) { results.valid = !(value.length == 0); }
@@ -47,60 +47,53 @@
 		validationResultsTemplate : { 
 			data : "", 
 			valid : true, 
-			codes : {} 
+			codes : {}
 		}
 	};
 	
-	$.extend(true, CORE, {
-		validation : {
-			
-			mAddCodes : function(obj) {
-				$.extend(data.codes, obj);
-			},
-			mAddValidators : function(obj) {
-				$.extend(data.validators, obj);
-			},
-			
-			mGetCodes : function() {
-				return data.codes;
-			},
-			mGetCodeMessage : function(code, label) {
-				if( data.codes[code] != undefined ) {
-					return replaceTokens({ label : label }, data.codes[code]);
-				}
-				return replaceTokens({ label : code }, data.defaultCodeMessage);
-			},
-			mGetRuleResultsTemplate : function() {
-				return $.extend(true, {}, data.ruleResultsTemplate);
-			},
-			mGetValidators : function() {
-				return data.validators;
-			},
-			
-			mValidate : function(dataObject) {
-				var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
-				for(var key in results.data) {
-					// Check the Rules for this data
-					var entry = results.data[key];
-					results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
-					for(var i = 0, iL = entry.rules.length; i < iL; i++) {
-						var rule = entry.rules[i];
-						var tmpValidationData = $.extend(true, {}, data.ruleResultsTemplate);
-						if( data.validators[rule] ) { 
-							tmpValidationData = data.validators[rule](entry.value); 
-						} else { 
-							tmpValidationData = data.validators["missingvalidator"](entry.value); 
-						}
-						mergeValidationResults(key, rule, tmpValidationData, results);
-					}
-					// Cleanup Data
-					if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
-						delete results.codes[key]; 
-					}
-				}
-				return results;
+	
+	Simplr.Core.Validation = {
+		mAddCodes : function(obj) {
+			$.extend(data.codes, obj);
+		},
+		mAddValidators : function(obj) {
+			$.extend(data.validators, obj);
+		},
+		mData : function() {
+			return data;
+		},
+		mGetCodeMessage : function(code, label) {
+			if( data.codes[code] != undefined ) {
+				return replaceTokens({ label : label }, data.codes[code]);
 			}
+			return replaceTokens({ label : code }, data.defaultCodeMessage);
+		},
+		mGetRuleResultsTemplate : function() {
+			return $.extend(true, {}, data.ruleResultsTemplate);
+		},
+		mValidate : function(dataObject) {
+			var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
+			for(var key in results.data) {
+				// Check the Rules for this data
+				var entry = results.data[key];
+				results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
+				for(var i = 0, iL = entry.rules.length; i < iL; i++) {
+					var rule = entry.rules[i];
+					var tmpValidationData = $.extend(true, {}, data.ruleResultsTemplate);
+					if( data.validators[rule] ) { 
+						tmpValidationData = data.validators[rule](entry.value); 
+					} else { 
+						tmpValidationData = data.validators["missingvalidator"](entry.value); 
+					}
+					mergeValidationResults(key, rule, tmpValidationData, results);
+				}
+				// Cleanup Data
+				if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
+					delete results.codes[key]; 
+				}
+			}
+			return results;
 		}
-	});
+	};
 	
 })(jQuery);

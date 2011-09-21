@@ -48,42 +48,42 @@
 		'</div>';
 		$("#js-testHTML").append(htmlContent);
 		
-		module("simplr.form");
-		test("simplr.form.mAddValidators()", function() {
-			simplr.form.mAddValidators({ "test0" : function() {} });
+		module("Simplr.Form");
+		test("Simplr.Form.mAddValidators()", function() {
+			Simplr.Form.mAddValidators({ "test0" : function() {} });
 			var test0Exists = false;
-			if( simplr.form.mGetValidators()["test0"] ) { test0Exists = true; }
+			if( Simplr.Form.mGetValidators()["test0"] ) { test0Exists = true; }
 			equal(test0Exists, true, "Add a Single Validator");
 
-			simplr.form.mAddValidators({ 
+			Simplr.Form.mAddValidators({ 
 				"test1" : function(value) {},
 				"test2" : function(value) {}
 			});
 			var test1And2Exists = false;
-			if( simplr.form.mGetValidators()["test1"] && simplr.form.mGetValidators()["test2"] ) { test1And2Exists = true; }
+			if( Simplr.Form.mGetValidators()["test1"] && Simplr.Form.mGetValidators()["test2"] ) { test1And2Exists = true; }
 			equal(test1And2Exists, true, "Add a list of Validators");
 		});
 		
-		test("simplr.form.mAddCodes()", function() {
-			simplr.form.mAddCodes({ "test0" : function(label) { return "test0"; } });
+		test("Simplr.Form.mAddCodes()", function() {
+			Simplr.Form.mAddCodes({ "test0" : function(label) { return "test0"; } });
 			var code0Exists = false;
-			if( simplr.form.mGetCodes()["test0"] ) { code0Exists = true; }
+			if( Simplr.Form.mGetCodes()["test0"] ) { code0Exists = true; }
 			equal(code0Exists, true, "Add a single code");
 			
-			simplr.form.mAddCodes({ 
+			Simplr.Form.mAddCodes({ 
 	   	   		"test1" : "test1", 
 	   			"test2" : "test2"
    			});
 			var code1And2Exists = false;
-			if( simplr.form.mGetCodes()["test1"] && simplr.form.mGetCodes()["test2"] ) { code1And2Exists = true; }
+			if( Simplr.Form.mGetCodes()["test1"] && Simplr.Form.mGetCodes()["test2"] ) { code1And2Exists = true; }
 			equal(code1And2Exists, true, "Add a list of codes");
 		});
 
-		test("simplr.form.mGetValues()", function() {
-			equals( countLength( simplr.form.mGetValues("#formTest form") ), 16, "Selector: 'form'");
-			equals( countLength( simplr.form.mGetValues("#formTest #form1") ), 10, "Selector: '#form1'");
-			equals( countLength( simplr.form.mGetValues("#formTest #form2") ), 1, "Selector: '#form2'");
-			same(simplr.form.mGetValues("#formTest #form1"), { 
+		test("Simplr.Form.mGetValues()", function() {
+			equals( countLength( Simplr.Form.mGetValues("#formTest form") ), 16, "Selector: 'form'");
+			equals( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 10, "Selector: '#form1'");
+			equals( countLength( Simplr.Form.mGetValues("#formTest #form2") ), 1, "Selector: '#form2'");
+			same(Simplr.Form.mGetValues("#formTest #form1"), { 
 				isPassword : "password test",
 				isHidden : "hidden test",
 				isText : "text test",
@@ -97,27 +97,27 @@
 			}, "All Expected Fields");
 		});
 
-		test("simplr.form.mAddValidationAssociation() - simplr.form.mValidateValuesAndRender()", function() {
-			simplr.form.mAddValidationAssociation({ "Zip_Code" : function(rules) { rules.push("postalcode") } });
-			var data = simplr.form.mGetValues("#formTest #form5");
-			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a postal code rule that was associated correctly" );
+		test("Simplr.Form.mAddValidationAssociation() - Simplr.Form.mValidateValuesAndRender()", function() {
+			Simplr.Form.mAddValidationAssociation({ "Zip_Code" : function(rules) { rules.push("postalcode") } });
+			var data = Simplr.Form.mGetValues("#formTest #form5");
+			equals( Simplr.Form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a postal code rule that was associated correctly" );
 		
-			simplr.form.mAddValidationAssociation({ "isText2" : function(rules) { rules.push("equal") } });
-			var data = simplr.form.mGetValues("#formTest #form2");
+			Simplr.Form.mAddValidationAssociation({ "isText2" : function(rules) { rules.push("equal") } });
+			var data = Simplr.Form.mGetValues("#formTest #form2");
 			data.isText2 = [ data.isText2, "test text2222" ];
-			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a equals rule false");
+			equals( Simplr.Form.mValidateValuesAndRender("#formTest #form5", data), false, "validate a equals rule false");
 		});
 		
-		test("simplr.form.mValidateValuesAndRender()", function() {
-			equals( simplr.form.mValidateValuesAndRender("#formTest #form2", simplr.form.mGetValues("#form2")), true, "rule notempty, field is not empty");
-			equals( simplr.form.mValidateValuesAndRender("#formTest #form3", simplr.form.mGetValues("#form3")), false, "rule notempty, field is empty");
-			equals( simplr.form.mValidateValuesAndRender("#formTest #form5", simplr.form.mGetValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
+		test("Simplr.Form.mValidateValuesAndRender()", function() {
+			equals( Simplr.Form.mValidateValuesAndRender("#formTest #form2", Simplr.Form.mGetValues("#form2")), true, "rule notempty, field is not empty");
+			equals( Simplr.Form.mValidateValuesAndRender("#formTest #form3", Simplr.Form.mGetValues("#form3")), false, "rule notempty, field is empty");
+			equals( Simplr.Form.mValidateValuesAndRender("#formTest #form5", Simplr.Form.mGetValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
 		});
 	
-		test("simplr.form.mAddLabelAssociation()", function() {
-			simplr.form.mAddLabelAssociation({ "Text_4-1" : "Text 4-1" });
-			var data = simplr.form.mGetValues("#formTest #form4");
-			simplr.form.mValidateValuesAndRender("#formTest #form4", data);
+		test("Simplr.Form.mAddLabelAssociation()", function() {
+			Simplr.Form.mAddLabelAssociation({ "Text_4-1" : "Text 4-1" });
+			var data = Simplr.Form.mGetValues("#formTest #form4");
+			Simplr.Form.mValidateValuesAndRender("#formTest #form4", data);
 			equals( $("#form4 .errorText").size(), 2, "2 total messages, 1 default, 1 from the tool." );
 			equals( $("#form4 .formEntry:eq(1) .errorText").size(), 1, "error in the correct spot" );
 			equals( $("#form4 .formEntry:eq(1) .errorText").text(), "Text 4-1 is empty.", "error text is correct" );

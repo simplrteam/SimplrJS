@@ -1,8 +1,8 @@
-(function($) {
+(function() {
 	
 	function convertTokenToString(value) {
 		if(typeof value == "object") {
-			return Cu.mAssembleLayout(value);
+			return Simplr.Layout.mAssembleLayout(value);
 		}
 		return value;
 	};
@@ -13,77 +13,72 @@
 		}
 		var componentToLoad = {};
 		componentToLoad[component.attr("id").split("-")[1]] = innerXHTML(component.get(0));
-		Cu.mAddComponents(componentToLoad);
+		Simplr.Layout.mAddComponents(componentToLoad);
 		component.remove();
 	};
 	
 	function getComponent(key) {
-		if(typeof data.components[key] == "undefined") {
+		if(typeof LayoutData.Components[key] == "undefined") {
 			var layoutEl = $("#layout-"+key);
 			if( layoutEl.size() > 0 ) {
 				loadLayoutComponent($("#layout-"+key));
 			} else {
-				data.components[key] = null;
+				LayoutData.Components[key] = null;
 			}
 		}
-		return data.components[key];
+		return LayoutData.Components[key];
 	};
 	
-	var data = {
-		components : {}	,
-		globalTokens : {}
+	var LayoutData = {
+		Components : {}	,
+		GlobalTokens : {}
 	};
 	
-	$.extend(simplr, {
-		layout : {
-			
-			mAddComponents : function(obj) {
-				for(var key in obj) {
-					data.components[key] = $.trim(obj[key].replace(/\n/g,"").replace(/\s{1,}/g," "));
-				}
-			},
-			
-			mAssembleLayout : function(config) {
-				var finalResults = "";
-				if( config ) {
-					if( config.component && config.tokens) {
-						var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
-						for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
-							var tmpTokens = {};
-							for(var tKey in tokenCollections[i]) {
-								tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
-							}
-							finalResults += Cu.mReplaceTokens(tmpTokens, Cu.mGetComponent(config.component));
+	Simplr.Layout = {
+		mAddComponents : function(obj) {
+			for(var key in obj) {
+				LayoutData.Components[key] = $.trim(obj[key].replace(/\n/g,"").replace(/\s{1,}/g," "));
+			}
+		},
+		
+		mAddGlobalTokens : function(globalTokens) {
+			$.extend(LayoutData.GlobalTokens, globalTokens);
+		},
+		
+		mAssembleLayout : function(config) {
+			var finalResults = "";
+			if( config ) {
+				if( config.component && config.tokens) {
+					var tokenCollections = $.isArray(config.tokens) ? config.tokens : [ config.tokens ];
+					for(var i = 0, iL = tokenCollections.length; i < iL; i++) {
+						var tmpTokens = {};
+						for(var tKey in tokenCollections[i]) {
+							tmpTokens[tKey] = convertTokenToString(tokenCollections[i][tKey]);
 						}
+						finalResults += Simplr.Layout.mReplaceTokens(tmpTokens, Simplr.Layout.mGetComponent(config.component));
 					}
 				}
-				return finalResults;
-			},
-			
-			mGetComponent : function(key) {
-				return getComponent(key);
-			},
-			
-			mGetComponents : function() {
-				return data.components;
-			},
-			
-			mAddGlobalTokens : function(globalTokens) {
-				$.extend(data.globalTokens, globalTokens);
-			},
-			
-			mReplaceTokens : function(keys, string) {
-				if(string != null) {
-					$.extend(keys, data.globalTokens);
-					for(var token in keys) {
-						string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
-					}
-				}
-				return unescape(string);
 			}
+			return finalResults;
+		},
+		
+		mData : function() {
+			return LayoutData;
+		},
+		
+		mGetComponent : function(key) {
+			return getComponent(key);
+		},
+		
+		mReplaceTokens : function(keys, string) {
+			if(string != null) {
+				$.extend(keys, LayoutData.GlobalTokens);
+				for(var token in keys) {
+					string = string.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
+				}
+			}
+			return unescape(string);
 		}
-	});
+	};
 	
-	var Cu = simplr.layout;
-	
-})(jQuery);
+})();

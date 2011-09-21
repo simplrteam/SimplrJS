@@ -1,81 +1,80 @@
-(function($) {
-	var mD = {
-		env : "_simplr",
-		services : {}
+(function() {
+	var TriggerData = {
+		Env : "_simplr",
+		Services : {}
 	};
 	
 	function getServiceIDs() {
 		var serviceIDs = [];
-		for(var id in mD.services) {
+		for(var id in TriggerData.Services) {
 			serviceIDs.push(id);
 		}
 		return serviceIDs;
 	};
 	
 	function trigger(triggerObj) {
-		var triggerOptions = { services : [], data : { envID : mD.env } };
+		var triggerOptions = { services : [], data : { envID : TriggerData.Env } };
 		$.extend(true, triggerOptions, triggerObj.options);
-		if(CORE.util.mEmpty(triggerOptions.services)) { 
+		if(Simplr.Core.Util.mEmpty(triggerOptions.services)) { 
 			triggerOptions.services = getServiceIDs(); 
 		}
 		
-		var messages = $.extend(CORE.console.mGetMessageTemplate(), {
-			group : "simplr.trigger: " + mD.env + " environment",
+		var messages = $.extend(Simplr.Core.Console.mGetMessageTemplate(), {
+			group : "simplr.trigger: " + TriggerData.Env + " environment",
 			message : []
 		});
 		
 		for(var i = 0, iL = triggerOptions.services.length; i < iL; i++) {
 			var id = triggerOptions.services[i];
-			if($.isFunction(mD.services[id][triggerObj.type]) && mD.services[id].data.environmentIDs[mD.env]) { 
+			if($.isFunction(TriggerData.Services[id][triggerObj.type]) && TriggerData.Services[id].data.environmentIDs[TriggerData.Env]) { 
 				messages.message.push({
 					message : "[" + id + "] " + triggerObj.type + " triggered.",
-				    data : mD.services[id][triggerObj.type](triggerOptions.data)
+				    data : TriggerData.Services[id][triggerObj.type](triggerOptions.data)
 				});
 			}
 		}
 		
 		if( messages.message.length > 0 ) {
-			CORE.console.mMessage(messages);
+			Simplr.Core.Console.mMessage(messages);
 		}
 	}
 	
-	$.extend(simplr, {
-		trigger : {
-			mAddServices : function( services ) {
-				for(var serviceName in services) {
-					mD.services[serviceName] = $.extend({
-						data : {
-							environmentIDs : {}
-						},
-						onLoad : function() {},
-						onPage : function() {},
-						onEvent : function() {},
-						onTransaction : function() {}
-					}, services[serviceName]);
-					trigger({ type : "onLoad", options : { services : [ serviceName ] } });
-				}
-			},
-			
-			mGetServices : function() {
-				return mD.services;
-			},
-
-			mSetEnvironment : function( env ) {
-				mD.env = env;
-			},
-			
-			mOnPage : function( options ) {
-				trigger({ type : "onPage", options : $.extend({},options) });
-			},
-			
-			mOnEvent : function( options ) {
-				trigger({ type : "onEvent", options : $.extend({},options) });
-			},
-			
-			mOnTransaction : function( options ) {
-				trigger({ type : "onTransaction", options : $.extend({},options) });
+	Simplr.Trigger = {
+		mAddServices : function( services ) {
+			for(var serviceName in services) {
+				TriggerData.Services[serviceName] = $.extend({
+					data : {
+						environmentIDs : {}
+					},
+					onLoad : function() {},
+					onPage : function() {},
+					onEvent : function() {},
+					onTransaction : function() {}
+				}, services[serviceName]);
+				trigger({ type : "onLoad", options : { services : [ serviceName ] } });
 			}
+		},
+		
+		mData : function() {
+			return TriggerData;
+		},
+
+		mSetEnvironment : function( env ) {
+			TriggerData.Env = env;
+		},
+		
+		mOnPage : function( options ) {
+			trigger({ type : "onPage", options : $.extend({}, options) });
+		},
+		
+		mOnEvent : function( options ) {
+			trigger({ type : "onEvent", options : $.extend({}, options) });
+		},
+		
+		mOnTransaction : function( options ) {
+			trigger({ type : "onTransaction", options : $.extend({}, options) });
 		}
-	});
+	};
 	
-})(jQuery);
+	
+})();

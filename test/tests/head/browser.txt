@@ -13,50 +13,50 @@
 		 	ie : "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)"
 		};
 		
-		module("simplr.browser");
+		module("Simplr.Browser");
 		
-		test("simplr.browser.mAddressBarHeight()", function() {
-			equals(simplr.browser.mAddressBarHeight(), 0, "0 on a computer browser");
+		test("Simplr.Browser.mAddressBarHeight()", function() {
+			equals(Simplr.Browser.mAddressBarHeight(), 0, "0 on a computer browser");
 		});
 		
-		test("simplr.browser.mDevice()", function() {
-			simplr.browser.mSetUserAgent(uaStrings.firefox);
-			equals(simplr.browser.mDevice(), "other", "firefox");
-			simplr.browser.mSetUserAgent(uaStrings.chrome);
-			equals(simplr.browser.mDevice(), "other", "chrome");
-			simplr.browser.mSetUserAgent(uaStrings.safari);
-			equals(simplr.browser.mDevice(), "other", "safari");
-			simplr.browser.mSetUserAgent(uaStrings.ipod);
-			equals(simplr.browser.mDevice(), "iPod", "ipod");
-			simplr.browser.mSetUserAgent(uaStrings.ipad);
-			equals(simplr.browser.mDevice(), "iPad", "ipad");
-			simplr.browser.mSetUserAgent(uaStrings.iphone);
-			equals(simplr.browser.mDevice(), "iPhone", "iphone");
-			simplr.browser.mSetUserAgent(uaStrings.android);
-			equals(simplr.browser.mDevice(), "Android", "android");
-			simplr.browser.mSetUserAgent(uaStrings.ie);
-			equals(simplr.browser.mDevice(), "other", "ie");
+		test("Simplr.Browser.mDevice()", function() {
+			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
+			equals(Simplr.Browser.mDevice(), "other", "firefox");
+			Simplr.Browser.mSetUserAgent(uaStrings.chrome);
+			equals(Simplr.Browser.mDevice(), "other", "chrome");
+			Simplr.Browser.mSetUserAgent(uaStrings.safari);
+			equals(Simplr.Browser.mDevice(), "other", "safari");
+			Simplr.Browser.mSetUserAgent(uaStrings.ipod);
+			equals(Simplr.Browser.mDevice(), "iPod", "ipod");
+			Simplr.Browser.mSetUserAgent(uaStrings.ipad);
+			equals(Simplr.Browser.mDevice(), "iPad", "ipad");
+			Simplr.Browser.mSetUserAgent(uaStrings.iphone);
+			equals(Simplr.Browser.mDevice(), "iPhone", "iphone");
+			Simplr.Browser.mSetUserAgent(uaStrings.android);
+			equals(Simplr.Browser.mDevice(), "Android", "android");
+			Simplr.Browser.mSetUserAgent(uaStrings.ie);
+			equals(Simplr.Browser.mDevice(), "other", "ie");
 		});
 		
-		test("simplr.browser.mTouchCapable()", function() {
-			simplr.browser.mSetUserAgent(uaStrings.firefox);
-			equals(simplr.browser.mTouchCapable(), false, "Firefox");
-			simplr.browser.mSetUserAgent(uaStrings.firefox);
-			equals(simplr.browser.mTouchCapable(), false, "IE");
-			simplr.browser.mSetUserAgent(uaStrings.android);
-			equals(simplr.browser.mTouchCapable(), true, "Andriod");
-			simplr.browser.mSetUserAgent(uaStrings.ipod);
-			equals(simplr.browser.mTouchCapable(), true, "ipod");
-			simplr.browser.mSetUserAgent(uaStrings.iphone);
-			equals(simplr.browser.mTouchCapable(), true, "iphone");
-			simplr.browser.mSetUserAgent(uaStrings.ipad);
-			equals(simplr.browser.mTouchCapable(), true, "ipad");
+		test("Simplr.Browser.mTouchCapable()", function() {
+			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
+			equals(Simplr.Browser.mTouchCapable(), false, "Firefox");
+			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
+			equals(Simplr.Browser.mTouchCapable(), false, "IE");
+			Simplr.Browser.mSetUserAgent(uaStrings.android);
+			equals(Simplr.Browser.mTouchCapable(), true, "Andriod");
+			Simplr.Browser.mSetUserAgent(uaStrings.ipod);
+			equals(Simplr.Browser.mTouchCapable(), true, "ipod");
+			Simplr.Browser.mSetUserAgent(uaStrings.iphone);
+			equals(Simplr.Browser.mTouchCapable(), true, "iphone");
+			Simplr.Browser.mSetUserAgent(uaStrings.ipad);
+			equals(Simplr.Browser.mTouchCapable(), true, "ipad");
 		});
 		
-		test("simplr.browser.mLocalStorageCapable()", function() {
+		test("Simplr.Browser.mLocalStorageCapable()", function() {
 			var hasSupport = false;
 			try { if( !(typeof localStorage == undefined) ) { hasSupport = true; } } catch(e) {}
-			equals(simplr.browser.mLocalStorageCapable(), hasSupport, "DEPENDS ON YOUR BROWSER RUNNING TESTS")
+			equals(Simplr.Browser.mLocalStorageCapable(), hasSupport, "DEPENDS ON YOUR BROWSER RUNNING TESTS")
 		});
 	
 	});

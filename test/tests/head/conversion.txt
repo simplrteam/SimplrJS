@@ -2,17 +2,17 @@
 	QUnit.config.reorder = false
 	$(function() {
 		
-		module("simplr.conversion");
-		test("simplr.conversion.mObjectToJSONString()", function() {
-			same(simplr.conversion.mObjectToJSONString({ a : 1, b : 2 }), '{"a":1,"b":2}', "Object -> String");
-			same(simplr.conversion.mObjectToJSONString({ a : { x : "1", y : "abc" }, b : 2 }), '{"a":{"x":"1","y":"abc"},"b":2}', "Object -> String");
-			same(simplr.conversion.mObjectToJSONString([ 1, "2", 3, "4" ]), '[1,"2",3,"4"]', "Object -> String");
+		module("Simplr.Conversion");
+		test("Simplr.Conversion.mObjectToJSONString()", function() {
+			same(Simplr.Conversion.mObjectToJSONString({ a : 1, b : 2 }), '{"a":1,"b":2}', "Object -> String");
+			same(Simplr.Conversion.mObjectToJSONString({ a : { x : "1", y : "abc" }, b : 2 }), '{"a":{"x":"1","y":"abc"},"b":2}', "Object -> String");
+			same(Simplr.Conversion.mObjectToJSONString([ 1, "2", 3, "4" ]), '[1,"2",3,"4"]', "Object -> String");
 		});
 
-		test("simplr.conversion.mJSONStringToObject()", function() {
-			same(simplr.conversion.mJSONStringToObject('{"a":1,"b":2}'), { a : 1, b : 2 }, "String -> Object");
-			same(simplr.conversion.mJSONStringToObject('{"a":{"x":"1","y":"abc"},"b":2}'), { a : { x : "1", y : "abc" }, b : 2 } , "String -> Object");
-			same(simplr.conversion.mJSONStringToObject('[1,"2",3,"4"]'), [ 1, "2", 3, "4" ], "String -> Object");
+		test("Simplr.Conversion.mJSONStringToObject()", function() {
+			same(Simplr.Conversion.mJSONStringToObject('{"a":1,"b":2}'), { a : 1, b : 2 }, "String -> Object");
+			same(Simplr.Conversion.mJSONStringToObject('{"a":{"x":"1","y":"abc"},"b":2}'), { a : { x : "1", y : "abc" }, b : 2 } , "String -> Object");
+			same(Simplr.Conversion.mJSONStringToObject('[1,"2",3,"4"]'), [ 1, "2", 3, "4" ], "String -> Object");
 		});
 	
 	});

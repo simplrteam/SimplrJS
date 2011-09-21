@@ -3,63 +3,63 @@
 	$(function() {
 		
 		/* Reset All Cookies First */
-		simplr.cookie.mExpire({ name : "cA", path : "/cw" });
-		simplr.cookie.mExpire({ name : "cB" });
-		simplr.cookie.mExpire({ name : "cC" });
-		simplr.cookie.mExpire({ name : "c2" })
-		simplr.cookie.mExpire({ name : "c3" })
-		simplr.cookie.mSet({ name : "c4", path : "/test" })
+		Simplr.Cookie.mExpire({ name : "cA", path : "/cw" });
+		Simplr.Cookie.mExpire({ name : "cB" });
+		Simplr.Cookie.mExpire({ name : "cC" });
+		Simplr.Cookie.mExpire({ name : "c2" })
+		Simplr.Cookie.mExpire({ name : "c3" })
+		Simplr.Cookie.mSet({ name : "c4", path : "/test" })
 		
-		module("simplr.cookie");
-		test("simplr.cookie.mGet() / .mSet()", function() {
-			equals(simplr.cookie.mGet(), null, "cookie not set");
-			equals(simplr.cookie.mGet({name :"c1"}), null, "cookie not set");
+		module("Simplr.Cookie");
+		test("Simplr.Cookie.mGet() / .mSet()", function() {
+			equals(Simplr.Cookie.mGet(), null, "cookie not set");
+			equals(Simplr.Cookie.mGet({name :"c1"}), null, "cookie not set");
 			
-			equals(simplr.cookie.mSet(), false, "Set should not have worked");
-			equals(simplr.cookie.mSet({
+			equals(Simplr.Cookie.mSet(), false, "Set should not have worked");
+			equals(Simplr.Cookie.mSet({
 				name : "c2",
 				value : "cookie2"
 			}), true, "Set should have worked");
-			equals(simplr.cookie.mGet({ name : "c2"}), "cookie2", "cookie is set, default options");
+			equals(Simplr.Cookie.mGet({ name : "c2"}), "cookie2", "cookie is set, default options");
 			
-			equals(simplr.cookie.mSet({
+			equals(Simplr.Cookie.mSet({
 				name : "c3",
 				value : "cookie3",
 				expireDays : -1
 			}), true, "Set should have worked, but this actually should expire cookie");
-			equals(simplr.cookie.mGet({ name : "c3" }), null, "cookie should be expired, and not set");
+			equals(Simplr.Cookie.mGet({ name : "c3" }), null, "cookie should be expired, and not set");
 			
-			equals(simplr.cookie.mSet({
+			equals(Simplr.Cookie.mSet({
 				name : "c4",
 				value : "cookie4",
 				path : "/test"
 			}), true, "this is set to a path that we are not on, cookie should not be set");
-			equals(simplr.cookie.mGet({ name : "c4" }), null, "cookie is not set");
+			equals(Simplr.Cookie.mGet({ name : "c4" }), null, "cookie is not set");
 			
 		});
 		
-		test("simplr.cookie.mExpire()", function() {
-			simplr.cookie.mSet({
+		test("Simplr.Cookie.mExpire()", function() {
+			Simplr.Cookie.mSet({
 				name : "cA",
 				value : "A"
 			});
-			simplr.cookie.mSet({
+			Simplr.Cookie.mSet({
 				name : "cB",
 				value : "B"
 			});
-			simplr.cookie.mSet({
+			Simplr.Cookie.mSet({
 				name : "cC",
 				value : "C"
 			});
-			same([simplr.cookie.mGet({ name : "cA" }), simplr.cookie.mGet({ name : "cB"}), simplr.cookie.mGet({ name : "cC"})], ["A", "B", "C"], "Cookies Set Prior to Expire")
+			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", "C"], "Cookies Set Prior to Expire")
 			
-			simplr.cookie.mExpire({ name : "cC" });
-			equals(simplr.cookie.mGet("cC"), null, "Cookie Expired Correctly");
-			same([simplr.cookie.mGet({ name : "cA" }), simplr.cookie.mGet({ name : "cB"}), simplr.cookie.mGet({ name : "cC"})], ["A", "B", null], "Other Cookies still exist")
+			Simplr.Cookie.mExpire({ name : "cC" });
+			equals(Simplr.Cookie.mGet("cC"), null, "Cookie Expired Correctly");
+			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", null], "Other Cookies still exist")
 			
-			simplr.cookie.mExpire({ name : "cB" });
-			simplr.cookie.mExpire({ name : "cA" });
-			same([simplr.cookie.mGet({ name : "cA" }), simplr.cookie.mGet({ name : "cB"}), simplr.cookie.mGet({ name : "cC"})], [null, null, null], "All cookies expired")
+			Simplr.Cookie.mExpire({ name : "cB" });
+			Simplr.Cookie.mExpire({ name : "cA" });
+			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], [null, null, null], "All cookies expired")
 		});
 		
 	});

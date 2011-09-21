@@ -2,78 +2,78 @@
 	QUnit.config.reorder = false
 	$(function() {
 		
-		module("simplr.validation");
+		module("Simplr.Validation");
 		
-		test("simplr.validation.mAddValidators()", function() {
-			simplr.validation.mAddValidators({ "test0" : function() {} });
+		test("Simplr.Validation.mAddValidators()", function() {
+			Simplr.Validation.mAddValidators({ "test0" : function() {} });
 			var test0Exists = false;
-			if( simplr.validation.mGetValidators()["test0"] ) { test0Exists = true; }
+			if( Simplr.Validation.mGetValidators()["test0"] ) { test0Exists = true; }
 			equal(test0Exists, true, "Add a Single Validator");
 
-			simplr.validation.mAddValidators({ 
+			Simplr.Validation.mAddValidators({ 
 				"test1" : function(value) {},
 				"test2" : function(value) {}
 			});
 			var test1And2Exists = false;
-			if( simplr.validation.mGetValidators()["test1"] && simplr.validation.mGetValidators()["test2"] ) { test1And2Exists = true; }
+			if( Simplr.Validation.mGetValidators()["test1"] && Simplr.Validation.mGetValidators()["test2"] ) { test1And2Exists = true; }
 			equal(test1And2Exists, true, "Add a list of Validators");
 		});
 		
-		test("simplr.validation.mAddCodes()", function() {
-			simplr.validation.mAddCodes({ "test0" : function(label) { return "test0"; } });
+		test("Simplr.Validation.mAddCodes()", function() {
+			Simplr.Validation.mAddCodes({ "test0" : function(label) { return "test0"; } });
 			var code0Exists = false;
-			if( simplr.validation.mGetCodes()["test0"] ) { code0Exists = true; }
+			if( Simplr.Validation.mGetCodes()["test0"] ) { code0Exists = true; }
 			equal(code0Exists, true, "Add a single code");
 			
-			simplr.validation.mAddCodes({ 
+			Simplr.Validation.mAddCodes({ 
 	   	   		"test1" : "test1", 
 	   			"test2" : "test2"
    			});
 			var code1And2Exists = false;
-			if( simplr.validation.mGetCodes()["test1"] && simplr.validation.mGetCodes()["test2"] ) { code1And2Exists = true; }
+			if( Simplr.Validation.mGetCodes()["test1"] && Simplr.Validation.mGetCodes()["test2"] ) { code1And2Exists = true; }
 			equal(code1And2Exists, true, "Add a list of codes");
 		});
 		
-		test("simplr.validation.mValidate() - Default Validators - error Conditions", function() {
-			equal(simplr.validation.mValidate({ emptyString : { value : "*&^%", rules : [ "alphanumeric" ] }}).valid, false, "alphanumeric" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "americanexpress" ] }}).valid, false, "americanexpress" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "dinersclub" ] }}).valid, false, "dinersclub" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "discover" ] }}).valid, false, "discover" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "email" ] }}).valid, false, "email" );
-			equal(simplr.validation.mValidate({ emptyString : { value : [ "abc", "efg" ], rules : [ "equal" ] }}).valid, false, "equal" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "mastercard" ] }}).valid, false, "mastercard" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "", rules : [ "notempty" ] }}).valid, false, "notempty" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "number" ] }}).valid, false, "number" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "phonenumber" ] }}).valid, false, "phonenumber" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "postalcode" ] }}).valid, false, "postalcode" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "visa" ] }}).valid, false, "vias" );
+		test("Simplr.Validation.mValidate() - Default Validators - error Conditions", function() {
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "*&^%", rules : [ "alphanumeric" ] }}).valid, false, "alphanumeric" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "americanexpress" ] }}).valid, false, "americanexpress" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "dinersclub" ] }}).valid, false, "dinersclub" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "discover" ] }}).valid, false, "discover" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "email" ] }}).valid, false, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : [ "abc", "efg" ], rules : [ "equal" ] }}).valid, false, "equal" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "mastercard" ] }}).valid, false, "mastercard" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "", rules : [ "notempty" ] }}).valid, false, "notempty" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "number" ] }}).valid, false, "number" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "phonenumber" ] }}).valid, false, "phonenumber" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "postalcode" ] }}).valid, false, "postalcode" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "visa" ] }}).valid, false, "vias" );
 		});
 		
-		test("simplr.validation.mValidate() - Default Validators - success Conditions", function() {
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc123", rules : [ "alphanumeric" ] }}).valid, true, "alphanumeric" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "371449635398431", rules : [ "americanexpress" ] }}).valid, true, "americanexpress" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "30569309025904", rules : [ "dinersclub" ] }}).valid, true, "dinersclub" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "6011000990139424", rules : [ "discover" ] }}).valid, true, "discover" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "test@test.com", rules : [ "email" ] }}).valid, true, "email" );
-			equal(simplr.validation.mValidate({ emptyString : { value : ["a", "a"], rules : [ "equal" ] }}).valid, true, "equal" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "5105105105105100", rules : [ "mastercard" ] }}).valid, true, "mastercard" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "abc", rules : [ "notempty" ] } }).valid, true, "notempty" );
-			equal(simplr.validation.mValidate({ emptyString : { value : 1334, rules : [ "number" ] }}).valid, true, "number" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "5174518176", rules : [ "phonenumber" ] }}).valid, true, "phonenumber" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "48105", rules : [ "postalcode" ] } }).valid, true, "postalcode" );
-			equal(simplr.validation.mValidate({ emptyString : { value : "4012888888881881", rules : [ "visa" ] } }).valid, true, "visa" );
+		test("Simplr.Validation.mValidate() - Default Validators - success Conditions", function() {
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc123", rules : [ "alphanumeric" ] }}).valid, true, "alphanumeric" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "371449635398431", rules : [ "americanexpress" ] }}).valid, true, "americanexpress" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "30569309025904", rules : [ "dinersclub" ] }}).valid, true, "dinersclub" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "6011000990139424", rules : [ "discover" ] }}).valid, true, "discover" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "test@test.com", rules : [ "email" ] }}).valid, true, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : ["a", "a"], rules : [ "equal" ] }}).valid, true, "equal" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "5105105105105100", rules : [ "mastercard" ] }}).valid, true, "mastercard" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "notempty" ] } }).valid, true, "notempty" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : 1334, rules : [ "number" ] }}).valid, true, "number" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "5174518176", rules : [ "phonenumber" ] }}).valid, true, "phonenumber" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "48105", rules : [ "postalcode" ] } }).valid, true, "postalcode" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "4012888888881881", rules : [ "visa" ] } }).valid, true, "visa" );
 		});
 		
-		test("simplr.validation.mGetCodeMessage()", function() {
-			simplr.validation.mAddCodes({ 
+		test("Simplr.Validation.mGetCodeMessage()", function() {
+			Simplr.Validation.mAddCodes({ 
 				"code1" : "no label",
      			"code2" : "$[label] with label",
      			"code3" : "" 
       		});			
-			equal( simplr.validation.mGetCodeMessage("code1", "lCode1"), "no label", "without label");
-			equal( simplr.validation.mGetCodeMessage("code2", "lCode2"), "lCode2 with label", "with label");
-			equal( simplr.validation.mGetCodeMessage("code3", "lCode3"), "", "empty string");
-			equal( simplr.validation.mGetCodeMessage("code4", "lCode4"), "code4 is UNDEFINED", "code doesn't exist, should use defaultCodeMessage");
+			equal( Simplr.Validation.mGetCodeMessage("code1", "lCode1"), "no label", "without label");
+			equal( Simplr.Validation.mGetCodeMessage("code2", "lCode2"), "lCode2 with label", "with label");
+			equal( Simplr.Validation.mGetCodeMessage("code3", "lCode3"), "", "empty string");
+			equal( Simplr.Validation.mGetCodeMessage("code4", "lCode4"), "code4 is UNDEFINED", "code doesn't exist, should use defaultCodeMessage");
 		});
 		
 	});

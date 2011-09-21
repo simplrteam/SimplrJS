@@ -2,44 +2,41 @@
 	QUnit.config.reorder = false
 	$(function() {
 		
-		module("simplr.util");
-		test("simplr.util.mEmpty", function() {
-			equals(simplr.util.mEmpty(), true, "no parameter");
-			equals(simplr.util.mEmpty(""), true, "empty string");
-			equals(simplr.util.mEmpty({}), true, "empty object");
-			equals(simplr.util.mEmpty([]), true, "empty array");
-			equals(simplr.util.mEmpty(0), false, "number");
-			equals(simplr.util.mEmpty(5), false, "number");
-			equals(simplr.util.mEmpty("abc"), false, "string");
-			equals(simplr.util.mEmpty({ x : "" }), false, "object");
-			equals(simplr.util.mEmpty({ y : "abc" }), false, "object");
-			equals(simplr.util.mEmpty([1]), false, "array");
-			equals(simplr.util.mEmpty(["a"]), false, "array");
-			equals(simplr.util.mEmpty(true), false, "no parameter");
+		module("Simplr.Util");
+		test("Simplr.Util.mEmpty", function() {
+			equals(Simplr.Util.mEmpty(), true, "no parameter");
+			equals(Simplr.Util.mEmpty(""), true, "empty string");
+			equals(Simplr.Util.mEmpty({}), true, "empty object");
+			equals(Simplr.Util.mEmpty([]), true, "empty array");
+			equals(Simplr.Util.mEmpty(0), false, "number");
+			equals(Simplr.Util.mEmpty(5), false, "number");
+			equals(Simplr.Util.mEmpty("abc"), false, "string");
+			equals(Simplr.Util.mEmpty({ x : "" }), false, "object");
+			equals(Simplr.Util.mEmpty({ y : "abc" }), false, "object");
+			equals(Simplr.Util.mEmpty([1]), false, "array");
+			equals(Simplr.Util.mEmpty(["a"]), false, "array");
+			equals(Simplr.Util.mEmpty(true), false, "no parameter");
 		});
 		
-		test("simplr.util.mEqual()", function() {
-			equals(simplr.util.mEqual(["1", "1"]), true, "two strings");
-			equals(simplr.util.mEqual(["abc", "abc"]), true, "two strings");
-			equals(simplr.util.mEqual(["AAA", "aaa"]), false, "two strings");
-			equals(simplr.util.mEqual(["aaa", "aaa", "aaa", "aaa"]), true, "multiple strings");
-			equals(simplr.util.mEqual([1,1,2,2,3,3]), false, "multiple strings");
-			equals(simplr.util.mEqual([{}, {}]), true, "2 objects");
-			equals(simplr.util.mEqual([{ a : 1, b : 2 }, { b : 2, a : 1 }]), true, "2 objects");
-			equals(simplr.util.mEqual([{ a : 1, b : 2 }, { a : 2, b : 1 }]), false, "2 objects");
-			equals(simplr.util.mEqual([ [1, 2, 3], [3,2,1] ]), false, "2 objects");
-			equals(simplr.util.mEqual([ [1, 2, 3], [1,2,3] ]), true, "2 objects");
-			equals(simplr.util.mEqual([ [1, 2, 3], { a : 1, b : 2, c : 3} ]), false, "1 object, 1 array");
+		test("Simplr.Util.mEqual()", function() {
+			equals(Simplr.Util.mEqual(["1", "1"]), true, "two strings");
+			equals(Simplr.Util.mEqual(["abc", "abc"]), true, "two strings");
+			equals(Simplr.Util.mEqual(["AAA", "aaa"]), false, "two strings");
+			equals(Simplr.Util.mEqual(["aaa", "aaa", "aaa", "aaa"]), true, "multiple strings");
+			equals(Simplr.Util.mEqual([1,1,2,2,3,3]), false, "multiple strings");
+			equals(Simplr.Util.mEqual([{}, {}]), true, "2 objects");
+			equals(Simplr.Util.mEqual([{ a : 1, b : 2 }, { b : 2, a : 1 }]), true, "2 objects");
+			equals(Simplr.Util.mEqual([{ a : 1, b : 2 }, { a : 2, b : 1 }]), false, "2 objects");
+			equals(Simplr.Util.mEqual([ [1, 2, 3], [3,2,1] ]), false, "2 objects");
+			equals(Simplr.Util.mEqual([ [1, 2, 3], [1,2,3] ]), true, "2 objects");
+			equals(Simplr.Util.mEqual([ [1, 2, 3], { a : 1, b : 2, c : 3} ]), false, "1 object, 1 array");
 		});
 		
-		test("simplr.util.mGetUrlParameter()", function() {
-			
-
-
-			var p1 = simplr.util.mGetUrlParameter("param1");
-			var p2 = simplr.util.mGetUrlParameter("param2");
-			var p3 = simplr.util.mGetUrlParameter("abc");
-			var p4 = simplr.util.mGetUrlParameter();
+		test("Simplr.Util.mGetUrlParameter()", function() {
+			var p1 = Simplr.Util.mGetUrlParameter("param1");
+			var p2 = Simplr.Util.mGetUrlParameter("param2");
+			var p3 = Simplr.Util.mGetUrlParameter("abc");
+			var p4 = Simplr.Util.mGetUrlParameter();
 			var p4Length = 0;
 			$.each(p4, function(key, value) {
 				p4Length++;
@@ -51,18 +48,18 @@
 			equals(p4Length , 2, "all parameters ( 2 params)");
 		});
 		
-		test("simplr.util.mHasLocalStorage()", function() {
+		test("Simplr.Util.mHasLocalStorage()", function() {
 			var hasSupport = false;
 			try { if( !(typeof localStorage == undefined) ) { hasSupport = true; } } catch(e) {}
-			equals(simplr.util.mHasLocalStorage(), hasSupport, "Local Storage, depends on browser running tests");
+			equals(Simplr.Util.mHasLocalStorage(), hasSupport, "Local Storage, depends on browser running tests");
 		});
 
-		test("simplr.util.mTruncateString()", function() {
-			same( simplr.util.mTruncateString({ string : "abcdefg", size : 2 }), "ab", "Simple Truncate" );
-			same( simplr.util.mTruncateString({ string : "abcdefg", size : 3, postfix : ".?" }), "a.?", "Simple Truncate with postfix" );
-			same( simplr.util.mTruncateString({ string : "abc defg", size : 7, postfix : ".." }), "abc ..", "Simple Truncate with postfix" );
-			same( simplr.util.mTruncateString({ string : "abc defg", size : 7, postfix : "..", smart : false }), "abc d..", "Simple Truncate with postfix not smart" );
-			same( simplr.util.mTruncateString({ string : "abcdefg", size : 10, postfix : "XXX" }), "abcdefg", "Simple Truncate doesn't truncate" );
+		test("Simplr.Util.mTruncateString()", function() {
+			same( Simplr.Util.mTruncateString({ string : "abcdefg", size : 2 }), "ab", "Simple Truncate" );
+			same( Simplr.Util.mTruncateString({ string : "abcdefg", size : 3, postfix : ".?" }), "a.?", "Simple Truncate with postfix" );
+			same( Simplr.Util.mTruncateString({ string : "abc defg", size : 7, postfix : ".." }), "abc ..", "Simple Truncate with postfix" );
+			same( Simplr.Util.mTruncateString({ string : "abc defg", size : 7, postfix : "..", smart : false }), "abc d..", "Simple Truncate with postfix not smart" );
+			same( Simplr.Util.mTruncateString({ string : "abcdefg", size : 10, postfix : "XXX" }), "abcdefg", "Simple Truncate doesn't truncate" );
 		});
 
 	});
