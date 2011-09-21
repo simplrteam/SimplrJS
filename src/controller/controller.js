@@ -44,19 +44,21 @@
 		
 		mRoute : function(url) {
 			var ret = { route : [], url : url, base : "", resources : {}, action : "", parameters : {} };
+			
 			// remove hash
-			if(ret.url[0] == "#") {
+			if(ret.url.charAt(0) == "#") {
 				ret.url = ret.url.substring(1);
 			}
 			// remove bang
-			if(ret.url[0] == "!") {
+			if(ret.url.charAt(0) == "!") {
 				ret.url = ret.url.substring(1);
 			}
 			
 			var urlArray = ret.url.split("?");
+			urlArray[0] = decodeURI(urlArray[0]);
 			
 			/* 1. Find the base and remove if its there */
-			var tmpURL = decodeURI(urlArray[0]);
+			var tmpURL = urlArray[0];
 			for(var base in ControllerData.Bases) {
 				if( (urlArray[0] = urlArray[0].replace(base, "")) != tmpURL ) { 
 					ret.base = base; ret.route.push(base); break;
@@ -108,11 +110,8 @@
 	
 	$(function() {
 		$(window).hashchange(function() {
-			var hash = window.location.href.split("#");
-			if(hash.length < 2) {
-				if(!Simplr.Core.Util.mEmpty(hash[1])) {
-					Simplr.Controller.mRouteAndExecute(hash[1]);
-				}
+			if(window.location.hash != "") {
+				Simplr.Controller.mRouteAndExecute("#" + (window.location.href.split("#")[1] || ""));
 			}
 		});
 	});
