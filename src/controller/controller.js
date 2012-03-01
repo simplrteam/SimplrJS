@@ -39,7 +39,9 @@
 		
 		mExecute : function(data) {
 			var key = data.route.join("_");
-			try { ControllerData.Commands[key](data); } catch(e) { };
+			if($.isFunction(ControllerData.Commands[key])) {
+				ControllerData.Commands[key](data); 
+			}
 		},
 		
 		mRoute : function(url) {
