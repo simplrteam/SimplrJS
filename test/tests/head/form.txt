@@ -1,4 +1,4 @@
-<style type="text/css">form { margin-left:-1000px; }</style>
+<style type="text/css">form { margin-left:-5000px; }</style>
 <script type="text/javascript">
 	QUnit.config.reorder = false
 	$(function() {
@@ -22,12 +22,15 @@
 				'<input type="checkbox" name="isCheckbox2" id="cInput2" value="checkbox2" checked="true" />' +
 				'<input type="checkbox" name="isCheckbox3" id="cInput3" />' +
 				'<input type="checkbox" name="isCheckbox4" id="cInput4" value="checkbox4" />' +
+				'<input type="range" name="isRange" id="raInput1" value="4" />' +
 				'<textarea name="isTextarea" id="tArea">textarea text</textarea>' +
 				'<select name="isSelect" id="select">' +
 					'<option value="one">1</option>' +
 					'<option selected="true" value="two">2</option>' +
 					'<option value="three">3</option>' +
 				'</select>' +
+				'<input type="reset" value="resetForm" />' +
+				'<input type="button" value="somebutton" />' +
 				'<input type="submit" value="submitForm" />' +
 			'</form>' +
 			'<div id="form2"><form>' +
@@ -80,8 +83,8 @@
 		});
 
 		test("Simplr.Form.mGetValues()", function() {
-			equals( countLength( Simplr.Form.mGetValues("#formTest form") ), 16, "Selector: 'form'");
-			equals( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 10, "Selector: '#form1'");
+			equals( countLength( Simplr.Form.mGetValues("#formTest form") ), 17, "Selector: 'form'");
+			equals( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 11, "Selector: '#form1'");
 			equals( countLength( Simplr.Form.mGetValues("#formTest #form2") ), 1, "Selector: '#form2'");
 			same(Simplr.Form.mGetValues("#formTest #form1"), { 
 				isPassword : "password test",
@@ -93,7 +96,8 @@
 				isCheckbox3 : false,
 				isCheckbox4 : false,
 				isSelect : "two", 
-				isTextarea : "textarea text"
+				isTextarea : "textarea text",
+				isRange : "4"
 			}, "All Expected Fields");
 		});
 

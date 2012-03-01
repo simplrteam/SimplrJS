@@ -78,11 +78,15 @@
 		},
 		mGetValues : function(selector) {
 			var values = {};
-			$("input[type='checkbox']", selector).each(function() { 
-				values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
-			});
-			$("input[type='text'], input[type='password'], input[type='hidden'], input[type='radio']:checked, select, textarea", selector).each(function() { 
-				values[$(this).attr("name")] = $(this).val();
+			$("input, select, textarea", selector).each(function() {
+				var thisEl = $(this);
+				if(thisEl.is("[type='button']") || thisEl.is("[type='reset']") || thisEl.is("[type='submit']") || (thisEl.is("[type='radio']") && !thisEl.is(":checked"))) {
+					// Excluded	
+				} else if( thisEl.is("[type='checkbox']") ) {
+					values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
+				} else {
+					values[$(this).attr("name")] = $(this).val();
+				}
 			});
 			return values;
 		},
