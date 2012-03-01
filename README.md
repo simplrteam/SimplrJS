@@ -1,4 +1,4 @@
-[v2.0.0] SimplrJS
+[v2.1.0] SimplrJS
 =============
 
 Description
@@ -19,17 +19,21 @@ Just include this javascript library with jQuery and start coding away!
 Change Log
 ------------
 
-v2.0.0
+v2.1.0
 
 	Features:
-		- Simplr.Core.*, core functionality now available for use in your applications.
-
+		- Form.mGetValues detects new html5 input types ( such as range, email ... ).
+		
 	Bug Fixes:
-		- Simplr.Controller.mRouteAndExecute(), expects properly encoded urls using encodeURI and encodeURIComponent for parameters.
-
+		- 
+		
 	Refactor:
-		- Refactor simplr object for consistency.  Simplr Object references have been updated to uppercase. 
-		Examples: [old] simplr.util.mEmpty() --> [new] Simplr.Util.mEmpty()
+		- Removed Try/Catch loop from Form code
+		- Removed Try/Catch loop from Controller.mExecute() code
+		- Form.mGetValues updated to better handle new html5 input types.
+		
+	Other
+		- Tested with jQuery 1.7.1
 
 Functionality
 ---------------
