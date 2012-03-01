@@ -1,4 +1,4 @@
-// Simplr 2.0.0
+// v2.1.0
 (function($) {
 
 	// Array Remove - By John Resig (MIT Licensed)
@@ -573,7 +573,9 @@
 		
 		mExecute : function(data) {
 			var key = data.route.join("_");
-			try { ControllerData.Commands[key](data); } catch(e) { };
+			if($.isFunction(ControllerData.Commands[key])) {
+				ControllerData.Commands[key](data); 
+			}
 		},
 		
 		mRoute : function(url) {
@@ -1604,7 +1606,9 @@ Simplr.Core.Validation.mAddValidators({
 			for(var i = 0, iL = FormData.DefaultRules.length; i < iL; i++) {
 				validationObject.rules.push(FormData.DefaultRules[i]);
 			}
-			try { FormData.Rules[key](validationObject.rules); } catch(e) {}
+			if($.isFunction(FormData.Rules[key])) {
+			  FormData.Rules[key](validationObject.rules);
+			}
 			// Return the Transformed Data
 			validationAndRenderValues[key] = validationObject;
 		}
@@ -1646,11 +1650,15 @@ Simplr.Core.Validation.mAddValidators({
 		},
 		mGetValues : function(selector) {
 			var values = {};
-			$("input[type='checkbox']", selector).each(function() { 
-				values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
-			});
-			$("input[type='text'], input[type='password'], input[type='hidden'], input[type='radio']:checked, select, textarea", selector).each(function() { 
-				values[$(this).attr("name")] = $(this).val();
+			$("input, select, textarea", selector).each(function() {
+				var thisEl = $(this);
+				if(thisEl.is("[type='button']") || thisEl.is("[type='reset']") || thisEl.is("[type='submit']") || (thisEl.is("[type='radio']") && !thisEl.is(":checked"))) {
+					// Excluded	
+				} else if( thisEl.is("[type='checkbox']") ) {
+					values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
+				} else {
+					values[$(this).attr("name")] = $(this).val();
+				}
 			});
 			return values;
 		},
