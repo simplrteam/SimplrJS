@@ -34,7 +34,9 @@
 			for(var i = 0, iL = FormData.DefaultRules.length; i < iL; i++) {
 				validationObject.rules.push(FormData.DefaultRules[i]);
 			}
-			try { FormData.Rules[key](validationObject.rules); } catch(e) {}
+			if($.isFunction(FormData.Rules[key])) {
+			  FormData.Rules[key](validationObject.rules);
+			}
 			// Return the Transformed Data
 			validationAndRenderValues[key] = validationObject;
 		}
