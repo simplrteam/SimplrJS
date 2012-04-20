@@ -110,12 +110,8 @@
 		}
 	};
 	
-	$(function() {
-		$(window).hashchange(function() {
-			if(window.location.hash != "") {
-				Simplr.Controller.mRouteAndExecute("#" + (window.location.href.split("#")[1] || ""));
-			}
-		});
+	$(window).on("hashchange", {}, function() {
+		Simplr.Controller.mRouteAndExecute(window.location.hash);
 	});
 	
 })();

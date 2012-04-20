@@ -1,4 +1,4 @@
-[v2.1.0] SimplrJS
+[v2.2.0] SimplrJS
 =============
 
 Description
@@ -19,21 +19,19 @@ Just include this javascript library with jQuery and start coding away!
 Change Log
 ------------
 
-v2.1.0
+v2.2.0
 
 	Features:
-		- Form.mGetValues detects new html5 input types ( such as range, email ... ).
+		- 
 		
 	Bug Fixes:
 		- 
 		
 	Refactor:
-		- Removed Try/Catch loop from Form code
-		- Removed Try/Catch loop from Controller.mExecute() code
-		- Form.mGetValues updated to better handle new html5 input types.
+		- Now, uses normal window hashchange event.  IE7/IE6 Hashchange support dropped.
 		
 	Other
-		- Tested with jQuery 1.7.1
+		- 
 
 Functionality
 ---------------

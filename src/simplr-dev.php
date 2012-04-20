@@ -3,7 +3,7 @@
 	header('Content-type: text/javascript'); 
 ?>
 
-(function($) {
+(function() {
 
 	// Array Remove - By John Resig (MIT Licensed)
 	Array.prototype.remove = function(from, to) {
@@ -37,93 +37,57 @@
 		}
 	};
 
-	// Browser
-	Simplr.Browser = {};
 	<?php
+	
+		// Browser
 		include("browser/browser.js");
-	?>
-	
-	// Cache
-	Simplr.Cache = {};
-	<?php
+		
+		// Cache
 		include("cache/cache.js");
-	?>
-
-	// Controller
-	Simplr.Controller = {};
-	<?php
-		include("controller/jquery.ba-hashchange.js");
+		
+		// Controller
 		include("controller/controller.js");
-	?>
-	
-	// Converison
-	Simplr.Conversion = {};
-	<?php
+		
+		// Converison
 		include("conversion/json2.js");
 		include("conversion/conversion.js");
-	?>
 	
-	// Cookie
-	Simplr.Cookie = {};
-	<?php
+		// Cookie	
 		include("cookie/cookie.js");
-	?>
-
-	// Core
-	Simplr.Core = {};
-	<?php
+	
+		// Core
+		echo "Simplr.Core = {};";
 		include("core/core.console.js"); 
 		include("core/core.util.js");
 		include("core/core.ui.js");
 		include("core/core.validation.js");
 		include("core/defaultCodesAndValidators.js");
-	?>
-	
-	// Form
-	Simplr.Form = {};
-	<?php
+		
+		// Form
 		include("form/form.js");
-	?>
-	
-	// Layout
-	Simplr.Layout = {};
-	<?php
+		
+		// Layout
 		include("layout/innerxhtml.js");
 		include("layout/layout.js");
-	?>
-	
-	// Trigger
-	Simplr.Trigger = {};
-	<?php
+		
+		// Trigger
 		include("trigger/trigger.js");
-	?>
-	
-	// Ui
-	Simplr.Ui = {
-		Widget : {}
-	};
-	<?php
+		
+		// Ui
+		echo "Simplr.Ui = { Widget : {} };";
 		include("ui/ui.layer.js");
 		include("ui/ui.newBrowserWindow.js");
 		include("ui/ui.widget.oTrackableScrollingElement.js");
-	?>
-
-	// Util
-	Simplr.Util = {};
-	<?php
+		
+		// Util
 		include("util/util.js");
-	?>
-	
-	// Validation
-	Simplr.Validation = {};
-	<?php
+		
+		// Validation
 		include("validation/validation.js");
-	?>
-
-	// View
-	Simplr.View = {};
-	<?php
+		
+		// View
 		include("view/view.js");
+		
 	?>
 
-})(jQuery);
+})();
