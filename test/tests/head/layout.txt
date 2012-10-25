@@ -33,42 +33,42 @@
 		module("Simplr.Layout");
 
 		test("Components exist in DOM before using Simplr.Layout.*", function() {
-			equals( $("#layoutTest .layout-component").size(), 4, "Components Expected");
+			equal( $("#layoutTest .layout-component").size(), 4, "Components Expected");
 		});
 		
 		test("Simplr.Layout.mAddComponents()", function() {
-			equals(Simplr.Layout.mGetComponent("test1"), null, "Component Doesn't exist, isn't in DOM");			
+			equal(Simplr.Layout.mGetComponent("test1"), null, "Component Doesn't exist, isn't in DOM");			
 			Simplr.Layout.mAddComponents({
 				test1 : '<div id="test1">test1</div>'
 			});
-			equals(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
+			equal(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
 		});
 
 		test("Simplr.Layout.mGetComponent()", function() {
-			equals(Simplr.Layout.mGetComponent("doesnntexist"), null, "NULL component");
-			equals(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
-			equals(Simplr.Layout.mGetComponent("test2"), '<div id="test2">test2</div>', "Component 2");
-			equals(Simplr.Layout.mGetComponent("nested"), '<div id="nested"><span>nested</span></div>', "Nested Component");
-			equals(Simplr.Layout.mGetComponent("nested2"), '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>', "Nested -> Nested Component");
+			equal(Simplr.Layout.mGetComponent("doesnntexist"), null, "NULL component");
+			equal(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
+			equal(Simplr.Layout.mGetComponent("test2"), '<div id="test2">test2</div>', "Component 2");
+			equal(Simplr.Layout.mGetComponent("nested"), '<div id="nested"><span>nested</span></div>', "Nested Component");
+			equal(Simplr.Layout.mGetComponent("nested2"), '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>', "Nested -> Nested Component");
 		});
 
 		test("Simplr.Layout.mReplaceTokens()", function() {
 			var string1 = "test test $[rp1] test test";
-			equals( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string1), "test test RP1 test test", "Single Replacement");
+			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string1), "test test RP1 test test", "Single Replacement");
 			var string2 = "$[rp1] test $[rp1] test $[rp1]";
-			equals( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string2), "RP1 test RP1 test RP1", "Single Replacement with repeats");
+			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string2), "RP1 test RP1 test RP1", "Single Replacement with repeats");
 			var string3 = "$[rp1] test $[rp2] test test";
-			equals( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string3), "RP1 test RP2 test test", "Multiple Replacements");
+			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string3), "RP1 test RP2 test test", "Multiple Replacements");
 			var string4 = "$[rp1] $[rp2] $[rp2] $[rp1] $[rp3]";
-			equals( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2", rp3 : "RP3" }, string4), "RP1 RP2 RP2 RP1 RP3", "Multiple Replacements with repeats");
+			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2", rp3 : "RP3" }, string4), "RP1 RP2 RP2 RP1 RP3", "Multiple Replacements with repeats");
 		});
 		
 		test("Simplr.Layout.mAddGlobalTokens()", function() {
 			Simplr.Layout.mAddGlobalTokens({ GB1 : "word1", GB2 : "word2" });
 			var string1 = "test $[GB1] test $[GB2] test";
-			equals( Simplr.Layout.mReplaceTokens({ }, string1), "test word1 test word2 test", "Global Only Replacement");
+			equal( Simplr.Layout.mReplaceTokens({ }, string1), "test word1 test word2 test", "Global Only Replacement");
 			var string2 = "$[rp1] test $[GB1] test $[rp2]";
-			equals( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string2), "RP1 test word1 test RP2", "Global Replace with layout specific tokens");
+			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string2), "RP1 test word1 test RP2", "Global Replace with layout specific tokens");
 		});
 
 		test("simplre.layout.mAssembleLayout()", function() {
@@ -82,7 +82,7 @@
 				component : "cp3",
 				tokens : { string1 : "1", string2 : "2" }
 			};
-			equals(Simplr.Layout.mAssembleLayout(config1), "++1++2++", "Simple Replacement");
+			equal(Simplr.Layout.mAssembleLayout(config1), "++1++2++", "Simple Replacement");
 			
 			var config2 = {
 				component : "cp3",
@@ -92,7 +92,7 @@
 					{ string1 : "5", string2 : "6" }
 				]
 			};
-			equals(Simplr.Layout.mAssembleLayout(config2), "++1++2++++3++4++++5++6++", "Simple replacement with repeats");
+			equal(Simplr.Layout.mAssembleLayout(config2), "++1++2++++3++4++++5++6++", "Simple replacement with repeats");
 			
 			var config3 = {
 				component : "cp3",
@@ -104,7 +104,7 @@
 					}
 				}
 			};
-			equals(Simplr.Layout.mAssembleLayout(config3), "++1++a++", "Nest replacement");	
+			equal(Simplr.Layout.mAssembleLayout(config3), "++1++a++", "Nest replacement");	
 
 			var config4 = {
 				component : "cp3",
@@ -120,7 +120,7 @@
 					}
 				}
 			};
-			equals(Simplr.Layout.mAssembleLayout(config4), "++1++abc++", "Nested replacement with repeats");	
+			equal(Simplr.Layout.mAssembleLayout(config4), "++1++abc++", "Nested replacement with repeats");	
 
 			var config5 = {
 				component : "cp3",
@@ -148,7 +148,7 @@
 					}
 				}
 			};
-			equals(Simplr.Layout.mAssembleLayout(config5), "++----1--2--3--4--z++abc++", "mutlipe nested with repeats");
+			equal(Simplr.Layout.mAssembleLayout(config5), "++----1--2--3--4--z++abc++", "mutlipe nested with repeats");
 		});
 		
 	});

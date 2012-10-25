@@ -36,26 +36,26 @@
 		module("Simplr.View");
 
 		test("Simplr.View.mAddViews()", function() {
-			equals( getLayoutCount(), 3, "Layout Count");
-			same( getLayoutNames(), ["layout_1", "layout_2", "layout_3"], "Layout Names");
+			equal( getLayoutCount(), 3, "Layout Count");
+			deepEqual( getLayoutNames(), ["layout_1", "layout_2", "layout_3"], "Layout Names");
 		});
 
 		test("Simplr.View.mRender() - HTML Executes correctly", function() {
-			equals( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist");
+			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist");
 			Simplr.View.mRender({ name : "layout_1", data : {}, selector : "#js-page"});
-			equals( $("#layout_1").size(), 1, "Layout Now Exists");
+			equal( $("#layout_1").size(), 1, "Layout Now Exists");
 		});
 		
 		test("Simplr.View.mRender() - CALLBACK Executes", function() {
 			Simplr.View.mRender({ name : "layout_2", data : {}, selector : "#js-page" });
-			equals( $("#layout_2").size(), 1, "New Layout Exists");
-			equals( $("#layout_2").css("font-weight") == "bold" || $("#layout_2").css("font-weight") == "700", true, "Callback executed");
+			equal( $("#layout_2").size(), 1, "New Layout Exists");
+			equal( $("#layout_2").css("font-weight") == "bold" || $("#layout_2").css("font-weight") == "700", true, "Callback executed");
 		});
 
 		test("Simplr.View.mRender() - DATA is Passed", function() {
 			Simplr.View.mRender({ name : "layout_3", data : { text : "data string" }, selector : "#js-page" });
-			equals( $("#layout_3").size(), 1, "New Layout Exists");
-			equals( $("#layout_3").text(), "data string", "Data Passed"); 
+			equal( $("#layout_3").size(), 1, "New Layout Exists");
+			equal( $("#layout_3").text(), "data string", "Data Passed"); 
 		});
 		
 	});

@@ -8,7 +8,7 @@
 		module("Simplr.Trigger");
 		test("Simplr.Trigger.mAddServices()", function() {
 			
-			same(Simplr.Trigger.mData().Services, {}, "No services");
+			deepEqual(Simplr.Trigger.mData().Services, {}, "No services");
 			Simplr.Trigger.mAddServices({ "ga" : {
 					data : {
 						environmentIDs : { dev : "something" }

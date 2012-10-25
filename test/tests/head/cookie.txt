@@ -12,29 +12,29 @@
 		
 		module("Simplr.Cookie");
 		test("Simplr.Cookie.mGet() / .mSet()", function() {
-			equals(Simplr.Cookie.mGet(), null, "cookie not set");
-			equals(Simplr.Cookie.mGet({name :"c1"}), null, "cookie not set");
+			equal(Simplr.Cookie.mGet(), null, "cookie not set");
+			equal(Simplr.Cookie.mGet({name :"c1"}), null, "cookie not set");
 			
-			equals(Simplr.Cookie.mSet(), false, "Set should not have worked");
-			equals(Simplr.Cookie.mSet({
+			equal(Simplr.Cookie.mSet(), false, "Set should not have worked");
+			equal(Simplr.Cookie.mSet({
 				name : "c2",
 				value : "cookie2"
 			}), true, "Set should have worked");
-			equals(Simplr.Cookie.mGet({ name : "c2"}), "cookie2", "cookie is set, default options");
+			equal(Simplr.Cookie.mGet({ name : "c2"}), "cookie2", "cookie is set, default options");
 			
-			equals(Simplr.Cookie.mSet({
+			equal(Simplr.Cookie.mSet({
 				name : "c3",
 				value : "cookie3",
 				expireDays : -1
 			}), true, "Set should have worked, but this actually should expire cookie");
-			equals(Simplr.Cookie.mGet({ name : "c3" }), null, "cookie should be expired, and not set");
+			equal(Simplr.Cookie.mGet({ name : "c3" }), null, "cookie should be expired, and not set");
 			
-			equals(Simplr.Cookie.mSet({
+			equal(Simplr.Cookie.mSet({
 				name : "c4",
 				value : "cookie4",
 				path : "/test"
 			}), true, "this is set to a path that we are not on, cookie should not be set");
-			equals(Simplr.Cookie.mGet({ name : "c4" }), null, "cookie is not set");
+			equal(Simplr.Cookie.mGet({ name : "c4" }), null, "cookie is not set");
 			
 		});
 		
@@ -51,15 +51,15 @@
 				name : "cC",
 				value : "C"
 			});
-			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", "C"], "Cookies Set Prior to Expire")
+			deepEqual([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", "C"], "Cookies Set Prior to Expire")
 			
 			Simplr.Cookie.mExpire({ name : "cC" });
-			equals(Simplr.Cookie.mGet("cC"), null, "Cookie Expired Correctly");
-			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", null], "Other Cookies still exist")
+			equal(Simplr.Cookie.mGet("cC"), null, "Cookie Expired Correctly");
+			deepEqual([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], ["A", "B", null], "Other Cookies still exist")
 			
 			Simplr.Cookie.mExpire({ name : "cB" });
 			Simplr.Cookie.mExpire({ name : "cA" });
-			same([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], [null, null, null], "All cookies expired")
+			deepEqual([Simplr.Cookie.mGet({ name : "cA" }), Simplr.Cookie.mGet({ name : "cB"}), Simplr.Cookie.mGet({ name : "cC"})], [null, null, null], "All cookies expired")
 		});
 		
 	});

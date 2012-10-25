@@ -16,47 +16,47 @@
 		module("Simplr.Browser");
 		
 		test("Simplr.Browser.mAddressBarHeight()", function() {
-			equals(Simplr.Browser.mAddressBarHeight(), 0, "0 on a computer browser");
+			equal(Simplr.Browser.mAddressBarHeight(), 0, "0 on a computer browser");
 		});
 		
 		test("Simplr.Browser.mDevice()", function() {
 			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
-			equals(Simplr.Browser.mDevice(), "other", "firefox");
+			equal(Simplr.Browser.mDevice(), "other", "firefox");
 			Simplr.Browser.mSetUserAgent(uaStrings.chrome);
-			equals(Simplr.Browser.mDevice(), "other", "chrome");
+			equal(Simplr.Browser.mDevice(), "other", "chrome");
 			Simplr.Browser.mSetUserAgent(uaStrings.safari);
-			equals(Simplr.Browser.mDevice(), "other", "safari");
+			equal(Simplr.Browser.mDevice(), "other", "safari");
 			Simplr.Browser.mSetUserAgent(uaStrings.ipod);
-			equals(Simplr.Browser.mDevice(), "iPod", "ipod");
+			equal(Simplr.Browser.mDevice(), "iPod", "ipod");
 			Simplr.Browser.mSetUserAgent(uaStrings.ipad);
-			equals(Simplr.Browser.mDevice(), "iPad", "ipad");
+			equal(Simplr.Browser.mDevice(), "iPad", "ipad");
 			Simplr.Browser.mSetUserAgent(uaStrings.iphone);
-			equals(Simplr.Browser.mDevice(), "iPhone", "iphone");
+			equal(Simplr.Browser.mDevice(), "iPhone", "iphone");
 			Simplr.Browser.mSetUserAgent(uaStrings.android);
-			equals(Simplr.Browser.mDevice(), "Android", "android");
+			equal(Simplr.Browser.mDevice(), "Android", "android");
 			Simplr.Browser.mSetUserAgent(uaStrings.ie);
-			equals(Simplr.Browser.mDevice(), "other", "ie");
+			equal(Simplr.Browser.mDevice(), "other", "ie");
 		});
 		
 		test("Simplr.Browser.mTouchCapable()", function() {
 			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
-			equals(Simplr.Browser.mTouchCapable(), false, "Firefox");
+			equal(Simplr.Browser.mTouchCapable(), false, "Firefox");
 			Simplr.Browser.mSetUserAgent(uaStrings.firefox);
-			equals(Simplr.Browser.mTouchCapable(), false, "IE");
+			equal(Simplr.Browser.mTouchCapable(), false, "IE");
 			Simplr.Browser.mSetUserAgent(uaStrings.android);
-			equals(Simplr.Browser.mTouchCapable(), true, "Andriod");
+			equal(Simplr.Browser.mTouchCapable(), true, "Andriod");
 			Simplr.Browser.mSetUserAgent(uaStrings.ipod);
-			equals(Simplr.Browser.mTouchCapable(), true, "ipod");
+			equal(Simplr.Browser.mTouchCapable(), true, "ipod");
 			Simplr.Browser.mSetUserAgent(uaStrings.iphone);
-			equals(Simplr.Browser.mTouchCapable(), true, "iphone");
+			equal(Simplr.Browser.mTouchCapable(), true, "iphone");
 			Simplr.Browser.mSetUserAgent(uaStrings.ipad);
-			equals(Simplr.Browser.mTouchCapable(), true, "ipad");
+			equal(Simplr.Browser.mTouchCapable(), true, "ipad");
 		});
 		
 		test("Simplr.Browser.mLocalStorageCapable()", function() {
 			var hasSupport = false;
 			try { if( !(typeof localStorage == undefined) ) { hasSupport = true; } } catch(e) {}
-			equals(Simplr.Browser.mLocalStorageCapable(), hasSupport, "DEPENDS ON YOUR BROWSER RUNNING TESTS")
+			equal(Simplr.Browser.mLocalStorageCapable(), hasSupport, "DEPENDS ON YOUR BROWSER RUNNING TESTS")
 		});
 	
 	});

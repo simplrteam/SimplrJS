@@ -52,67 +52,67 @@
 		
 		module("Simplr.Controller");
 		test("Layouts Initialized Correctly", function() {
-			equals( getCommandCount(), 3, "Command Count");
-			same( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view", "test1_cmd3_view" ], "Command Names");
+			equal( getCommandCount(), 3, "Command Count");
+			deepEqual( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view", "test1_cmd3_view" ], "Command Names");
 		});
 
 		test("Simplr.Controller.mRouteAndExecute(), Routes", function() {
 			Simplr.Controller.mRouteAndExecute('/cmd1/view');
-			same(getCurrentData().route, ["cmd1", "view"], "simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('#/cmd1/view');
-			same(getCurrentData().route, ["cmd1", "view"], "# simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "# simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('!/cmd1/view');
-			same(getCurrentData().route, ["cmd1", "view"], "! simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "! simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('#!/cmd1/view');
-			same(getCurrentData().route, ["cmd1", "view"], "#! simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "#! simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('/cmd1/A/cmd2/');
-			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('#/cmd1/A/cmd2/');
-			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "# simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "# simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('!/cmd1/A/cmd2/');
-			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "! simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "! simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('#!/cmd1/A/cmd2/');
-			same(getCurrentData().route, ["cmd1", "cmd2", "view"], "#! simplr route array");
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "#! simplr route array");
 
 			Simplr.Controller.mRouteAndExecute('!/test1/cmd3/view');
-			same(getCurrentData().route, ["test1", "cmd3", "view"], "! simplr route array with base");
+			deepEqual(getCurrentData().route, ["test1", "cmd3", "view"], "! simplr route array with base");
 		});
 		
 		test("Simplr.Controller.mRouteAndExecute(), Parameters - cross site scripting", function() {
 			Simplr.Controller.mRouteAndExecute('/cmd1/view?x=%3Cscript%3Ealert(%22junk%22);%3C/script%3E');
-			equals(getCurrentData().parameters.x, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag url encoded");
+			equal(getCurrentData().parameters.x, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag url encoded");
 			Simplr.Controller.mRouteAndExecute('/cmd1/view?y=<script>alert("junk");<\/script>');
-			equals(getCurrentData().parameters.y, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag not url encoded");
+			equal(getCurrentData().parameters.y, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag not url encoded");
 			Simplr.Controller.mRouteAndExecute('/cmd1/view?y=<b>BOLD</b>');
-			equals(getCurrentData().parameters.y, '&lt;b&gt;BOLD&lt;/b&gt;', "html tag not url encoded");
+			equal(getCurrentData().parameters.y, '&lt;b&gt;BOLD&lt;/b&gt;', "html tag not url encoded");
 		});
 
 		test("Simplr.Controller.mRouteAndExecute(), Parameters - Parsing", function() {
 			Simplr.Controller.mRouteAndExecute('/cmd1/?x=1&y=1/2');
-			equals(getCurrentData().parameters.x, "1", "X=1");
-			equals(getCurrentData().parameters.y, "1/2", "Y=1/2");
+			equal(getCurrentData().parameters.x, "1", "X=1");
+			equal(getCurrentData().parameters.y, "1/2", "Y=1/2");
 
 			Simplr.Controller.mRouteAndExecute('/cmd1/view?x=2&y=2/2');
-			equals(getCurrentData().parameters.x, "2", "X=2");
-			equals(getCurrentData().parameters.y, "2/2", "Y=2/2");
+			equal(getCurrentData().parameters.x, "2", "X=2");
+			equal(getCurrentData().parameters.y, "2/2", "Y=2/2");
 
 			Simplr.Controller.mRouteAndExecute('/cmd1/A/?x=3&y=3/2');
-			equals(getCurrentData().parameters.x, "3", "X=3");
-			equals(getCurrentData().parameters.y, "3/2", "Y=3/2");
+			equal(getCurrentData().parameters.x, "3", "X=3");
+			equal(getCurrentData().parameters.y, "3/2", "Y=3/2");
 
 			Simplr.Controller.mRouteAndExecute('/cmd1/A/cmd2/?x=4&y=4/2');
-			equals(getCurrentData().parameters.x, "4", "X=4");
-			equals(getCurrentData().parameters.y, "4/2", "Y=4/2");
+			equal(getCurrentData().parameters.x, "4", "X=4");
+			equal(getCurrentData().parameters.y, "4/2", "Y=4/2");
 
 			Simplr.Controller.mRouteAndExecute(encodeURI("/test1/cmd3/") + "?a=" + encodeURIComponent("bob & tom") + "&b=" + encodeURIComponent("100%"));
-			same(getCurrentData().parameters, { a : "bob & tom", b : "100%" }, "decodeURIComponentParts, decodeURI");
+			deepEqual(getCurrentData().parameters, { a : "bob & tom", b : "100%" }, "decodeURIComponentParts, decodeURI");
 		});
 		
 	});
