@@ -1,4 +1,4 @@
-[v2.2.0] SimplrJS - test
+[v2.2.1] SimplrJS
 =============
 
 Description
@@ -13,13 +13,13 @@ Requirments
 Installation & Requirments
 -----------
 
-jQuery (1.6+) is required for underlying javascript support.  SimplrJS is NOT a jQuery plugin, but instead leverages jQuery as needed for DOM manipulation.
+jQuery is required for underlying javascript support.  SimplrJS is NOT a jQuery plugin, but instead leverages jQuery as needed for DOM manipulation.
 Just include this javascript library with jQuery and start coding away!
 
 Change Log
 ------------
 
-v2.2.0
+v2.2.1
 
 	Features:
 		- 
@@ -28,10 +28,12 @@ v2.2.0
 		- 
 		
 	Refactor:
-		- Now, uses normal window hashchange event.  IE7/IE6 Hashchange support dropped.
+		-
 		
 	Other
-		- 
+		- Updated to jquery 1.8.2
+		- Updated to the latest version of qunit
+		- changed "CORE" to "core" in file / folder structure
 
 Functionality
 ---------------
