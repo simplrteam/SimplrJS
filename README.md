@@ -1,4 +1,4 @@
-[v2.2.0] SimplrJS
+[v2.2.0] SimplrJS - test
 =============
 
 Description
