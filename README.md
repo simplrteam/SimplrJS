@@ -1,4 +1,4 @@
-[v2.2.1] SimplrJS
+[v3.0.0 Beta] SimplrJS
 =============
 
 Description
@@ -19,7 +19,7 @@ Just include this javascript library with jQuery and start coding away!
 Change Log
 ------------
 
-v2.2.1
+v3.0.0
 
 	Features:
 		- 
@@ -31,9 +31,8 @@ v2.2.1
 		-
 		
 	Other
-		- Updated to jquery 1.8.2
-		- Updated to the latest version of qunit
-		- changed "CORE" to "core" in file / folder structure
+		- Updated to jquery 2.0.0
+		
 
 Functionality
 ---------------
