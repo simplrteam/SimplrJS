@@ -1,7 +1,6 @@
 <?php
 
 	// all head files loaded
-	include("browser.txt");
 	include("cache.txt");
 	include("controller.txt");
 	include("cookie.txt");

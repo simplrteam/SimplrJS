@@ -39,9 +39,6 @@
 
 	<?php
 	
-		// Browser
-		include("browser/browser.js");
-		
 		// Cache
 		include("cache/cache.js");
 		

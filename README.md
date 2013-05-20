@@ -31,6 +31,7 @@ v3.0.0
 		- [UPDATED] Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
 		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
+		- [REMOVED] Simplr.Browser.* has been removed.  The current browser / device landscape makes this outdated.
 		
 	Other
 		- Updated to jquery 2.0.0
@@ -38,12 +39,6 @@ v3.0.0
 
 Functionality
 ---------------
-*	Simplr.Browser.*
-	+	Simplr.Browser.mAddressBarHeight()
-	+	Simplr.Browser.mDevice()
-	+	Simplr.Browser.mLocalStorageCapable()
-	+	Simplr.Browser.mSetUserAgent()
-	+	Simplr.Browser.mTouchCapable()
 *	Simplr.Cache.*
 	+	Simplr.Cache.mExpire()
 	+	Simplr.Cache.mGet()
