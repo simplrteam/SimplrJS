@@ -28,7 +28,8 @@ v3.0.0
 		- 
 		
 	Refactor:
-		-
+		- Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
+		- Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
 		
 	Other
 		- Updated to jquery 2.0.0

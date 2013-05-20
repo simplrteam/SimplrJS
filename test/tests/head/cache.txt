@@ -24,7 +24,7 @@
 		
 		module("Simplr.Cache");
 		test("Simplr.Cache.mSet()", function() {
-			equal(Simplr.Cache.mSet(input.put1), output.out1, "put string");
+			equal(Simplr.Cache.mSet(input.put1), output.isNull, "no key or identifier");
 			equal(Simplr.Cache.mSet(input.put2), output.out2, "put string");
 			equal(Simplr.Cache.mSet(input.put3), output.out3, "put string");
 		});
