@@ -28,8 +28,9 @@ v3.0.0
 		- 
 		
 	Refactor:
-		- Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
-		- Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
+		- [UPDATED] Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
+		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
+		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
 		
 	Other
 		- Updated to jquery 2.0.0
@@ -54,9 +55,6 @@ Functionality
 	+	Simplr.Controller.mExecute()
 	+	Simplr.Controller.mRoute()
 	+	Simplr.Controller.mRouteAndExecute()
-*	Simplr.Conversion.*
-	+	Simplr.Conversion.mObjectToJSONString()
-	+	Simplr.Conversion.mJSONStringToObject()
 *	Simplr.Cookie.*
 	+	Simplr.Cookie.mGet()
 	+	Simplr.Cookie.mSet()

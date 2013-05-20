@@ -47,10 +47,6 @@
 		
 		// Controller
 		include("controller/controller.js");
-		
-		// Converison
-		include("conversion/json2.js");
-		include("conversion/conversion.js");
 	
 		// Cookie	
 		include("cookie/cookie.js");
