@@ -32,6 +32,8 @@ v3.0.0
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
 		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
 		- [REMOVED] Simplr.Browser.* has been removed.  The current browser / device landscape makes this outdated.
+		- [REMOVED] Simplr.Ui.* has been removed.  These UI widgets arent' generally used and are better off as specialty features.
+		- [REMOVED] Simplr.Core.Ui.* has been removed.  These core features aren't used, or are just duuplicates of base jQuery functionality.
 		
 	Other
 		- Updated to jquery 2.0.0
@@ -58,11 +60,6 @@ Functionality
 	+	Simplr.Core.Console.*
 		-	Simplr.Core.Console.mGetMessageTemplate()
 		-	Simplr.Core.Console.mMessage()
-	+	Simplr.Core.Ui.*
-		-	Simplr.Core.Ui.mElementInfo()
-		-	Simplr.Core.Ui.mWindowInfo()
-	+	Simplr.Core.Ui.Widget.*
-		-	Simplr.Core.Ui.Widget.mGenerateWidgetID()
 	+	Simplr.Core.Util.*
 		-	Simplr.Core.Util.mEmpty()
 		-	Simplr.Core.Util.mEqual()
@@ -98,16 +95,6 @@ Functionality
 	+	Simplr.Trigger.mOnPage()
 	+	Simplr.Trigger.mOnEvent()
 	+	Simplr.Trigger.mOnTransaction()
-*	Simplr.Ui.*
-	+	Simplr.Ui.Layer.*
-		-	Simplr.Ui.Layer.mCenter()
-		-	Simplr.Ui.Layer.mCreate()
-		-	Simplr.Ui.Layer.mDestroy()
-	+	Simplr.Ui.mNewBrowserWindow()
-	+	Simplr.Ui.Widget.*
-		-	Simplr.Ui.Widget.oTrackableScrollingElement()
-			1.	this.reset()
-			2.	this.destroy()
 *	Simplr.Util.*
 	+	Simplr.Util.mEmpty()
 	+	Simplr.Util.mEqual()

@@ -52,7 +52,6 @@
 		echo "Simplr.Core = {};";
 		include("core/core.console.js"); 
 		include("core/core.util.js");
-		include("core/core.ui.js");
 		include("core/core.validation.js");
 		include("core/defaultCodesAndValidators.js");
 		
@@ -65,12 +64,6 @@
 		
 		// Trigger
 		include("trigger/trigger.js");
-		
-		// Ui
-		echo "Simplr.Ui = { Widget : {} };";
-		include("ui/ui.layer.js");
-		include("ui/ui.newBrowserWindow.js");
-		include("ui/ui.widget.oTrackableScrollingElement.js");
 		
 		// Util
 		include("util/util.js");
