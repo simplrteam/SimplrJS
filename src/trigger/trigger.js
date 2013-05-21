@@ -15,7 +15,7 @@
 	function trigger(triggerObj) {
 		var triggerOptions = { services : [], data : { envID : TriggerData.Env } };
 		$.extend(true, triggerOptions, triggerObj.options);
-		if(Simplr.Core.Util.mEmpty(triggerOptions.services)) { 
+		if(Simplr.Util.mEmpty(triggerOptions.services)) { 
 			triggerOptions.services = getServiceIDs(); 
 		}
 		

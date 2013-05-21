@@ -44,7 +44,6 @@
 		// Core
 		echo "Simplr.Core = {};";
 		include("core/core.console.js"); 
-		include("core/core.util.js");
 		include("core/core.validation.js");
 		include("core/defaultCodesAndValidators.js");
 		

@@ -37,6 +37,7 @@ v3.0.0
 		- [REMOVED] Array.Prototype.remove by John Resig was removed. Use native Array.splice method instead of this method.
 		- [REMOVED] Simplr.Core.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
 		- [REMOVED] Simplr.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
+		- [REMOVED] Simplr.Core.Util.* was removed.  Use Simplr.Util.* instead.
 			
 	Other
 		- Updated to jquery 2.0.0
@@ -63,11 +64,7 @@ Functionality
 	+	Simplr.Core.Console.*
 		-	Simplr.Core.Console.mGetMessageTemplate()
 		-	Simplr.Core.Console.mMessage()
-	+	Simplr.Core.Util.*
-		-	Simplr.Core.Util.mEmpty()
-		-	Simplr.Core.Util.mEqual()
-		-	Simplr.Core.Util.mGetUrlParameter()
-		Simplr.Core.Validation.*
+	+	Simplr.Core.Validation.*
 		-	Simplr.Core.Validation.mAddCodes()
 		-	Simplr.Core.Validation.mAddValidators()
 		-	Simplr.Core.validation.mData()

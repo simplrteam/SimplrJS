@@ -51,7 +51,7 @@ Simplr.Core.Validation.mAddValidators({
 		var results = $.extend(true, {}, Simplr.Core.Validation.mGetRuleResultsTemplate());
 		if( $.isArray(value) ) { 
 			for(var i = 0, iL = value.length; i < iL; i++) {
-				if(!Simplr.Core.Util.mEqual([value[0], value[i]])) {
+				if(!Simplr.Util.mEqual([value[0], value[i]])) {
 					results.valid = false; 
 					i = iL;
 				}
