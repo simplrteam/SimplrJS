@@ -47,12 +47,6 @@
 			equal((p3 == null), true, "abc - doesn't exist");
 			equal(p4Length , 2, "all parameters ( 2 params)");
 		});
-		
-		test("Simplr.Util.mHasLocalStorage()", function() {
-			var hasSupport = false;
-			try { if( !(typeof localStorage == undefined) ) { hasSupport = true; } } catch(e) {}
-			equal(Simplr.Util.mHasLocalStorage(), hasSupport, "Local Storage, depends on browser running tests");
-		});
 
 		test("Simplr.Util.mTruncateString()", function() {
 			deepEqual( Simplr.Util.mTruncateString({ string : "abcdefg", size : 2 }), "ab", "Simple Truncate" );

@@ -35,7 +35,9 @@ v3.0.0
 		- [REMOVED] Simplr.Ui.* has been removed.  These UI widgets arent' generally used and are better off as specialty features.
 		- [REMOVED] Simplr.Core.Ui.* has been removed.  These core features aren't used, or are just duuplicates of base jQuery functionality.
 		- [REMOVED] Array.Prototype.remove by John Resig was removed. Use native Array.splice method instead of this method.
-		
+		- [REMOVED] Simplr.Core.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
+		- [REMOVED] Simplr.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
+			
 	Other
 		- Updated to jquery 2.0.0
 		
@@ -65,8 +67,7 @@ Functionality
 		-	Simplr.Core.Util.mEmpty()
 		-	Simplr.Core.Util.mEqual()
 		-	Simplr.Core.Util.mGetUrlParameter()
-		-	Simplr.Core.Util.mHasLocalStorage()
-	+	Simplr.Core.Validation.*
+		Simplr.Core.Validation.*
 		-	Simplr.Core.Validation.mAddCodes()
 		-	Simplr.Core.Validation.mAddValidators()
 		-	Simplr.Core.validation.mData()
@@ -100,7 +101,6 @@ Functionality
 	+	Simplr.Util.mEmpty()
 	+	Simplr.Util.mEqual()
 	+	Simplr.Util.mGetUrlParameter()
-	+	Simplr.Util.mHasLocalStorage()
 	+	Simplr.Util.mTruncateString()
 *	Simplr.Validation.*
 	+	Simplr.Validation.mAddCodes()

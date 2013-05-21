@@ -1,7 +1,5 @@
 (function() {
 	
-	var hasLocalStorage = typeof localStorage == "undefined" ? false : true;
-	
 	function htmlEntities(string) {
 		return string.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 	};
@@ -93,9 +91,6 @@
 			} else { 
 				return null;
 			}
-		},
-		mHasLocalStorage : function() {
-			return hasLocalStorage;
 		}
 	};
 	

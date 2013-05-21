@@ -8,9 +8,6 @@ Simplr.Util = {
 	mGetUrlParameter : function(name) {
 		return Simplr.Core.Util.mGetUrlParameter(name);
 	},
-	mHasLocalStorage : function() {
-		return Simplr.Core.Util.mHasLocalStorage();
-	},
 	mTruncateString : function(options) {
 		var opts = $.extend({ string : "", size : 5, postfix : "", smart : true }, options);
 		if(opts.string.length > opts.size) {
