@@ -38,6 +38,11 @@ v3.0.0
 		- [REMOVED] Simplr.Core.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
 		- [REMOVED] Simplr.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
 		- [REMOVED] Simplr.Core.Util.* was removed.  Use Simplr.Util.* instead.
+		- [REMOVED] Simplr.Core.Validation.* was removed.  Use Simplr.Validation.* instead.
+		- [REMOVED] Simplr.Form.mAddValidators was removed. Use Simplr.Validation.mAddValiators()
+		- [REMOVED] Simplr.Form.mGetValidators was removed. Use Simplr.Validation.mGetValidators() 
+		- [REMOVED] Simplr.Form.mAddCodes was removed. Use Simplr.Validation.mAddCodes()
+		- [REMOVED] Simplr.Form.mGetCodes was removed. Use Simplr.Validation.mGetCodes()
 			
 	Other
 		- Updated to jquery 2.0.0
@@ -64,18 +69,7 @@ Functionality
 	+	Simplr.Core.Console.*
 		-	Simplr.Core.Console.mGetMessageTemplate()
 		-	Simplr.Core.Console.mMessage()
-	+	Simplr.Core.Validation.*
-		-	Simplr.Core.Validation.mAddCodes()
-		-	Simplr.Core.Validation.mAddValidators()
-		-	Simplr.Core.validation.mData()
-		-	Simplr.Core.Validation.mGetCodeMessage()
-		-	Simplr.Core.Validation.mGetRuleResultsTemplate()
-		-	Simplr.Core.Validation.mValidate()
 *	Simplr.Form.*
-	+	Simplr.Form.mAddValidators()
-	+	Simplr.Form.mGetValidators()
-	+	Simplr.Form.mAddCodes()
-	+	Simplr.Form.mGetCodes()
 	+	Simplr.Form.mAddLabelAssociation()
 	+	Simplr.Form.mAddValidationAssociation()
 	+	Simplr.Form.mGetValues()

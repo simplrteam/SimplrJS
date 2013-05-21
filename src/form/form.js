@@ -16,7 +16,7 @@
 			for(var i = 0; i < 2; i++) {
 				// Only showing 1 message at a time.
 				if(msgArray[i].length > 0) {
-					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + Simplr.Core.Validation.mGetCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
+					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + Simplr.Validation.mGetCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
 				}
 			}
 			
@@ -58,19 +58,7 @@
 	};
 	
 	Simplr.Form = {
-		mAddValidators : function(obj) {
-			Simplr.Core.Validation.mAddValidators(obj);
-		},
-		mGetValidators : function() {
-			return Simplr.Core.Validation.mData().validators;
-		},
-		mAddCodes : function(obj) {
-			Simplr.Core.Validation.mAddCodes(obj);
-		},
-		mGetCodes : function() {
-			return Simplr.Core.Validation.mData().codes;
-		},
-		mAddLabelAssociation : function(obj) {
+	    mAddLabelAssociation : function(obj) {
 			$.extend(FormData.Labels, obj);
 		},
 		mAddValidationAssociation : function(obj) {
@@ -92,7 +80,7 @@
 		},
 		mValidateValuesAndRender : function(selector, values) {
 			var validationData = transformValues(values);
-			var validatedData = Simplr.Core.Validation.mValidate(validationData);
+			var validatedData = Simplr.Validation.mValidate(validationData);
 			render(selector, validatedData);
 			return validatedData.valid;
 		}

@@ -52,36 +52,6 @@
 		$("#js-testHTML").append(htmlContent);
 		
 		module("Simplr.Form");
-		test("Simplr.Form.mAddValidators()", function() {
-			Simplr.Form.mAddValidators({ "test0" : function() {} });
-			var test0Exists = false;
-			if( Simplr.Form.mGetValidators()["test0"] ) { test0Exists = true; }
-			equal(test0Exists, true, "Add a Single Validator");
-
-			Simplr.Form.mAddValidators({ 
-				"test1" : function(value) {},
-				"test2" : function(value) {}
-			});
-			var test1And2Exists = false;
-			if( Simplr.Form.mGetValidators()["test1"] && Simplr.Form.mGetValidators()["test2"] ) { test1And2Exists = true; }
-			equal(test1And2Exists, true, "Add a list of Validators");
-		});
-		
-		test("Simplr.Form.mAddCodes()", function() {
-			Simplr.Form.mAddCodes({ "test0" : function(label) { return "test0"; } });
-			var code0Exists = false;
-			if( Simplr.Form.mGetCodes()["test0"] ) { code0Exists = true; }
-			equal(code0Exists, true, "Add a single code");
-			
-			Simplr.Form.mAddCodes({ 
-	   	   		"test1" : "test1", 
-	   			"test2" : "test2"
-   			});
-			var code1And2Exists = false;
-			if( Simplr.Form.mGetCodes()["test1"] && Simplr.Form.mGetCodes()["test2"] ) { code1And2Exists = true; }
-			equal(code1And2Exists, true, "Add a list of codes");
-		});
-
 		test("Simplr.Form.mGetValues()", function() {
 			equal( countLength( Simplr.Form.mGetValues("#formTest form") ), 17, "Selector: 'form'");
 			equal( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 11, "Selector: '#form1'");
