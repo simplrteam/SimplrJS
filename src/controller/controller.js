@@ -1,9 +1,5 @@
 (function() {
 
-	function htmlEntities(string) {
-		return string.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-	};
-	
 	var ControllerData = {
 		CRUD : { 
 			"view" : true, 
@@ -97,7 +93,7 @@
 				var kvArr = urlArray[1].split("&");
 				for(var i = 0, iL = kvArr.length; i < iL; i++) {
 					var keyValue = kvArr[i].split("=");
-					ret.parameters[keyValue[0]] = $.trim(htmlEntities(decodeURIComponent(keyValue[1])));
+					ret.parameters[keyValue[0]] = $.trim(decodeURIComponent(keyValue[1]).replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'));
 				}
 			}
 			
