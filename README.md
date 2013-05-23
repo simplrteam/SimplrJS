@@ -22,7 +22,7 @@ Change Log
 v3.0.0
 
 	Features:
-		- 
+		-
 		
 	Bug Fixes:
 		- 
