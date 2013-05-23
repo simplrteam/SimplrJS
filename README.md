@@ -28,6 +28,7 @@ v3.0.0
 		- 
 		
 	Refactor:
+		- [ADDED] Simplr.Console.mMessage was added.  Replaces Simplr.Core.Console.mMessage
 		- [UPDATED] Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
 		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
@@ -37,6 +38,7 @@ v3.0.0
 		- [REMOVED] Array.Prototype.remove by John Resig was removed. Use native Array.splice method instead of this method.
 		- [REMOVED] Simplr.Core.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
 		- [REMOVED] Simplr.Util.mHasLocalStorage was removed.  Use your own method to check for localStorage.
+		- [REMOVED] Simplr.Core.Console.* was removed. Use Simplr.Console.* instead.
 		- [REMOVED] Simplr.Core.Util.* was removed.  Use Simplr.Util.* instead.
 		- [REMOVED] Simplr.Core.Validation.* was removed.  Use Simplr.Validation.* instead.
 		- [REMOVED] Simplr.Form.mAddValidators was removed. Use Simplr.Validation.mAddValiators()
@@ -65,10 +67,8 @@ Functionality
 	+	Simplr.Cookie.mGet()
 	+	Simplr.Cookie.mSet()
 	+	Simplr.Cookie.mExpire()
-*	Simplr.Core.*
-	+	Simplr.Core.Console.*
-		-	Simplr.Core.Console.mGetMessageTemplate()
-		-	Simplr.Core.Console.mMessage()
+*	Simplr.Console.*
+	+	Simplr.Console.mMessage()
 *	Simplr.Form.*
 	+	Simplr.Form.mAddLabelAssociation()
 	+	Simplr.Form.mAddValidationAssociation()

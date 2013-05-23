@@ -19,11 +19,7 @@
 			triggerOptions.services = getServiceIDs(); 
 		}
 		
-		var messages = $.extend(Simplr.Core.Console.mGetMessageTemplate(), {
-			group : "simplr.trigger: " + TriggerData.Env + " environment",
-			message : []
-		});
-		
+		var messages = { group : "simplr.trigger: " + TriggerData.Env + " environment", message : [] };
 		for(var i = 0, iL = triggerOptions.services.length; i < iL; i++) {
 			var id = triggerOptions.services[i];
 			if($.isFunction(TriggerData.Services[id][triggerObj.type]) && TriggerData.Services[id].data.environmentIDs[TriggerData.Env]) { 
@@ -35,7 +31,7 @@
 		}
 		
 		if( messages.message.length > 0 ) {
-			Simplr.Core.Console.mMessage(messages);
+			Simplr.Console.mMessage(messages);
 		}
 	}
 	

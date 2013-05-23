@@ -41,10 +41,9 @@
 		// Cookie	
 		include("cookie/cookie.js");
 	
-		// Core
-		echo "Simplr.Core = {};";
-		include("core/core.console.js"); 
-		
+        // Console
+        include("console/console.js");
+    	
 		// Form
 		include("form/form.js");
 		
