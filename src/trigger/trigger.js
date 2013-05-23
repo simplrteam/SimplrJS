@@ -47,7 +47,6 @@
 					onEvent : function() {},
 					onTransaction : function() {}
 				}, services[serviceName]);
-				trigger({ type : "onLoad", options : { services : [ serviceName ] } });
 			}
 		},
 		
@@ -55,19 +54,23 @@
 			return TriggerData;
 		},
 
-		mSetEnvironment : function( env ) {
+		mSetEnvironment : function(env) {
 			TriggerData.Env = env;
 		},
 		
-		mOnPage : function( options ) {
+		mOnLoad : function(options) {
+		    trigger({ type : "onLoad", options : $.extend({}, options) });
+		},
+		
+		mOnPage : function(options) {
 			trigger({ type : "onPage", options : $.extend({}, options) });
 		},
 		
-		mOnEvent : function( options ) {
+		mOnEvent : function(options) {
 			trigger({ type : "onEvent", options : $.extend({}, options) });
 		},
 		
-		mOnTransaction : function( options ) {
+		mOnTransaction : function(options) {
 			trigger({ type : "onTransaction", options : $.extend({}, options) });
 		}
 	};

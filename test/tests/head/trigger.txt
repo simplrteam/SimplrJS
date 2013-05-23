@@ -7,9 +7,24 @@
 
 		module("Simplr.Trigger");
 		test("Simplr.Trigger.mAddServices()", function() {
-			
 			deepEqual(Simplr.Trigger.mData().Services, {}, "No services");
-			Simplr.Trigger.mAddServices({ "ga" : {
+			Simplr.Trigger.mAddServices({ 
+				"ga": {
+					data : {
+						environmentIDs : { dev : "something" }
+					},
+					onPage : function( data ) {
+						xResult += data.x;
+						return data;
+					},
+					onEvent : function( data ) {
+						return data;
+					},
+					onTransaction : function( data ) {
+						return data;
+					}
+				},
+				"wt" : {
 					data : {
 						environmentIDs : { dev : "something" }
 					},
@@ -25,23 +40,8 @@
 					}
 				}
 			});
+			Simplr.Trigger.mOnLoad();
 			equal($.isFunction(Simplr.Trigger.mData().Services.ga.onPage), true, "One service added");
-			Simplr.Trigger.mAddServices({ "wt" : {
-					data : {
-						environmentIDs : { dev : "something" }
-					},
-					onPage : function( data ) {
-						xResult += data.x;
-						return data;
-					},
-					onEvent : function( data ) {
-						return data;
-					},
-					onTransaction : function( data ) {
-						return data;
-					}
-				}
-			});
 			equal($.isFunction(Simplr.Trigger.mData().Services.ga.onPage) && $.isFunction(Simplr.Trigger.mData().Services.wt.onPage), true, "Two services added");
 		});
 		
