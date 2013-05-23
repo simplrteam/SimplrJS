@@ -28,7 +28,8 @@ v3.0.0
 		- 
 		
 	Refactor:
-		- [ADDED] Simplr.Console.mMessage was added.  Replaces Simplr.Core.Console.mMessage
+		- [ADDED] Simplr.Console.mMessage was added. Replaces Simplr.Core.Console.mMessage
+		- [ADDED] Simplr.Console.mToggle was added. Turns on / off the console.  Replaces the usage of Simplr.Config.mToggleConsole()
 		- [ADDED/UPDATED] Simplr.Trigger.mOnLoad. Triggers are no longer loaded automatically.  You must call the Simplr.Trigger.mOnLoad() method to load the triggers.
 		- [UPDATED] Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
@@ -69,6 +70,7 @@ Functionality
 	+	Simplr.Cookie.mSet()
 	+	Simplr.Cookie.mExpire()
 *	Simplr.Console.*
+	+	Simplr.Console.mToggle()
 	+	Simplr.Console.mMessage()
 *	Simplr.Form.*
 	+	Simplr.Form.mAddLabelAssociation()

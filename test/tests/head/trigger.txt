@@ -1,6 +1,7 @@
 <script type="text/javascript">
-	Simplr.Config.mToggleConsole(true);
 	QUnit.config.reorder = false
+	
+	Simplr.Console.mToggle(true);
 	$(function() {
 		Simplr.Trigger.mSetEnvironment("dev");		
 		var xResult = 0;
