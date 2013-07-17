@@ -1,3 +1,0 @@
-<?php
-	$ctx = "/simplr";
-?>

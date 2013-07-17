@@ -28,11 +28,17 @@ v3.0.0
 		- 
 		
 	Refactor:
+		- [ADDED] Simplr.Layout.mAddGlobalToken(token, value) has been added. Where "token" is the token to replace and "value" is the replacement value.
+		- [ADDED] Simplr.Layout.mAddComponent(key, component) has been added. Where "key" is a text value and "component" is a text value that contains a html string.
 		- [ADDED] Simplr.Console.mMessage was added. Replaces Simplr.Core.Console.mMessage
 		- [ADDED] Simplr.Console.mToggle was added. Turns on / off the console.  Replaces the usage of Simplr.Config.mToggleConsole()
 		- [ADDED/UPDATED] Simplr.Trigger.mOnLoad. Triggers are no longer loaded automatically.  You must call the Simplr.Trigger.mOnLoad() method to load the triggers.
 		- [UPDATED] Simplr.Cache.* now always returns null or data for all operations.  NULL can be used to check if soemthing doesn't exist or has expired.
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
+		- [UPDATED] Simplr.Layout.*, every component requires its own script template block.  You cannot nest components inside other components anymore.
+		- [REMOVED] Simplr.Layout.mAddGlobalTokens() has been removed.  Use Simplr.Layout.mAddGlobalToken().
+		- [REMOVED] Simplr.Layout.mAddComponents has been removed.  Use Simplr.Layout.mAddComponent().
+		- [REMOVED] Simplr.Layout.mReplaceTokens has been removed.
 		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
 		- [REMOVED] Simplr.Browser.* has been removed.  The current browser / device landscape makes this outdated.
 		- [REMOVED] Simplr.Ui.* has been removed.  These UI widgets arent' generally used and are better off as specialty features.
@@ -49,7 +55,7 @@ v3.0.0
 		- [REMOVED] Simplr.Form.mGetCodes was removed. Use Simplr.Validation.mGetCodes()
 			
 	Other
-		- Updated to jquery 2.0.0
+		- Updated to jquery 2.0.3
 		
 
 Functionality

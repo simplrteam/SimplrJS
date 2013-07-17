@@ -2,111 +2,88 @@
 <script type="text/javascript">
 	QUnit.config.reorder = false
 	$(function() {
-		
-		function countComponents() {
-			var count = 0;
-			$.each(Simplr.Layout.mData().Components, function() {
-				count++;
-			});
-			return count;
-		}
 
-		var testLayouts =
-		'<div id="layoutTest">' +	
-			'<div id="layout-test2" class="layout-component">'+
-				'<div id="test2">test2</div>'+
-			'</div>'+
-			'<div id="layout-test3" class="layout-component">'+
-				'<div id="test3">test3'+
-					'<div id="layout-nested" class="layout-component">'+
-						'<div id="nested"><span>nested</span>' +
-							'<div id="layout-nested2" class="layout-component">'+
-								'<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>'+
-							'</div>'+
-						'</div>'+
-					'</div>'+
-				'</div>'+
-			'</div>' +
-		'</div>';
+		// Setup the DEMO HTML for these tests
+		var testLayouts =	'<script id="layout-test2" type="text/x-simplr-layout-component">' +
+				                '<div id="test2">test2</div>' +
+				            '<\/script>' +
+				            '<script id="layout-test3" type="text/x-simplr-layout-component">' +
+				                '<div id="test3">test3</div>' +
+				            '<\/script>' +
+				            '<script id="layout-nested" type="text/x-simplr-layout-component">' +
+				                '<div id="nested"><span>nested</span></div>' +
+				            '<\/script>' +
+				            '<script id="layout-nested2" type="text/x-simplr-layout-component">' +
+				                '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>' +
+				            '<\/script>';
 		$("#js-testHTML").append(testLayouts);
 
 		module("Simplr.Layout");
-
-		test("Components exist in DOM before using Simplr.Layout.*", function() {
-			equal( $("#layoutTest .layout-component").size(), 4, "Components Expected");
-		});
 		
-		test("Simplr.Layout.mAddComponents()", function() {
-			equal(Simplr.Layout.mGetComponent("test1"), null, "Component Doesn't exist, isn't in DOM");			
-			Simplr.Layout.mAddComponents({
-				test1 : '<div id="test1">test1</div>'
-			});
-			equal(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
+		test("Components exist in page as script tags", function() {
+			equal( $("script[type='text/x-simplr-layout-component']").size(), 4, "Components Expected");
 		});
-
+	
+		test("Simplr.Layout.mAddComponent(key, component)", function() {
+			equal(Simplr.Layout.mGetComponent("test1"), undefined, "Component doesnt exist in memory or dom");
+			Simplr.Layout.mAddComponent("test1", '<div id="test1">test1</div>');
+			equal(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1 now exists");
+		});
+	
 		test("Simplr.Layout.mGetComponent()", function() {
-			equal(Simplr.Layout.mGetComponent("doesnntexist"), null, "NULL component");
+			equal(Simplr.Layout.mGetComponent("doesnntexist"), undefined, "undefined component");
 			equal(Simplr.Layout.mGetComponent("test1"), '<div id="test1">test1</div>', "Component 1");
 			equal(Simplr.Layout.mGetComponent("test2"), '<div id="test2">test2</div>', "Component 2");
+			equal(Simplr.Layout.mGetComponent("test3"), '<div id="test3">test3</div>', "Component 3");
 			equal(Simplr.Layout.mGetComponent("nested"), '<div id="nested"><span>nested</span></div>', "Nested Component");
 			equal(Simplr.Layout.mGetComponent("nested2"), '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>', "Nested -> Nested Component");
 		});
-
-		test("Simplr.Layout.mReplaceTokens()", function() {
-			var string1 = "test test $[rp1] test test";
-			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string1), "test test RP1 test test", "Single Replacement");
-			var string2 = "$[rp1] test $[rp1] test $[rp1]";
-			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1" }, string2), "RP1 test RP1 test RP1", "Single Replacement with repeats");
-			var string3 = "$[rp1] test $[rp2] test test";
-			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string3), "RP1 test RP2 test test", "Multiple Replacements");
-			var string4 = "$[rp1] $[rp2] $[rp2] $[rp1] $[rp3]";
-			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2", rp3 : "RP3" }, string4), "RP1 RP2 RP2 RP1 RP3", "Multiple Replacements with repeats");
+		
+		test("Simplr.Layout.mAddGlobalToken()", function() {
+			Simplr.Layout.mAddGlobalToken("GB1", "word1");
+			Simplr.Layout.mAddGlobalToken("GB2", "word2");
+			var gTokens = Simplr.Layout.mData().GlobalTokens;
+			equal(gTokens["GB1"], "word1", "Global Token 1");
+			equal(gTokens["GB2"], "word2", "Global Token 2");
 		});
 		
-		test("Simplr.Layout.mAddGlobalTokens()", function() {
-			Simplr.Layout.mAddGlobalTokens({ GB1 : "word1", GB2 : "word2" });
-			var string1 = "test $[GB1] test $[GB2] test";
-			equal( Simplr.Layout.mReplaceTokens({ }, string1), "test word1 test word2 test", "Global Only Replacement");
-			var string2 = "$[rp1] test $[GB1] test $[rp2]";
-			equal( Simplr.Layout.mReplaceTokens({ rp1 : "RP1", rp2 : "RP2" }, string2), "RP1 test word1 test RP2", "Global Replace with layout specific tokens");
-		});
-
-		test("simplre.layout.mAssembleLayout()", function() {
-			$.extend(Simplr.Layout.mData().Components, {
-				cp1 : "$[token]",
-				cp2 : "--$[token1]--$[token2]",
-				cp3 : "++$[string1]++$[string2]++"
-			});
-
-			var config1 = {
+		test("Simplr.Layout.mAssembleLayout()", function() {
+			// Add some simple layout components
+			Simplr.Layout.mAddComponent("cp1", "$[token]");
+			Simplr.Layout.mAddComponent("cp2", "--$[token1]--$[token2]");
+			Simplr.Layout.mAddComponent("cp3", "++$[string1]++$[string2]++");
+			// Assemble a Layout
+			equal(Simplr.Layout.mAssembleLayout({
 				component : "cp3",
-				tokens : { string1 : "1", string2 : "2" }
-			};
-			equal(Simplr.Layout.mAssembleLayout(config1), "++1++2++", "Simple Replacement");
-			
-			var config2 = {
+				tokens : {
+					string1 : "1",
+					string2 : "2"
+				}
+			}), "++1++2++", "Simple Replacement");
+			// Assemble a Layout
+			equal(Simplr.Layout.mAssembleLayout({
 				component : "cp3",
 				tokens : [
 					{ string1 : "1", string2 : "2" },
 					{ string1 : "3", string2 : "4" },
 					{ string1 : "5", string2 : "6" }
 				]
-			};
-			equal(Simplr.Layout.mAssembleLayout(config2), "++1++2++++3++4++++5++6++", "Simple replacement with repeats");
-			
-			var config3 = {
+			}), "++1++2++++3++4++++5++6++", "Simple replacement with repeats");
+			// Assemble a Layout
+			equal(Simplr.Layout.mAssembleLayout({
 				component : "cp3",
 				tokens : {
 					string1 : "1",
 					string2 : {
 						component : "cp1",
-						tokens : { token : "a" }
+						tokens : {
+							token : "a"
+						}
 					}
 				}
-			};
-			equal(Simplr.Layout.mAssembleLayout(config3), "++1++a++", "Nest replacement");	
-
-			var config4 = {
+			}), "++1++a++", "Nest replacement");
+			// Assemble a Layout
+			equal(Simplr.Layout.mAssembleLayout({
 				component : "cp3",
 				tokens : {
 					string1 : "1",
@@ -119,10 +96,9 @@
 						]
 					}
 				}
-			};
-			equal(Simplr.Layout.mAssembleLayout(config4), "++1++abc++", "Nested replacement with repeats");	
-
-			var config5 = {
+			}), "++1++abc++", "Nested replacement with repeats");
+			// Assemble a Layout
+			equal(Simplr.Layout.mAssembleLayout({
 				component : "cp3",
 				tokens : {
 					string1 : {
@@ -147,9 +123,8 @@
 						]
 					}
 				}
-			};
-			equal(Simplr.Layout.mAssembleLayout(config5), "++----1--2--3--4--z++abc++", "mutlipe nested with repeats");
+			}), "++----1--2--3--4--z++abc++", "multiple nested with repeats");
 		});
-		
+
 	});
 </script>

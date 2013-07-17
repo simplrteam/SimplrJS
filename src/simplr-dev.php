@@ -48,7 +48,6 @@
 		include("form/form.js");
 		
 		// Layout
-		include("layout/innerxhtml.js");
 		include("layout/layout.js");
 		
 		// Trigger
