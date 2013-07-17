@@ -37,7 +37,7 @@ v3.0.0
 		- [UPDATED] Simplr.Cookie.* now always returns null or data for all operations. NULL can be used to check if soemthing doesn't exist or has expired. 
 		- [UPDATED] Simplr.Layout.*, every component requires its own script template block.  You cannot nest components inside other components anymore.
 		- [REMOVED] Simplr.Layout.mAddGlobalTokens() has been removed.  Use Simplr.Layout.mAddGlobalToken().
-		- [REMOVED] Simplr.Layout.mAddComponents has been removed.  Use Simplr.Layout.mAddComponent().
+		- [REMOVED] Simplr.Layout.mAddComponents() has been removed.  Use Simplr.Layout.mAddComponent().
 		- [REMOVED] Simplr.Layout.mReplaceTokens has been removed.
 		- [REMOVED] Simplr.Conversion.* has been removed. Use JSON.parse() and JSON.stringify() native methods.
 		- [REMOVED] Simplr.Browser.* has been removed.  The current browser / device landscape makes this outdated.
@@ -84,12 +84,11 @@ Functionality
 	+	Simplr.Form.mGetValues()
 	+	Simplr.Form.mValidateValuesAndRender()
 *	Simplr.Layout.*
-	+	Simplr.Layout.mAddComponents()
+	+	Simplr.Layout.mAddComponent()
 	+	Simplr.Layout.mAssembleLayout()
 	+	Simplr.Layout.mData()
 	+	Simplr.Layout.mGetComponent()
-	+	Simplr.Layout.mAddGlobalTokens()
-	+	Simplr.Layout.mReplaceTokens()
+	+	Simplr.Layout.mAddGlobalToken()
 *	Simplr.Trigger.*
 	+	Simplr.Trigger.mAddServices()
 	+	Simplr.Trigger.mSetEnvironment()
