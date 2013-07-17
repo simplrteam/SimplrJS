@@ -30,35 +30,7 @@
 			<h2 id="qunit-userAgent"><!--  --></h2>  
 			<ol id="qunit-tests"><!--  --></ol>  
 		</div>
-		<div id="js-testHTML"><!--  -->
-		    
-		    <!-- Templates inside script tags -->
-		    <!--
-		    <script id="layout-test2" type="text/x-simplr-layout-component">
-                <div id="test2">test2</div>
-            </script>
-            <script id="layout-test3" type="text/x-simplr-layout-component">
-                <div id="test3">test3</div>
-            </script>
-            <script id="layout-nested" type="text/x-simplr-layout-component">
-                <div id="nested"><span>nested</span></div>
-            </script>
-            <script id="layout-nested2" type="text/x-simplr-layout-component">
-                <div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>
-            </script>
-            -->
-        
-		    <!--
-		    <div id="layout-test1" class="layout-component">
-    		    <div id="myTest1">
-                    <h1>Test Test Test</h1>
-                    <p>this is a paragraph</p>
-                    <div>test div</div>
-                </div>
-            </div>
-		    -->
-		    
-		</div>
+		<div id="js-testHTML"><!--  --></div>
 	</body>
 
 </html>
