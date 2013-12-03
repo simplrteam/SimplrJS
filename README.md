@@ -22,7 +22,7 @@ Change Log
 v3.0.0
 
 	Features:
-		-
+		- Added samples folder with code samples.
 		
 	Bug Fixes:
 		- 
