@@ -12,6 +12,16 @@
 		var htmlContent = 
 		'<div id="formTest">' +
 			'<form id="form1">' +
+				'<input type="password" name="isPasswordWhiteSpace" id="isPasswordWhiteSpace" value="  password test1  " />' +
+				'<input type="text" name="isTextWhiteSpace" id="isTextWhiteSpace" value="  test    " />' +
+				'<input type="radio" name="isRadioWhiteSpace" id="isRadioWhiteSpace" checked="true" value="    radio      " />' +
+				'<input type="hidden" name="isHiddenWhiteSpace" id="isHiddenWhiteSpace" value="    hidden      " />' +
+				'<textarea name="isTextareaWhiteSpace" id="isTextareaWhiteSpace">     textarea text     </textarea>' +
+				'<select name="isSelectWhiteSpace" id="isSelectWhiteSpace">' +
+					'<option value="one">1</option>' +
+					'<option selected="true" value="two">2</option>' +
+					'<option value="three">3</option>' +
+				'</select>' +
 				'<input type="password" name="isPassword" id="pInput" value="password test" />' +
 				'<input type="hidden" name="isHidden" id="hInput" value="hidden test" />' +
 				'<input type="text" name="isText" id="tInput" value="text test" />' +
@@ -53,8 +63,8 @@
 		
 		module("Simplr.Form");
 		test("Simplr.Form.mGetValues()", function() {
-			equal( countLength( Simplr.Form.mGetValues("#formTest form") ), 17, "Selector: 'form'");
-			equal( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 11, "Selector: '#form1'");
+			equal( countLength( Simplr.Form.mGetValues("#formTest form") ), 23, "Selector: 'form'");
+			equal( countLength( Simplr.Form.mGetValues("#formTest #form1") ), 17, "Selector: '#form1'");
 			equal( countLength( Simplr.Form.mGetValues("#formTest #form2") ), 1, "Selector: '#form2'");
 			deepEqual(Simplr.Form.mGetValues("#formTest #form1"), { 
 				isPassword : "password test",
@@ -67,7 +77,13 @@
 				isCheckbox4 : false,
 				isSelect : "two", 
 				isTextarea : "textarea text",
-				isRange : "4"
+				isRange : "4",
+				isPasswordWhiteSpace : "  password test1  ",
+				isTextWhiteSpace : "test",
+				isRadioWhiteSpace : "radio",
+				isHiddenWhiteSpace : "hidden",
+				isTextareaWhiteSpace : "textarea text",
+				isSelectWhiteSpace : "two"
 			}, "All Expected Fields");
 		});
 

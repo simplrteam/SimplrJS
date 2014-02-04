@@ -74,6 +74,12 @@
 					values[$(this).attr("name")] = $(this).is(":checked") ? ( $(this).val() != "on" ? $(this).val() : true ) : false;
 				} else {
 					values[$(this).attr("name")] = $(this).val();
+					if(!thisEl.is("[type='password']")) {
+						// trim the value
+						values[$(this).attr("name")] = values[$(this).attr("name")].trim();
+						// update the display
+						$(this).val(values[$(this).attr("name")]);
+					}
 				}
 			});
 			return values;
