@@ -43,7 +43,7 @@ Simplr.Validation.mAddValidators({
 		return results;
 	},
 	email : function(value) {
-		var results = $.extend(true, {}, Simplr.Validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
+		var results = $.extend(true, {}, Simplr.Validation.mGetRuleResultsTemplate(), { valid : /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value) });
 		if( !results.valid ) { results.errorCodes.push("eEmail"); }
 		return results;
 	},

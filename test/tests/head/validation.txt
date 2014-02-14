@@ -40,6 +40,8 @@
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "dinersclub" ] }}).valid, false, "dinersclub" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "discover" ] }}).valid, false, "discover" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "email" ] }}).valid, false, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "test@abc+google.com", rules : [ "email" ] }}).valid, false, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "test+google@abc+test.com", rules : [ "email" ] }}).valid, false, "email" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : [ "abc", "efg" ], rules : [ "equal" ] }}).valid, false, "equal" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "mastercard" ] }}).valid, false, "mastercard" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "", rules : [ "notempty" ] }}).valid, false, "notempty" );
@@ -55,6 +57,8 @@
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "30569309025904", rules : [ "dinersclub" ] }}).valid, true, "dinersclub" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "6011000990139424", rules : [ "discover" ] }}).valid, true, "discover" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "test@test.com", rules : [ "email" ] }}).valid, true, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "test+google@test.com", rules : [ "email" ] }}).valid, true, "email" );
+			equal(Simplr.Validation.mValidate({ emptyString : { value : "test+google+google@test.com", rules : [ "email" ] }}).valid, true, "email" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : ["a", "a"], rules : [ "equal" ] }}).valid, true, "equal" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "5105105105105100", rules : [ "mastercard" ] }}).valid, true, "mastercard" );
 			equal(Simplr.Validation.mValidate({ emptyString : { value : "abc", rules : [ "notempty" ] } }).valid, true, "notempty" );
