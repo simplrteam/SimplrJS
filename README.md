@@ -89,4 +89,8 @@ Functionality
 
 Usage
 -----
-see [SimplrJS Documentation](http://simplrjs.com/docs/)
+
+Find version 3.0.0 on the 3.0.0 Branch.
+For version 3.0.0 see [Documentation for 3.0.0](https://github.com/simplrteam/SimplrJS/tree/master/archive/samples)
+
+For version 4.0.0, in-progress.
