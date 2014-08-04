@@ -1,0 +1,64 @@
+<script type="text/javascript">
+	QUnit.config.reorder = false
+	
+	// Create 3 Layouts
+	simplr.view.add({
+		layout_1 : {
+			html : function(data) { return '<div id="layout_1">Layout1</div>' },
+			callback : function(selector, data) {}
+		},
+		layout_2 : {
+			html : function(data) { return '<div id="layout_2">Layout2</div>' },
+			callback : function(selector, data) { $("#layout_2", selector).css("font-weight", "bold");}
+		},
+		layout_3 : {
+			html : function(data) { return '<div id="layout_3">' + data.text + '</div>' },
+			callback : function(selector, data) {}
+		}
+	});
+	
+	function getLayoutCount() {
+		var tmp = 0;
+		$.each(simplr.dataStorage.view.views, function(key, value) { tmp++; });
+		return tmp;
+	};
+
+	function getLayoutNames() {
+		var tmp = [];
+		$.each(simplr.dataStorage.view.views, function(key, value) { tmp.push(key); });
+		return tmp;
+	};
+	
+	// start the testing on dom conent loaded
+	document.addEventListener("DOMContentLoaded", function() {
+	
+		// need to Create a Dummy Container for our content
+		$("body").append('<div id="js-page" class="none"><!-- --></div>');
+	
+		module("simplr.view");
+		test("simplr.view.add()", function() {
+			equal( getLayoutCount(), 3, "Layout Count");
+			deepEqual( getLayoutNames(), ["layout_1", "layout_2", "layout_3"], "Layout Names");
+		});
+
+		test("simplr.view.render() - HTML Executes correctly", function() {
+			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist");
+			simplr.view.render({ name : "layout_1", data : {}, selector : "#js-page"});
+			equal( $("#layout_1").size(), 1, "Layout Now Exists");
+		});
+		
+		test("simplr.view.render() - CALLBACK Executes", function() {
+			simplr.view.render({ name : "layout_2", data : {}, selector : "#js-page" });
+			equal( $("#layout_2").size(), 1, "New Layout Exists");
+			equal( $("#layout_2").css("font-weight") == "bold" || $("#layout_2").css("font-weight") == "700", true, "Callback executed");
+		});
+
+		test("simplr.view.render() - DATA is Passed", function() {
+			simplr.view.render({ name : "layout_3", data : { text : "data string" }, selector : "#js-page" });
+			equal( $("#layout_3").size(), 1, "New Layout Exists");
+			equal( $("#layout_3").text(), "data string", "Data Passed"); 
+		});
+	
+	}, false);
+	
+</script>

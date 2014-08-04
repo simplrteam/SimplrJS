@@ -1,5 +1,7 @@
-[ v4.0.0 ] Beta SimplrJS
+[ v4.0.0 ] IN-PROGESS SimplrJS
 =============
+
+IMPORTANT VERSION IS A WORK IN-PROGRESS.  PLEASE SEE BRANCHES FOR PREVIOUS VERSIONS.
 
 Description
 -----------
