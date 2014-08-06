@@ -29,13 +29,12 @@
 			// in order to render we need to have a name and selector
 			if(options.name && options.selector) {
 				// add the html data to the area from selector
-				// TODO: replace this without jQuery
-				$(options.selector).html(simplr.dataStorage.view.views[options.name].html(options.data));
+				document.querySelector(options.selector).innerHTML = simplr.dataStorage.view.views[options.name].html(options.data);
 				// call the callback function from that view
 				simplr.dataStorage.view.views[options.name].callback(options.selector, options.data);
 			}
 		}
-			
+
 	};
 	
 })();
