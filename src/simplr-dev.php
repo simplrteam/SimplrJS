@@ -17,10 +17,11 @@
 		// cache
 		include("cache.js");
 		
-		// View
+		// view
 		include("view.js");
 		
-		
+		// command
+		include("command.js");
 		
 	
 		// Cache

@@ -1,0 +1,114 @@
+<script type="text/javascript">
+	QUnit.config.reorder = false
+	$(function() {
+		
+		function getCommandCount() {
+			var size = 0;
+			$.each(simplr.dataStorage.command.commands, function() {
+				size++;
+			});
+			return size;
+		};
+		
+		function getCommandNames() {
+			var results = [];
+			$.each(simplr.dataStorage.command.commands, function(name, object) {
+				results.push(name);
+			});
+			return results;
+		};
+
+		function getCurrentData() {
+			return window.jsTestData;
+		};
+
+		function setCurrentData(data) {
+			window.jsTestData = {};
+			window.jsTestData = $.extend(true, {}, data);
+		};
+		
+		simplr.command.add({
+			cmd1 : {
+				route : [ "cmd1", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			},
+			cmd2 : {
+				route : [ "cmd1", "cmd2", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			},
+			cmd3 : {
+				route : [ "cmd3", "view" ],
+				callback : function(data) { 
+					setCurrentData(data);
+				}
+			},
+		});
+
+		module("simplr.command");
+		test("commands Initialized Correctly", function() {
+			equal( getCommandCount(), 3, "Command Count");
+			deepEqual( getCommandNames(), ["cmd1_view", "cmd1_cmd2_view", "cmd3_view" ], "Command Names");
+		});
+
+		test("simplr.command.execute(), Routes", function() {
+			simplr.command.execute('/cmd1/view');
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "simplr route array");
+
+			simplr.command.execute('#/cmd1/view');
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "# simplr route array");
+
+			simplr.command.execute('!/cmd1/view');
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "! simplr route array");
+
+			simplr.command.execute('#!/cmd1/view');
+			deepEqual(getCurrentData().route, ["cmd1", "view"], "#! simplr route array");
+
+			simplr.command.execute('/cmd1/A/cmd2/');
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "simplr route array");
+
+			simplr.command.execute('#/cmd1/A/cmd2/');
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "# simplr route array");
+
+			simplr.command.execute('!/cmd1/A/cmd2/');
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "! simplr route array");
+
+			simplr.command.execute('#!/cmd1/A/cmd2/');
+			deepEqual(getCurrentData().route, ["cmd1", "cmd2", "view"], "#! simplr route array");
+		});
+		
+		test("simplr.command.execute(), Parameters - cross site scripting", function() {
+			simplr.command.execute('/cmd1/view?x=%3Cscript%3Ealert(%22junk%22);%3C/script%3E');
+			equal(getCurrentData().parameters.x, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag url encoded");
+			simplr.command.execute('/cmd1/view?y=<script>alert("junk");<\/script>');
+			equal(getCurrentData().parameters.y, '&lt;script&gt;alert(&quot;junk&quot;);&lt;/script&gt;', "script tag not url encoded");
+			simplr.command.execute('/cmd1/view?y=<b>BOLD</b>');
+			equal(getCurrentData().parameters.y, '&lt;b&gt;BOLD&lt;/b&gt;', "html tag not url encoded");
+		});
+
+		test("simplr.command.execute(), Parameters - Parsing", function() {
+			simplr.command.execute('/cmd1/?x=1&y=1/2');
+			equal(getCurrentData().parameters.x, "1", "X=1");
+			equal(getCurrentData().parameters.y, "1/2", "Y=1/2");
+
+			simplr.command.execute('/cmd1/view?x=2&y=2/2');
+			equal(getCurrentData().parameters.x, "2", "X=2");
+			equal(getCurrentData().parameters.y, "2/2", "Y=2/2");
+
+			simplr.command.execute('/cmd1/A/?x=3&y=3/2');
+			equal(getCurrentData().parameters.x, "3", "X=3");
+			equal(getCurrentData().parameters.y, "3/2", "Y=3/2");
+
+			simplr.command.execute('/cmd1/A/cmd2/?x=4&y=4/2');
+			equal(getCurrentData().parameters.x, "4", "X=4");
+			equal(getCurrentData().parameters.y, "4/2", "Y=4/2");
+
+			simplr.command.execute(encodeURI("/cmd3/") + "?a=" + encodeURIComponent("bob & tom") + "&b=" + encodeURIComponent("100%"));
+			deepEqual(getCurrentData().parameters, { a : "bob & tom", b : "100%" }, "decodeURIComponentParts, decodeURI");
+		});
+		
+	});
+</script>
