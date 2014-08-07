@@ -11,7 +11,7 @@
 			.none { display: none; }
 		</style>		
 		
-		<script type="text/javascript" src="../src/jquery.min.js"></script>
+		<script type="text/javascript" src="includes/jquery.min.js"></script>
 		<script type="text/javascript" src="includes/qunit.js"></script>
 		<script type="text/javascript" src="../src/simplr-dev.php"></script>
 		
