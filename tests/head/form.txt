@@ -1,0 +1,118 @@
+<style type="text/css">form { margin-left:-5000px; }</style>
+<script type="text/javascript">
+	QUnit.config.reorder = false
+	$(function() {
+		
+		function countLength(data) {
+			var x = 0;
+			$.each(data, function(key, value) { x++; });
+			return x;
+		};
+		
+		var htmlContent = 
+		'<div id="formTest">' +
+			'<form id="form1">' +
+				'<input type="password" name="isPasswordWhiteSpace" id="isPasswordWhiteSpace" value="  password test1  " />' +
+				'<input type="text" name="isTextWhiteSpace" id="isTextWhiteSpace" value="  test    " />' +
+				'<input type="radio" name="isRadioWhiteSpace" id="isRadioWhiteSpace" checked="true" value="    radio      " />' +
+				'<input type="hidden" name="isHiddenWhiteSpace" id="isHiddenWhiteSpace" value="    hidden      " />' +
+				'<textarea name="isTextareaWhiteSpace" id="isTextareaWhiteSpace">     textarea text     </textarea>' +
+				'<select name="isSelectWhiteSpace" id="isSelectWhiteSpace">' +
+					'<option value="one">1</option>' +
+					'<option selected="true" value="two">2</option>' +
+					'<option value="three">3</option>' +
+				'</select>' +
+				'<input type="password" name="isPassword" id="pInput" value="password test" />' +
+				'<input type="hidden" name="isHidden" id="hInput" value="hidden test" />' +
+				'<input type="text" name="isText" id="tInput" value="text test" />' +
+				'<input type="radio" name="isRadio" id="rInput1" value="radio1" />' +
+				'<input type="radio" name="isRadio" id="rInput2" checked="true" value="radio2" />' +
+				'<input type="radio" name="isRadio" id="rInput3" value="radio3" />' +
+				'<input type="checkbox" name="isCheckbox1" id="cInput1" checked="true" />' +
+				'<input type="checkbox" name="isCheckbox2" id="cInput2" value="checkbox2" checked="true" />' +
+				'<input type="checkbox" name="isCheckbox3" id="cInput3" />' +
+				'<input type="checkbox" name="isCheckbox4" id="cInput4" value="checkbox4" />' +
+				'<input type="range" name="isRange" id="raInput1" value="4" />' +
+				'<textarea name="isTextarea" id="tArea">textarea text</textarea>' +
+				'<select name="isSelect" id="select">' +
+					'<option value="one">1</option>' +
+					'<option selected="true" value="two">2</option>' +
+					'<option value="three">3</option>' +
+				'</select>' +
+				'<input type="reset" value="resetForm" />' +
+				'<input type="button" value="somebutton" />' +
+				'<input type="submit" value="submitForm" />' +
+			'</form>' +
+			'<div id="form2"><form>' +
+				'<div><input type="text" name="isText2" id="tInput2" value="test text2" /></div>' +
+			'</form></div>' +
+			'<div id="form3"><form>' +
+				'<div><input type="text" name="isText3" id="tInput3" value="" /></div>' +
+			'</form></div>' +
+				'<div id="form4"><form>' +
+				'<p class="errorText">Test Error Stuff that shouldnt get cleared.</p>' +
+				'<div class="formEntry"><input type="text" name="Text_4-0" id="tInput4-0" value="notempty4-0" /></div>' +
+				'<div class="formEntry"><input type="text" name="Text_4-1" id="tInput4-1" value="" /></div>' +
+				'<input type="text" name="Text_4-2" id="tInput4-2" value="" />' +
+			'</form></div>' +
+			'<div id="form5"><form>' +
+				'<div class="formEntry"><input type="text" name="Zip_Code" id="ZipCode" value="abc" /></div>' +
+			'</form></div>'
+		'</div>';
+		$("body").append(htmlContent);
+		
+		module("simplr.form");
+		test("simplr.form.getValues()", function() {
+			var formEl = $("#formTest #form1").get(0);
+			equal( countLength( simplr.form.getValues(formEl) ), 17, "Selector: '#form1'");
+			equal( countLength( simplr.form.getValues("#formTest #form2") ), 1, "Selector: '#form2'");
+			deepEqual(simplr.form.getValues("#formTest #form1"), { 
+				isPassword : "password test",
+				isHidden : "hidden test",
+				isText : "text test",
+				isRadio : "radio2",
+				isCheckbox1 : true,
+				isCheckbox2 : "checkbox2",
+				isCheckbox3 : false,
+				isCheckbox4 : false,
+				isSelect : "two", 
+				isTextarea : "textarea text",
+				isRange : "4",
+				isPasswordWhiteSpace : "  password test1  ",
+				isTextWhiteSpace : "test",
+				isRadioWhiteSpace : "radio",
+				isHiddenWhiteSpace : "hidden",
+				isTextareaWhiteSpace : "textarea text",
+				isSelectWhiteSpace : "two"
+			}, "All Expected Fields");
+		});
+
+		test("simplr.form.addValidationAssociation() - simplr.form.validate()", function() {
+			simplr.form.addValidationAssociation({ "Zip_Code" : function(rules) { rules.push("postalcode") } });
+			var data = simplr.form.getValues("#formTest #form5");
+			equal( simplr.form.validate("#formTest #form5", data), false, "validate a postal code rule that was associated correctly" );
+		
+			simplr.form.addValidationAssociation({ "isText2" : function(rules) { rules.push("equal") } });
+			var data = simplr.form.getValues("#formTest #form2");
+			data.isText2 = [ data.isText2, "test text2222" ];
+			equal( simplr.form.validate("#formTest #form5", data), false, "validate a equals rule false");
+		});
+		
+		test("simplr.form.validate()", function() {
+			equal( simplr.form.validate("#formTest #form2", simplr.form.getValues("#form2")), true, "rule notempty, field is not empty");
+			var formEl = $("#formTest #form3").get(0);
+			equal( simplr.form.validate(formEl, simplr.form.getValues("#form3")), false, "rule notempty, field is empty");
+			equal( simplr.form.validate("#formTest #form5", simplr.form.getValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
+		});
+	
+		test("simplr.form.addLabelAssociation - simplr.form.validate()", function() {
+			simplr.form.addLabelAssociation({ "Text_4-1" : "Text 4-1" });
+			var data = simplr.form.getValues("#formTest #form4");
+			simplr.form.validate("#formTest #form4", data);
+			equal( $("#form4 .errorText").size(), 2, "2 total messages, 1 default, 1 from the tool." );
+			equal( $("#form4 .formEntry:eq(1) .errorText").size(), 1, "error in the correct spot" );
+			equal( $("#form4 .formEntry:eq(1) .errorText").text(), "Text 4-1 is empty.", "error text is correct" );
+		});
+		
+	});
+</script>

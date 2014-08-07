@@ -55,17 +55,21 @@ Functionality
 	+	simplr.command.execute()
 *	simplr.template.*
 	+	simplr.template.build()
-
-
-
-
-
-
-*	Simplr.Form.*
+*	simplr.form.*
+	+	simplr.form.addCode()
+	+	simplr.form.addValidation()
+	+	simplr.form.addLabelAssociation()
+	+	simplr.form.addValidationAssociation()
+	+	simplr.form.getValues()
+	+	simplr.form.validate()
+	
+	
 	+	Simplr.Form.mAddLabelAssociation()
 	+	Simplr.Form.mAddValidationAssociation()
 	+	Simplr.Form.mGetValues()
 	+	Simplr.Form.mValidateValuesAndRender()
+
+
 
 *	Simplr.Util.*
 	+	Simplr.Util.mEmpty()
