@@ -2,8 +2,8 @@
 
 	// helper function for equal
 	function _equal(thing1, thing2) {
-	    if(typeof thing1 == typeof thing2) {
-	        if(typeof thing1 != "object") { // its a simple object
+		if(typeof thing1 == typeof thing2) {
+	    	if(typeof thing1 != "object") { // its a simple object
 	            return thing1 == thing2;
 	        } else {
 	           if(thing1 && (thing1.length !== undefined)) {
@@ -151,9 +151,10 @@
 	    		successCodes : [],
 	    		errorCodes : []
 	    	};
+			
 			if(value && (typeof value == "object") && (value.length !== undefined)) {
 				for(var i = 0; i < value.length; i++) {
-					if(!_equal([value[0], value[i]])) {
+					if(!_equal(value[0], value[i])) {
 						results.valid = false;
 						results.errorCodes.push("eEqual");
 						break;

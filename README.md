@@ -1,8 +1,6 @@
 [ v4.0.0 ] BETA SimplrJS
 =============
 
-IMPORTANT VERSION IS A WORK IN-PROGRESS.  PLEASE SEE BRANCHES FOR PREVIOUS VERSIONS.
-
 Description
 -----------
 
@@ -65,6 +63,6 @@ Functionality
 Usage
 -----
 
-Documentation coming very soon.
+[Documentation / Samples here](https://github.com/simplrteam/SimplrJS/tree/master/samples/)
 
-[Download the distribution version here.](https://github.com/simplrteam/SimplrJS/tree/master/dist/simplr.min.js)
+[Download the distribution version here](https://github.com/simplrteam/SimplrJS/tree/master/dist/simplr.min.js)
