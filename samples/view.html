@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>-- simplr.view.* --</title>
+		<meta charset="utf-8" />
+	 	<meta name="description" content="" />
+	 	<meta name="viewport" content="user-scalable=0, initial-scale=1.0" />
+	   	
+	   	<style type="text/css">
+	   		
+	   		
+	   	</style>
+	   	
+	   	<!-- jQuery Framework for just basic samples, not requried for simplr-->
+   		<script type="text/javascript" src="jquery.min.js"></script>
+   		<!-- simplr js -->
+   		<script type="text/javascript" src="../dist/simplr.min.js"></script>
+   		
+   		<!-- Sample Code -->
+   		<script type="text/javascript">
+   			// add some view
+   			simplr.view.add({
+   				SampleView1 : {
+   					html : function(data) {
+   						console.log("view1 data:", data);
+   						return '<div id="one">sample 1</div>';
+					},
+					callback : function(selector, data) {
+						console.log("callback after view 1 rendered");
+					}
+   				},
+   				SampleView2 : {
+   					html : function(data) {
+   						console.log("view2 data:", data);
+						return '<div id="two">sample 2 with data: ' + data.name + ' <a href="#">click me</a> i was an event added in the callback.</div>';
+					},
+					callback : function(selector, data) {
+						console.log("callback after view 2 rendered");
+						// create some dummy functionality
+						$(selector).find('div#two').on("click", "a", {}, function(evt) {
+							evt.preventDefault();
+							alert("I was a click event added to the view the was rendered to the page");
+						});
+					}
+   				}
+   			});
+			
+			$(function() {
+				// view 1
+				$("a.js-view1").on("click", {}, function(evt) {
+					evt.preventDefault();
+					simplr.view.render({
+						name : "SampleView1",
+						data : {},
+						selector : "div#renderHere"
+					});
+				});
+				// view 2
+				$("a.js-view2").on("click", {}, function(evt) {
+					evt.preventDefault();
+					simplr.view.render({
+						name : "SampleView2",
+						data : {
+							name : "----BRIAN---"
+						},
+						selector : "div#renderHere"
+					});
+				});
+			});
+   		</script>
+   	</head>
+	<body>
+		
+		<h1>simplr.view examples</h1>
+		<p>You call simplr.view.render() to render views.</p>
+		<p>Typically Views are made from templates.  In these examples I'm not using templates.</p>
+		<p>Open the javascript console to see the callbacks being logged.</p>
+		<ul>
+			<li>Render Views</li>
+			<li><a class="js-view1" href="#Sample1">View 1</a></li>
+			<li><a class="js-view2" href="#Sample2">View 2</a></li>
+		</ul>
+    	<div id="renderHere">The Views are going to be rendered here!</div>
+    	
+    </body>
+</html>

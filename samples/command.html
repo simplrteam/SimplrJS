@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>-- simplr.command.* --</title>
+		<meta charset="utf-8" />
+	 	<meta name="description" content="" />
+	 	<meta name="viewport" content="user-scalable=0, initial-scale=1.0" />
+	   	
+	   	<style type="text/css">
+	   		
+	   		
+	   	</style>
+	   	
+	   	<!-- jQuery Framework -->
+   		<script type="text/javascript" src="jquery.min.js"></script>
+   		<!-- Simplr Framework -->
+   		<script type="text/javascript" src="../dist/simplr.min.js"></script>
+   		
+   		<!-- Sample Code -->
+   		<script type="text/javascript">
+   			// add some commands
+   			simplr.command.add({
+				SampleView : {
+					route : ["sample", "view"],
+					callback : function(data) {
+						console.log("view data:", data);
+						alert("sample view");
+					}
+				},
+				SampleNew : {
+					route : ["sample", "new"],
+					callback : function(data) {
+						console.log("new data:", data);
+						alert("sample new");
+					}
+				},
+				SampleUpdate : {
+					route : ["sample", "update"],
+					callback : function(data) {
+						console.log("update data:", data);
+						alert("sample update");
+					}
+				},
+				SampleDelete : {
+					route : ["sample", "delete"],
+					callback : function(data) {
+						console.log("delete data:", data);
+						alert("sample delete");
+					}
+				},
+				NestedView : {
+					route : ["sample", "example", "view"],
+					callback : function(data) {
+						console.log("nested view data:", data);
+						alert("nested view");
+					}
+				}
+			});
+			
+			
+			$(function() {
+				// create simple link functionality
+				$("a.js-link").on("click", {}, function(evt) {
+					evt.preventDefault();
+					simplr.command.execute($(this).attr("href"));
+				});
+			});
+   		</script>
+   	</head>
+	<body>
+		
+		<h1>simplr.command.* examples</h1>
+		<p>You can use the verbs: ["view", "new", "update", "delete"] in your routes.</p>
+		<p>You trigger the commands via HashPart in the URL, or by calling simplr.command.execute().</p>
+		<p>Open the javascript console, and you can see the data associated with each command.</p>
+		<ul>
+			<li>Via URL</li>
+			<li><a href="#/sample/">/sample/</a></li>
+			<li><a href="#/sample/view">/sample/view</a></li>
+			<li><a href="#/sample/view?a=1&b=2">/sample/view?a=1&b=2</a></li>
+			<li><a href="#/sample/1/">/sample/1/</a></li>
+			<li><a href="#/sample/1/view">/sample/1/view</a></li>
+			<li><a href="#/sample/new">/sample/new</a></li>
+			<li><a href="#/sample/1/new">/sample/1/new</a></li>
+			<li><a href="#/sample/update">/sample/update</a></li>
+			<li><a href="#/sample/1/update">/sample/1/update</a></li>
+			<li><a href="#/sample/delete">/sample/delete</a></li>
+			<li><a href="#/sample/1/delete">/sample/1/delete</a></li>
+			<li><a href="#/sample/1/example/">/sample/1/example/</a></li>
+			<li><a href="#/sample/1/example/2/">/sample/1/example/2/</a></li>
+			<li>Via JavaScript</li>
+			<li><a class="js-link" href="#/sample/">/sample/</a></li>
+			<li><a class="js-link" href="#/sample/view">/sample/view</a></li>
+			<li><a class="js-link" href="#/sample/view?a=1&b=2">/sample/view?a=1&b=2</a></li>
+			<li><a class="js-link" href="#/sample/1/">/sample/1/</a></li>
+			<li><a class="js-link" href="#/sample/1/view">/sample/1/view</a></li>
+			<li><a class="js-link" href="#/sample/new">/sample/new</a></li>
+			<li><a class="js-link" href="#/sample/1/new">/sample/1/new</a></li>
+			<li><a class="js-link" href="#/sample/update">/sample/update</a></li>
+			<li><a class="js-link" href="#/sample/1/update">/sample/1/update</a></li>
+			<li><a class="js-link" href="#/sample/delete">/sample/delete</a></li>
+			<li><a class="js-link" href="#/sample/1/delete">/sample/1/delete</a></li>
+			<li><a class="js-link" href="#/sample/1/example/">/sample/1/example/</a></li>
+			<li><a class="js-link" href="#/sample/1/example/2/">/sample/1/example/2/</a></li>
+		</ul>
+    	
+    </body>
+</html>

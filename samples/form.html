@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>-- simplr.form.* with custom validation --</title>
+		<meta charset="utf-8" />
+	 	<meta name="description" content="" />
+	 	<meta name="viewport" content="user-scalable=0, initial-scale=1.0" />
+	   	
+	   	<!-- jQuery Framework -->
+   		<script type="text/javascript" src="jquery.min.js"></script>
+   		<!-- Simplr Framework -->
+   		<script type="text/javascript" src="../dist/simplr.min.js"></script>
+   		
+   		<!-- Sample CSS -->
+   		<style type="text/css">
+	   		.formEntry { margin: 10px 0; }
+	   		.formEntry p { margin: 5px 0 0; }
+	   		.errorText { color: red; }
+	   		label { display: block; margin: 0 0 5px; }
+	   	</style>
+   		
+   		<!-- Sample Code -->
+   		<script type="text/javascript">
+   			
+   			// Let's add the labels
+   			// try commenting out a label to see what it does
+   			simplr.form.addLabelAssociation({
+				Password: "Password",
+				ConfirmPassword: "Confirm Password"
+			});
+   			
+   			// Let's associate a rule for the confirm password field
+   			// Let's also associate a custom password validation
+   			// Remember: all fields by default have the "empty" validator, but you can remove that association
+   			simplr.form.addValidationAssociation({
+   				// we'll use a custom validator
+   				Password : function(rules) { rules.push("customPassword"); },
+   				// we'll use the equal validator
+   				ConfirmPassword : function(rules) { rules.push("equal"); }
+   				// here's how you would remove the "empty" validator
+   				//Password : function(rules) { rules.splice(0,1); },
+   			});
+   			
+   			// We have to create our custom validator
+   			simplr.form.addValidation({
+				customPassword : function(value) {
+					var results = {
+			    		valid : true,
+			    		successCodes : [],
+			    		errorCodes : []
+			    	};
+					if(value != "password") {
+						results.valid = false;
+						results.errorCodes.push("customPasswordError");
+					}
+					return results;
+				}
+			});
+			
+			// We need to create our custom error message
+			simplr.form.addCode({
+				customPasswordError : "$[label] is not a valid password. We only accept &quot;password&quot;!"
+			});
+			
+			$(function() {
+				
+				// Catch the form submission
+				$("form").on("submit", {}, function(evt) {
+					evt.preventDefault();
+					// first, get the form values from the input fields
+					var formValues = simplr.form.getValues(this);
+				
+					// we are going to use the equal validator.
+					// equal validator expects an array of things
+					// so we'll update the form value data to be an array of strings to match against
+					formValues.ConfirmPassword = [ formValues.ConfirmPassword, formValues.Password ];
+				
+					// this function will both validate and render any errors to the screen.
+					// if no errors returns true
+					if(simplr.form.validate(this, formValues)) {
+						alert("No Errors, submit the form");	
+					}
+				});
+				
+			});
+			
+   		</script>
+   	</head>
+	<body>
+		<h1>Form Example</h1>
+		<p>Just a very basic form.</p>
+		<p>"formEntry" needs to be on the each groupoing for error messages to display automatically.</p>
+		<form>
+			<div class="formEntry">
+				<label for="Password">Password (only &quot;password&quot; will pass validation):</label>
+				<input type="text" name="Password" id="Password" />
+			</div>
+			<div class="formEntry">
+				<label for="ConfirmPassword">Confirm Password:</label>
+				<input type="text" name="ConfirmPassword" id="ConfirmPassword" />
+			</div>
+			<button type="submit">Submit</button>
+		</form>
+	</body>
+</html>
