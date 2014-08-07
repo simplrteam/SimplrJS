@@ -67,4 +67,4 @@ Usage
 
 Documentation coming very soon.
 
-[Download the distrubution version here.](https://github.com/simplrteam/SimplrJS/tree/master/)
+[Download the distrubution version here.](https://github.com/simplrteam/SimplrJS/tree/master/dist/simplr.min.js)
