@@ -64,11 +64,7 @@ Functionality
 	+	simplr.form.validate()
 	
 	
-	+	Simplr.Form.mAddLabelAssociation()
-	+	Simplr.Form.mAddValidationAssociation()
-	+	Simplr.Form.mGetValues()
-	+	Simplr.Form.mValidateValuesAndRender()
-
+	
 
 
 *	Simplr.Util.*

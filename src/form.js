@@ -14,28 +14,99 @@
 		defaultLabel : "_LABEL_",
 		rules : {},
 		labels : {},
-		codes : {
-			eEmpty : "$[label] is empty.",
-			eMissingValidator : "Missing Validator"
-		},
-		codeResultsTemplate : { 
-            success : [], 
-            error : []
-        },
-        defaultCodeMessage : "$[label] is UNDEFINED",
-        validators : {}
+		codes : {},
+		validators : {}
     };
 	
+	// helpers
+	function _transformValues(values) {
+		var validationAndRenderValues = {};
+		for(var key in values) {
+			var label = simplr.dataStorage.form.labels[key] ? simplr.dataStorage.form.labels[key] : simplr.dataStorage.form.defaultLabel;
+			var validationObject = { value : values[key], label : label, rules : [] };
+			// Add Validators as needed
+			for(var i = 0; i < simplr.dataStorage.form.defaultRules.length; i++) {
+				validationObject.rules.push(simplr.dataStorage.form.defaultRules[i]);
+			}
+			if(typeof simplr.dataStorage.form.rules[key] == "function") {
+				simplr.dataStorage.form.rules[key](validationObject.rules);
+			}
+			// Return the Transformed Data
+			validationAndRenderValues[key] = validationObject;
+		}
+		return validationAndRenderValues;
+	};
 	
-	/*
-	// we actually run the validation engine seperatly
-	function mergeValidationResults(key, rule, newData, existingData) {
+	function _mergeValidationResults(key, rule, newData, existingData) {
         existingData.codes[key].success = existingData.codes[key].success.concat( newData.successCodes );
         existingData.codes[key].error = existingData.codes[key].error.concat( newData.errorCodes );
         if( !newData.valid ) { existingData.valid = false; }
     };
+	
+	function _validate(dataObject) {
+		
+		console.log("++++");
+		console.log(dataObject);
+		
+		var results = {
+			data : dataObject || "",
+			valid : true,
+			codes : {}
+		};
+		
+		console.log(results);
+		
+		for(var key in results.data) {
+            // Check the Rules for this data
+            var entry = results.data[key];
+            results.codes[key] = {
+            	success : [], 
+                error : []
+            }
+            for(var i = 0; i < entry.rules.length; i++) {
+                var rule = entry.rules[i];
+                var tmpValidationData = {
+                	valid : true,
+                	successCodes : [],
+                	errorCodes : []
+                };
+                if(simplr.dataStorage.form.validators[rule]) { 
+                    tmpValidationData = simplr.dataStorage.form.validators[rule](entry.value); 
+                } else { 
+                    tmpValidationData = simplr.dataStorage.form.validators["missingvalidator"](entry.value); 
+                }
+                _mergeValidationResults(key, rule, tmpValidationData, results);
+            }
+            // Cleanup Data
+            if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
+                delete results.codes[key]; 
+            }
+        }
+		
+		console.log(results);
+		
+		console.log("+++++");
+        return results;
+    };
     
-    function replaceTokens(keys, message) {
+    function _findFormEntry(el) {
+    	
+    	console.log("EL:");
+    	console.log(el);
+    	console.log(el === document)
+    	if(el === document) {
+    		// we didn't find it
+    		return null;
+    	} else if(el.className.indexOf(simplr.dataStorage.form.classes.formEntry) != -1) {
+    		// found it
+    		return el;
+    	} else {
+    		// go to parent el
+    		return _findFormEntry(el.parentNode);
+    	}
+    };
+    
+    function _replaceTokens(keys, message) {
         var results = message;
         for(var token in keys) {
             results = results.replace(new RegExp("\\$\\[" + token + "\\]", "g"), escape(keys[token]));
@@ -43,49 +114,63 @@
         return unescape(results);
     };
     
-    Simplr.Validation = {
-    	
-    	mGetCodes : function() {
-    		return data.codes;
-    	},
-    	mGetValidators : function() {
-    		return data.validators;
-    	},
-    	mGetCodeMessage : function(code, label) {
-            if( data.codes[code] != undefined ) {
-                return replaceTokens({ label : label }, data.codes[code]);
-            }
-            return replaceTokens({ label : code }, data.defaultCodeMessage);
-        },
-        mValidate : function(dataObject) {
-            var results = $.extend(true, {}, data.validationResultsTemplate, { data : $.extend(true, {}, dataObject)});
-            for(var key in results.data) {
-                // Check the Rules for this data
-                var entry = results.data[key];
-                results.codes[key] = $.extend(true, {}, data.codeResultsTemplate);
-                for(var i = 0, iL = entry.rules.length; i < iL; i++) {
-                    var rule = entry.rules[i];
-                    var tmpValidationData = $.extend(true, {}, {
-                    	valid : true,
-    					successCodes : [],
-    					errorCodes : []
-                    });
-                    if( data.validators[rule] ) { 
-                        tmpValidationData = data.validators[rule](entry.value); 
-                    } else { 
-                        tmpValidationData = data.validators["missingvalidator"](entry.value); 
-                    }
-                    mergeValidationResults(key, rule, tmpValidationData, results);
-                }
-                // Cleanup Data
-                if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
-                    delete results.codes[key]; 
-                }
-            }
-            return results;
-        }
+    function _getCodeMessage(code, label) {
+    	if(simplr.dataStorage.form.codes[code]) {
+    		return _replaceTokens({ label : label }, simplr.dataStorage.form.codes[code]);
+    	}
+    	return _replaceTokens({ label : code }, "$[label] is UNDEFINED");
     };
-	*/
+    
+    function _render(selector, obj) {
+		var specClass = "_simplr";
+		var classes = simplr.dataStorage.form.classes;
+		var formEl;
+		if(selector && (typeof selector == "string")) {
+			formEl = document.querySelector(selector);
+		} else {
+			formEl = selector;
+		}
+			
+		// reset the form
+		var errorEls = formEl.querySelectorAll("."+classes.formError + "." + specClass + ", ."+classes.fieldError + "." + specClass);
+		for(var i = 0; i < errorEls.length; i++){
+			errorEls[i].className = errorEls[i].className.replace(classes.formError, "").replace(classes.fieldError, "");
+		}
+		var textEls = formEl.querySelectorAll("."+classes.textInformation + "." + specClass + ", ." + classes.textError + "." + specClass);
+		for(var i = textEls.length-1; i >= 0; i--) {
+			textEls[i].parentNode.removeChild(textEls[i]);
+		}
+		
+		// create the messages
+		for(var key in obj.codes) {
+			var msgObject = obj.codes[key];
+			var msgArray = [ msgObject.error, msgObject.success ];
+			var html = "";
+			for(var i = 0; i < 2; i++) {
+				// Only showing 1 message at a time.
+				if(msgArray[i].length > 0) {
+					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + _getCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
+				}
+			}
+			// now add the message
+			
+			console.log(formEl);
+			
+			var inputEl = formEl.querySelector("[name='" + key + "']");
+			if(inputEl) {
+				inputEl.className += " " + classes.fieldError + " " + specClass;
+				console.log("input:");
+				console.log(inputEl);
+				
+				
+				var entryEl = _findFormEntry(inputEl);
+				if(entryEl) {
+					entryEl.className += " " + classes.formError + " " + specClass;
+					entryEl.innerHTML += html;
+				}
+			}
+		}
+	};
 	
 	// feature
 	simplr.form = {
@@ -146,65 +231,16 @@
 		},
 		// validate and render
 		validate : function(formSelector, formData) {
+			var validationData = _transformValues(formData);
+			var validatedData = _validate(validationData);
 			
-		}
-	};
-	
-	/*
-	function render(selector, obj) {
-		var specClass = "_simplr";
-		var classes = FormData.Classes;
-		
-		// Reset the Form
-		$("."+classes.FormError + "," + "."+classes.FieldError, selector).filter("." + specClass).removeClass(classes.FormError).removeClass(classes.FieldError);
-		$("."+classes.TextInformation + "," + "."+classes.TextError, selector).filter("." + specClass).remove();
-		
-		// Create the Messages
-		for(var key in obj.codes) {
-			var msgObject = obj.codes[key];
-			var msgArray = [ msgObject.error, msgObject.success ];
-			var html = "";
-			for(var i = 0; i < 2; i++) {
-				// Only showing 1 message at a time.
-				if(msgArray[i].length > 0) {
-					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + Simplr.Validation.mGetCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
-				}
-			}
+			console.log("----");
+			console.log(validationData);
+			console.log(validatedData);
 			
-			// Now find the Form Entry to put the message html
-			$("[name='" + key + "']:first", selector).addClass(classes.FieldError + " " + specClass).closest("."+classes.FormEntry).addClass(classes.FormError + " " + specClass).append(html);
+			_render(formSelector, validatedData);
+			return validatedData.valid;	
 		}
 	};
-	
-	function transformValues(values) {
-		var validationAndRenderValues = {};
-		for(var key in values) {
-			var label = FormData.Labels[key] ? FormData.Labels[key] : FormData.DefaultLabel;
-			var validationObject = { value : values[key], label : label, rules : [] };
-			// Add Validators as needed
-			for(var i = 0, iL = FormData.DefaultRules.length; i < iL; i++) {
-				validationObject.rules.push(FormData.DefaultRules[i]);
-			}
-			if($.isFunction(FormData.Rules[key])) {
-			  FormData.Rules[key](validationObject.rules);
-			}
-			// Return the Transformed Data
-			validationAndRenderValues[key] = validationObject;
-		}
-		return validationAndRenderValues;
-	};
-	
-	
-	
-	Simplr.Form = {
-	    
-		mValidateValuesAndRender : function(selector, values) {
-			var validationData = transformValues(values);
-			var validatedData = Simplr.Validation.mValidate(validationData);
-			render(selector, validatedData);
-			return validatedData.valid;
-		}
-	};
-	*/
 
 })();

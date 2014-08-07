@@ -28,7 +28,7 @@
 		
 		// form
 		include("form.js");
-		include("form-defaultCodesAndValidators");
+		include("form-defaultCodesAndValidators.js");
 	?>
 
 })();
