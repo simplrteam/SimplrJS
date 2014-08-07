@@ -23,6 +23,8 @@
 		// command
 		include("command.js");
 		
+		// template
+		include("template.js");
 	
 		// Cache
 		//include("cache/cache.js");

@@ -11,8 +11,8 @@ SimplrJS is a JavaScript library to simplify the creation of simple, flexable, o
 - simple caching using localStorage
 - view based rendering
 - resource driven url design for commands
-
 - html templates
+
 - form design and validation by pattern
 
 
@@ -29,6 +29,7 @@ v4.0.0
 
 	Features:
 		- New release. See functionality.
+		- NOT COMPATABLE WITH PREVIOUS VERSIONS
 		
 	Bug Fixes:
 		- NONE, new release.
@@ -52,6 +53,8 @@ Functionality
 *	simplr.command.*
 	+	simplr.command.add()
 	+	simplr.command.execute()
+*	simplr.template.*
+	+	simplr.template.build()
 
 
 
@@ -63,12 +66,7 @@ Functionality
 	+	Simplr.Form.mAddValidationAssociation()
 	+	Simplr.Form.mGetValues()
 	+	Simplr.Form.mValidateValuesAndRender()
-*	Simplr.Layout.*
-	+	Simplr.Layout.mAddComponent()
-	+	Simplr.Layout.mAssembleLayout()
-	+	Simplr.Layout.mData()
-	+	Simplr.Layout.mGetComponent()
-	+	Simplr.Layout.mAddGlobalToken()
+
 *	Simplr.Util.*
 	+	Simplr.Util.mEmpty()
 	+	Simplr.Util.mEqual()

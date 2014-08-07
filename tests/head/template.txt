@@ -1,0 +1,112 @@
+<style type="text/css">.layout-component { display: none; }</style>
+<script type="text/javascript">
+	QUnit.config.reorder = false
+	$(function() {
+
+		// Setup the DEMO HTML for these tests
+		var testLayouts =	'<script id="template-test2" type="text/x-simplr-template">' +
+				                '<div id="test2">test2</div>' +
+				            '<\/script>' +
+				            '<script id="template-test3" type="text/x-simplr-template">' +
+				                '<div id="test3">test3</div>' +
+				            '<\/script>' +
+				            '<script id="template-nested" type="text/x-simplr-template">' +
+				                '<div id="nested"><span>nested</span></div>' +
+				            '<\/script>' +
+				            '<script id="template-nested2" type="text/x-simplr-template">' +
+				                '<div id="nested2"><a href="http://www.google.com/#/test/test/">this is a link</a></div>' +
+				            '<\/script>' +
+				            '<script id="template-cp1" type="text/x-simplr-template">' +
+				                '$[token]' +
+				            '<\/script>' +
+				            '<script id="template-cp2" type="text/x-simplr-template">' +
+				                '--$[token1]--$[token2]' +
+				            '<\/script>' +
+				            '<script id="template-cp3" type="text/x-simplr-template">' +
+				                '++$[string1]++$[string2]++' +
+				            '<\/script>';
+		$("body").append(testLayouts);
+
+		module("simplr.template");
+		
+		test("templates exist in page as script tags", function() {
+			equal( $("script[type='text/x-simplr-template']").size(), 7, "templates expected");
+		});
+		
+		test("simplr.template.build()", function() {
+			// Assemble a Layout
+			equal(simplr.template.build({
+				component : "cp3",
+				tokens : {
+					string1 : "1",
+					string2 : "2"
+				}
+			}), "++1++2++", "Simple Replacement");
+			// Assemble a Layout
+			equal(simplr.template.build({
+				component : "cp3",
+				tokens : [
+					{ string1 : "1", string2 : "2" },
+					{ string1 : "3", string2 : "4" },
+					{ string1 : "5", string2 : "6" }
+				]
+			}), "++1++2++++3++4++++5++6++", "Simple replacement with repeats");
+			// Assemble a Layout
+			equal(simplr.template.build({
+				component : "cp3",
+				tokens : {
+					string1 : "1",
+					string2 : {
+						component : "cp1",
+						tokens : {
+							token : "a"
+						}
+					}
+				}
+			}), "++1++a++", "Nest replacement");
+			// Assemble a Layout
+			equal(simplr.template.build({
+				component : "cp3",
+				tokens : {
+					string1 : "1",
+					string2 : {
+						component : "cp1",
+						tokens : [
+							{ token : "a" },
+							{ token : "b" },
+							{ token : "c" }
+						]
+					}
+				}
+			}), "++1++abc++", "Nested replacement with repeats");
+			// Assemble a Layout
+			equal(simplr.template.build({
+				component : "cp3",
+				tokens : {
+					string1 : {
+						component : "cp2",
+						tokens : {
+							token1 : {
+								component: "cp2",
+								tokens : [
+									{ token1 : "1", token2 : "2" },
+									{ token1 : "3", token2 : "4" }
+								]
+							},
+							token2 : "z"
+						}
+					},
+					string2 : {
+						component : "cp1",
+						tokens : [
+							{ token : "a" },
+							{ token : "b" },
+							{ token : "c" }
+						]
+					}
+				}
+			}), "++----1--2--3--4--z++abc++", "multiple nested with repeats");
+		});
+
+	});
+</script>
