@@ -151,7 +151,7 @@
 	    		successCodes : [],
 	    		errorCodes : []
 	    	};
-			if(value && (value.length !== undefined)) {
+			if(value && (typeof value == "object") && (value.length !== undefined)) {
 				for(var i = 0; i < value.length; i++) {
 					if(!_equal([value[0], value[i]])) {
 						results.valid = false;

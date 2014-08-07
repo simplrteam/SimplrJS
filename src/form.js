@@ -44,18 +44,11 @@
     };
 	
 	function _validate(dataObject) {
-		
-		console.log("++++");
-		console.log(dataObject);
-		
 		var results = {
 			data : dataObject || "",
 			valid : true,
 			codes : {}
 		};
-		
-		console.log(results);
-		
 		for(var key in results.data) {
             // Check the Rules for this data
             var entry = results.data[key];
@@ -77,23 +70,15 @@
                 }
                 _mergeValidationResults(key, rule, tmpValidationData, results);
             }
-            // Cleanup Data
+            // cleanup Data
             if( results.codes[key].error.length == 0 && results.codes[key].success.length == 0 ) { 
                 delete results.codes[key]; 
             }
         }
-		
-		console.log(results);
-		
-		console.log("+++++");
-        return results;
+		return results;
     };
     
     function _findFormEntry(el) {
-    	
-    	console.log("EL:");
-    	console.log(el);
-    	console.log(el === document)
     	if(el === document) {
     		// we didn't find it
     		return null;
@@ -149,20 +134,13 @@
 			for(var i = 0; i < 2; i++) {
 				// Only showing 1 message at a time.
 				if(msgArray[i].length > 0) {
-					html += '<p class="' + (( i == 0) ? classes.TextError : classes.TextInformation) + ' ' + specClass + '">' + _getCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
+					html += '<p class="' + (( i == 0) ? classes.textError : classes.textInformation) + ' ' + specClass + '">' + _getCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
 				}
 			}
 			// now add the message
-			
-			console.log(formEl);
-			
 			var inputEl = formEl.querySelector("[name='" + key + "']");
 			if(inputEl) {
 				inputEl.className += " " + classes.fieldError + " " + specClass;
-				console.log("input:");
-				console.log(inputEl);
-				
-				
 				var entryEl = _findFormEntry(inputEl);
 				if(entryEl) {
 					entryEl.className += " " + classes.formError + " " + specClass;
@@ -233,11 +211,6 @@
 		validate : function(formSelector, formData) {
 			var validationData = _transformValues(formData);
 			var validatedData = _validate(validationData);
-			
-			console.log("----");
-			console.log(validationData);
-			console.log(validatedData);
-			
 			_render(formSelector, validatedData);
 			return validatedData.valid;	
 		}

@@ -104,16 +104,15 @@
 			equal( simplr.form.validate("#formTest #form5", simplr.form.getValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
 		});
 	
-		/*
 		test("simplr.form.addLabelAssociation - simplr.form.validate()", function() {
 			simplr.form.addLabelAssociation({ "Text_4-1" : "Text 4-1" });
 			var data = simplr.form.getValues("#formTest #form4");
 			simplr.form.validate("#formTest #form4", data);
 			equal( $("#form4 .errorText").size(), 2, "2 total messages, 1 default, 1 from the tool." );
-			equal( $("#form4 .formEntry:eq(1) .errorText").size(), 1, "error in the correct spot" );
-			equal( $("#form4 .formEntry:eq(1) .errorText").text(), "Text 4-1 is empty.", "error text is correct" );
+			
+			//equal( $("#form4 .formEntry:eq(1) .errorText").size(), 1, "error in the correct spot" );
+			//equal( $("#form4 .formEntry:eq(1) .errorText").text(), "Text 4-1 is empty.", "error text is correct" );
 		});
-		*/
-	
+		
 	});
 </script>

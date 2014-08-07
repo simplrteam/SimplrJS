@@ -1,4 +1,4 @@
-[ v4.0.0 ] IN-PROGESS SimplrJS
+[ v4.0.0 ] BETA SimplrJS
 =============
 
 IMPORTANT VERSION IS A WORK IN-PROGRESS.  PLEASE SEE BRANCHES FOR PREVIOUS VERSIONS.
@@ -12,15 +12,14 @@ SimplrJS is a JavaScript library to simplify the creation of simple, flexable, o
 - view based rendering
 - resource driven url design for commands
 - html templates
-
 - form design and validation by pattern
-
 
 Installation and Requirments
 -----------
 
-jQuery is required for underlying javascript support.
-SimplrJS uses jQuery, but is not written as a plugin.
+Just include the simplr.min.js file on your page and you are ready to go.  
+
+Supports Modern browsers.
 
 Change Log
 ------------
@@ -62,30 +61,10 @@ Functionality
 	+	simplr.form.addValidationAssociation()
 	+	simplr.form.getValues()
 	+	simplr.form.validate()
-	
-	
-	
-
-
-*	Simplr.Util.*
-	+	Simplr.Util.mEmpty()
-	+	Simplr.Util.mEqual()
-	+	Simplr.Util.mGetUrlParameter()
-	+	Simplr.Util.mTruncateString()
-*	Simplr.Validation.*
-	+	Simplr.Validation.mAddCodes()
-	+	Simplr.Validation.mGetCodes()
-	+	Simplr.Validation.mAddValidators()
-	+	Simplr.Validation.mGetValidators()
-	+	Simplr.Validation.mGetRuleResultsTemplate()
-	+	Simplr.Validation.mGetCodeMessage()
-	+	Simplr.Validation.mValidate()
-
 
 Usage
 -----
 
-Find version 3.0.0 on the 3.0.0 Branch.
-For version 3.0.0 see [Documentation for 3.0.0](https://github.com/simplrteam/SimplrJS/tree/master/archive/samples)
+Documentation coming very soon.
 
-For version 4.0.0, in-progress.
+[Download the distrubution version here.](https://github.com/simplrteam/SimplrJS/tree/master/)
