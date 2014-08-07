@@ -91,7 +91,9 @@
 	simplr.form = {
 		// add a label associations
 		addLabelAssociation : function(opts) {
-			
+			for(var key in opts) {
+				simplr.dataStorage.form.labels[key] = opts[key];
+			}
 		},
 		// add validation associations
 		addValidationAssociation : function(opts) {
@@ -195,15 +197,7 @@
 	
 	
 	Simplr.Form = {
-	    mAddLabelAssociation : function(obj) {
-			$.extend(FormData.Labels, obj);
-		},
-		mAddValidationAssociation : function(obj) {
-			
-		},
-		mGetValues : function(selector) {
-			
-		},
+	    
 		mValidateValuesAndRender : function(selector, values) {
 			var validationData = transformValues(values);
 			var validatedData = Simplr.Validation.mValidate(validationData);
