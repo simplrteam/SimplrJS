@@ -42,9 +42,15 @@
 		});
 
 		test("simplr.view.render() - HTML Executes correctly", function() {
-			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist");
+			// HTML execution using a selector
+			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist - before css string");
 			simplr.view.render({ name : "layout_1", data : {}, selector : "#js-page"});
-			equal( $("#layout_1").size(), 1, "Layout Now Exists");
+			equal( $("#layout_1").size(), 1, "Layout Now Exists using css string");
+			// HTML execution using an element
+			$("#layout_1").remove();
+			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist - before dom object");
+			simplr.view.render({ name : "layout_1", data : {}, selector : $("#js-page").get(0) });
+			equal( $("#layout_1").size(), 1, "Layout Now Exists using dom object");
 		});
 		
 		test("simplr.view.render() - CALLBACK Executes", function() {

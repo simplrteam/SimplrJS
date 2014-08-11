@@ -28,8 +28,13 @@
 			};
 			// in order to render we need to have a name and selector
 			if(options.name && options.selector) {
-				// add the html data to the area from selector
-				document.querySelector(options.selector).innerHTML = simplr.dataStorage.view.views[options.name].html(options.data);
+				if(typeof options.selector == "string") {
+					// add the html data to the area from selector
+					document.querySelector(options.selector).innerHTML = simplr.dataStorage.view.views[options.name].html(options.data);
+				} else {
+					// add the html data to the area from dom object
+					options.selector.innerHTML = simplr.dataStorage.view.views[options.name].html(options.data);
+				}
 				// call the callback function from that view
 				simplr.dataStorage.view.views[options.name].callback(options.selector, options.data);
 			}
