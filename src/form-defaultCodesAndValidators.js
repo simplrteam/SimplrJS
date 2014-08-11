@@ -140,7 +140,7 @@
 	    	};
 			if(!(/^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value))) {
 				results.valid = false;
-				results.errorcodes.push("eEmail");
+				results.errorCodes.push("eEmail");
 			}
 			return results;
 		},
