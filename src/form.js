@@ -4,6 +4,7 @@
 	// so we'll create the dataStorage for it
 	simplr.dataStorage.form = {
 		classes : {
+			simplr : "_simplr",
 			formEntry : "formEntry",
 			formError : "formError",
 			fieldError : "errorField",
@@ -107,7 +108,6 @@
     };
     
     function _render(selector, obj) {
-		var specClass = "_simplr";
 		var classes = simplr.dataStorage.form.classes;
 		var formEl;
 		if(selector && (typeof selector == "string")) {
@@ -116,14 +116,15 @@
 			formEl = selector;
 		}
 			
-		// reset the form
-		var errorEls = formEl.querySelectorAll("."+classes.formError + "." + specClass + ", ."+classes.fieldError + "." + specClass);
+		// reset the form, cleanup any extra classes added from validation
+		var errorEls = formEl.querySelectorAll("."+classes.formError + "." + classes.simplr + ", ."+classes.fieldError + "." + classes.simplr);
 		for(var i = 0; i < errorEls.length; i++){
-			errorEls[i].className = errorEls[i].className.replace(classes.formError, "").replace(classes.fieldError, "");
+			errorEls[i].className = errorEls[i].className.replace(classes.formError, "").replace(classes.fieldError, "").replace(classes.simplr, "");
 		}
-		var textEls = formEl.querySelectorAll("."+classes.textInformation + "." + specClass + ", ." + classes.textError + "." + specClass);
+		var textEls = formEl.querySelectorAll("."+classes.textInformation + "." + classes.simplr + ", ." + classes.textError + "." + classes.simplr);
 		for(var i = textEls.length-1; i >= 0; i--) {
 			textEls[i].parentNode.removeChild(textEls[i]);
+			textEls[i].className = textEls[i].className.replace(classes.simplr, "");
 		}
 		
 		// create the messages
@@ -134,16 +135,16 @@
 			for(var i = 0; i < 2; i++) {
 				// Only showing 1 message at a time.
 				if(msgArray[i].length > 0) {
-					html += '<p class="' + (( i == 0) ? classes.textError : classes.textInformation) + ' ' + specClass + '">' + _getCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
+					html += '<p class="' + (( i == 0) ? classes.textError : classes.textInformation) + ' ' + classes.simplr + '">' + _getCodeMessage(msgArray[i][0], obj.data[key].label) + '</p>';
 				}
 			}
 			// now add the message
 			var inputEl = formEl.querySelector("[name='" + key + "']");
 			if(inputEl) {
-				inputEl.className += " " + classes.fieldError + " " + specClass;
+				inputEl.className += " " + classes.fieldError + " " + classes.simplr;
 				var entryEl = _findFormEntry(inputEl);
 				if(entryEl) {
-					entryEl.className += " " + classes.formError + " " + specClass;
+					entryEl.className += " " + classes.formError + " " + classes.simplr;
 					entryEl.innerHTML += html;
 				}
 			}
