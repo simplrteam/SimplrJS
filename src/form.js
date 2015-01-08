@@ -198,7 +198,7 @@
 				} else {
 					// handle all other types
 					values[thisElement.name] = thisElement.value;
-					if(thisElement.type != "password") {
+					if((thisElement.type != "password") && (thisElement.type != "file")) {
 						// we trim results
 						values[thisElement.name] = values[thisElement.name].trim();
 						// we update the value
