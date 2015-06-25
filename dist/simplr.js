@@ -373,7 +373,7 @@
     	if(el === document) {
     		// we didn't find it
     		return null;
-    	} else if(el.className.indexOf(simplr.dataStorage.form.classes.formEntry) != -1) {
+    	} else if((" " + el.className + " ").replace(/[\t\r\n\f]/g, " ").indexOf(" " + simplr.dataStorage.form.classes.formEntry + " ") != -1) {
     		// found it
     		return el;
     	} else {
@@ -488,7 +488,7 @@
 				} else {
 					// handle all other types
 					values[thisElement.name] = thisElement.value;
-					if(thisElement.type != "password") {
+					if((thisElement.type != "password") && (thisElement.type != "file")) {
 						// we trim results
 						values[thisElement.name] = values[thisElement.name].trim();
 						// we update the value

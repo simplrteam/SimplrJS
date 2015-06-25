@@ -57,7 +57,12 @@
 			'</form></div>' +
 			'<div id="form5"><form>' +
 				'<div class="formEntry"><input type="text" name="Zip_Code" id="ZipCode" value="abc" /></div>' +
-			'</form></div>'
+			'</form></div>' +
+			'<div id="form6"><form>' +
+				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-1" id="Test-6-1" value="" /></div>' +
+				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-2" id="Test-6-2" value="" /></div>' +
+			'</form></div>' +
+			
 		'</div>';
 		$("body").append(htmlContent);
 		
@@ -102,6 +107,10 @@
 			var formEl = $("#formTest #form3").get(0);
 			equal( simplr.form.validate(formEl, simplr.form.getValues("#form3")), false, "rule notempty, field is empty");
 			equal( simplr.form.validate("#formTest #form5", simplr.form.getValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
+			var formEl2 = $("#formTest #form6").get(0);
+			simplr.form.validate(formEl2, simplr.form.getValues("#form6"));
+			equal(!$("#Test-6-1").is(".formError"), true, "form error class not being added to the field");
+			equal(!$("#Test-6-2").is(".formError"), true, "form error class not being added to the field");
 		});
 	
 		test("simplr.form.addLabelAssociation - simplr.form.validate()", function() {

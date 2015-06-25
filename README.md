@@ -1,4 +1,4 @@
-[ v4.0.0 ] BETA SimplrJS   
+[ v4.0.1 ] BETA SimplrJS   
 =============
 
 Description
@@ -21,6 +21,20 @@ Supports Modern browsers.
 
 Change Log
 ------------
+
+v4.0.1
+	
+	Features:
+		- NONE
+		
+	Bug Fixes:
+		- Fixed bug in simplr.form.validate causing the form error class to be added to the wrong element.
+	
+	Refactor:
+		- NONE
+		
+	Other:
+		- NONE
 
 v4.0.0
 
