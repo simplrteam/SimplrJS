@@ -14,6 +14,10 @@
 		layout_3 : {
 			html : function(data) { return '<div id="layout_3">' + data.text + '</div>' },
 			callback : function(selector, data) {}
+		},
+		layout_4 : {
+			html : function(data) { return '<div id="layout_4_1">Test1</div><div id="layout_4_2">Test2</div>' },
+			callback : function(selector, data) {}
 		}
 	});
 	
@@ -37,8 +41,8 @@
 	
 		module("simplr.view");
 		test("simplr.view.add()", function() {
-			equal( getLayoutCount(), 3, "Layout Count");
-			deepEqual( getLayoutNames(), ["layout_1", "layout_2", "layout_3"], "Layout Names");
+			equal( getLayoutCount(), 4, "Layout Count");
+			deepEqual( getLayoutNames(), ["layout_1", "layout_2", "layout_3", "layout_4"], "Layout Names");
 		});
 
 		test("simplr.view.render() - HTML Executes correctly", function() {
@@ -51,6 +55,12 @@
 			equal( $("#layout_1").size(), 0, "Layout Doesn't Yet Exist - before dom object");
 			simplr.view.render({ name : "layout_1", data : {}, selector : $("#js-page").get(0) });
 			equal( $("#layout_1").size(), 1, "Layout Now Exists using dom object");
+			// HTML execution using seletor, mulitple root elements
+			equal( $("#layout_4_1").size(), 0, "Layout Doesn't Yet Exist");
+			equal( $("#layout_4_2").size(), 0, "Layout Doesn't Yet Exist");
+			simplr.view.render({ name : "layout_4", data : {}, selector : "#js-page"});
+			equal( $("#layout_4_1").size(), 1, "Layout Now Exists");
+			equal( $("#layout_4_2").size(), 1, "Layout Now Exists");
 		});
 		
 		test("simplr.view.render() - CALLBACK Executes", function() {
