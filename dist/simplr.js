@@ -575,19 +575,6 @@
 	            errorCodes : ["eMissingValidator"]
 	        };
 	    },
-	    // not empty
-	    notempty : function(value) {
-	    	var results = {
-	    		valid : true,
-	    		successCodes : [],
-	    		errorCodes : []
-	    	};
-	        if(value.trim() == "") {
-	    		results.valid = false;
-	    		results.errorCodes.push("eEmpty");
-	    	}
-	    	return results;
-	    },
 	    // alphnumeric
 		alphanumeric : function(value) {
 			var results = {

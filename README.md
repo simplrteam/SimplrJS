@@ -1,4 +1,4 @@
-[ v4.0.1 ] BETA SimplrJS   
+[ v4.0.2 ] BETA SimplrJS   
 =============
 
 Description
@@ -21,6 +21,20 @@ Supports Modern browsers.
 
 Change Log
 ------------
+
+v4.0.2
+	
+	Features:
+		- NONE
+		
+	Bug Fixes:
+		- Fixed bug in default validators. See: https://github.com/simplrteam/SimplrJS/pull/4 Credit to: @zachwick
+	
+	Refactor:
+		- NONE
+		
+	Other:
+		- NONE
 
 v4.0.1
 	
