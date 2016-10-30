@@ -61,6 +61,9 @@
 			'<div id="form6"><form>' +
 				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-1" id="Test-6-1" value="" /></div>' +
 				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-2" id="Test-6-2" value="" /></div>' +
+				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-3" id="Test-6-3" value="test.com" /></div>' +
+				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-4" id="Test-6-4" value="test+1@test.com" /></div>' +
+				'<div class="formEntry"><input class="formEntry-test" type="text" name="Test-6-5" id="Test-6-5" value="test.test+1@longer.longer" /></div>' +
 			'</form></div>' +
 			
 		'</div>';
@@ -108,9 +111,15 @@
 			equal( simplr.form.validate(formEl, simplr.form.getValues("#form3")), false, "rule notempty, field is empty");
 			equal( simplr.form.validate("#formTest #form5", simplr.form.getValues("#form5")), false, "postalcode, non-default rule, field is not a postalcode or empty.");
 			var formEl2 = $("#formTest #form6").get(0);
+			simplr.form.addValidationAssociation({ "Test-6-3" : function(rules) { rules.push("email") } });
+			simplr.form.addValidationAssociation({ "Test-6-4" : function(rules) { rules.push("email") } });
+			simplr.form.addValidationAssociation({ "Test-6-5" : function(rules) { rules.push("email") } });
 			simplr.form.validate(formEl2, simplr.form.getValues("#form6"));
-			equal(!$("#Test-6-1").is(".formError"), true, "form error class not being added to the field");
-			equal(!$("#Test-6-2").is(".formError"), true, "form error class not being added to the field");
+			equal($("#Test-6-1").is(".errorField"), true, "error class added properly");
+			equal($("#Test-6-2").parent().is(".formError"), true, "error class added properlty for entry");
+			equal($("#Test-6-3").is(".errorField"), true, "email validation failed");
+			equal(!$("#Test-6-4").is(".errorField"), true, "email validation passes");
+			equal(!$("#Test-6-5").is(".errorField"), true, "email validation passes");
 		});
 	
 		test("simplr.form.addLabelAssociation - simplr.form.validate()", function() {

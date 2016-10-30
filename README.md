@@ -1,4 +1,4 @@
-[ v4.0.2 ] BETA SimplrJS   
+[ v4.0.3 ] BETA SimplrJS   
 =============
 
 Description
@@ -21,6 +21,20 @@ Supports Modern browsers.
 
 Change Log
 ------------
+
+v4.0.3
+	
+	Features:
+		- NONE
+		
+	Bug Fixes:
+		- Fixed bug in default email validator.  Loosend up basic rules for increated compatibility.  Now using /.+@.+/ regex.
+	
+	Refactor:
+		- NONE
+		
+	Other:
+		- NONE
 
 v4.0.2
 	
