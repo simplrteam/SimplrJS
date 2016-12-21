@@ -5,30 +5,35 @@
 
 (function() {
 
-    // Base Object
-    window.simplr = {};
-    
-    // We are going to do storage on this
-    // so we'll create a dataStorage bucket
-    simplr.dataStorage = {};
-    
-	<?php
+	if(!window.simplr) {	
 	
-		// cache
-		include("cache.js");
+	    // Base Object
+	    window.simplr = {};
+	    
+	    // We are going to do storage on this
+	    // so we'll create a dataStorage bucket
+	    simplr.dataStorage = {};
+	    
+		<?php
 		
-		// view
-		include("view.js");
-		
-		// command
-		include("command.js");
-		
-		// template
-		include("template.js");
-		
-		// form
-		include("form.js");
-		include("form-defaultCodesAndValidators.js");
-	?>
+			// cache
+			include("cache.js");
+			
+			// view
+			include("view.js");
+			
+			// command
+			include("command.js");
+			
+			// template
+			include("template.js");
+			
+			// form
+			include("form.js");
+			include("form-defaultCodesAndValidators.js");
+	
+		?>
+	
+	}
 
 })();

@@ -1,14 +1,16 @@
 
 (function() {
 
-    // Base Object
-    window.simplr = {};
-    
-    // We are going to do storage on this
-    // so we'll create a dataStorage bucket
-    simplr.dataStorage = {};
-    
-	(function() {
+	if(!window.simplr) {	
+	
+	    // Base Object
+	    window.simplr = {};
+	    
+	    // We are going to do storage on this
+	    // so we'll create a dataStorage bucket
+	    simplr.dataStorage = {};
+	    
+		(function() {
 	
 	// use this as the key to set the expiry
 	function _createExpiryKey(key) {
@@ -748,5 +750,7 @@
 		}
 	});
 
-})();
+})();	
+	}
+
 })();
