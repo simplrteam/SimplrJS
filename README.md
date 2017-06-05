@@ -1,4 +1,4 @@
-[ v4.0.3 ] BETA SimplrJS   
+[ v4.0.3 ] SimplrJS   
 =============
 
 Description
