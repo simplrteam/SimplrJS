@@ -16,9 +16,6 @@
 	    
 		<?php
 		
-			// cache
-			include("cache.js");
-			
 			// view
 			include("view.js");
 			

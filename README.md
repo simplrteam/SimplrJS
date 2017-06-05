@@ -1,4 +1,4 @@
-[ v4.0.3 ] SimplrJS   
+[ v5.0.0 ] SimplrJS   
 =============
 
 Description
@@ -6,11 +6,9 @@ Description
 
 SimplrJS is a JavaScript library to simplify the creation of simple, flexable, one-page dynamic websites through the use of:
 
-- simple caching using localStorage
-- view based rendering
-- resource driven url design for commands
-- html templates
-- form design and validation by pattern
+- resource driven url design pattern for commands
+- view based rendering using html templates
+- form validation and error rendering
 
 Installation and Requirments
 -----------
@@ -22,70 +20,24 @@ Supports Modern browsers.
 Change Log
 ------------
 
-v4.0.3
+v5.0.0
+	
+	***Note: This is NOT compatible with previous versions of simplrjs
 	
 	Features:
-		- NONE
+		- See Functionality
 		
 	Bug Fixes:
-		- Fixed bug in default email validator.  Loosend up basic rules for increated compatibility.  Now using /.+@.+/ regex.
+		- None
 	
 	Refactor:
-		- NONE
+		- None
 		
 	Other:
-		- NONE
-
-v4.0.2
-	
-	Features:
-		- NONE
-		
-	Bug Fixes:
-		- Fixed bug in default validators. See: https://github.com/simplrteam/SimplrJS/pull/4 Credit to: @zachwick
-	
-	Refactor:
-		- NONE
-		
-	Other:
-		- NONE
-
-v4.0.1
-	
-	Features:
-		- NONE
-		
-	Bug Fixes:
-		- Fixed bug in simplr.form.validate causing the form error class to be added to the wrong element.
-	
-	Refactor:
-		- NONE
-		
-	Other:
-		- NONE
-
-v4.0.0
-
-	Features:
-		- New release. See functionality.
-		- NOT COMPATABLE WITH PREVIOUS VERSIONS
-		
-	Bug Fixes:
-		- NONE, new release.
-		
-	Refactor:
-		- NONE, new release.
-			
-	Other
-		- NONE, new release.
-		
+		- This is NOT compatible with previous versions of simplrjs		
 
 Functionality
 ---------------
-*	simplr.cache.*
-	+	simplr.cache.expire()
-	+	simplr.cache.get()
-	+	simplr.cache.set()
 *	simplr.view.*
 	+	simplr.view.add()
 	+	simplr.view.render()
