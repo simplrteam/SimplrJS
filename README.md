@@ -1,3 +1,9 @@
+# Disclaimer
+This repository is left here for historical reasons only. It is in read-only mode and no further development will be done.
+If you need anything, try contacting authors of the code.
+
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+
 [ v4.0.3 ] SimplrJS   
 =============
 
